@@ -41,4 +41,14 @@ public class ProductService {
         }
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
     }
+
+    public ResponseEntity<String> deleteProduct(Long id) {
+        try {
+            productRepository.deleteById(id);
+            return new ResponseEntity<>("Delted Successfully", HttpStatus.OK);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+    }
 }
