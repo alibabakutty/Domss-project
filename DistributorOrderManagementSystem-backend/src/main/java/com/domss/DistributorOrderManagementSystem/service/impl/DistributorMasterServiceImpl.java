@@ -3,7 +3,7 @@ package com.domss.DistributorOrderManagementSystem.service.impl;
 
 import com.domss.DistributorOrderManagementSystem.dto.DistributorMasterDto;
 import com.domss.DistributorOrderManagementSystem.entity.DistributorMaster;
-import com.domss.DistributorOrderManagementSystem.exception.R;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
 import com.domss.DistributorOrderManagementSystem.mapper.DistributorMasterMapper;
 import com.domss.DistributorOrderManagementSystem.repository.DistributorMasterRepository;
 import com.domss.DistributorOrderManagementSystem.service.DistributorMasterService;
