@@ -6,7 +6,7 @@ target/
 
 ### App ###
 application.properties
-
+### App ###
 ### STS ###
 .apt_generated
 .classpath
