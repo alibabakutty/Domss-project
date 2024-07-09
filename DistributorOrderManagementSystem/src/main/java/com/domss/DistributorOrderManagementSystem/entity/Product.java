@@ -33,7 +33,10 @@ public class Product {
     @Column(name = "stock_category")
     private String stockCategory;
 
-    @Column(name = "rate")
+    @Column(name = "standard_cost")
+    private Long standardCost;
+
+    @Column(name = "selling_price")
     private Double rate;
 
     @Column(name = "discount")

@@ -45,7 +45,7 @@ public class ProductService {
     public ResponseEntity<String> deleteProduct(Long id) {
         try {
             productRepository.deleteById(id);
-            return new ResponseEntity<>("Delted Successfully", HttpStatus.OK);
+            return new ResponseEntity<>("Deleted Successfully", HttpStatus.OK);
         } catch (Exception e){
             e.printStackTrace();
         }

@@ -22,17 +22,17 @@ public class OrdersService {
     private OrdersRepository orderRepository;
 
     public ResponseEntity<String> addOrder(Orders order) {
-        List<OrderItems> orderItems = order.getItems().stream().map(itemDTO -> {
+        List<OrderItems> orderItems = order.getItems().stream().map(items -> {
             OrderItems item = new OrderItems();
-            item.setCategory(itemDTO.getCategory());
-            item.setCode(itemDTO.getCode());
-            item.setDescription(itemDTO.getDescription());
-            item.setOrderQty(itemDTO.getOrderQty());
-            item.setUom(itemDTO.getUom());
-            item.setApprovedQuantity(itemDTO.getApprovedQuantity());
-            item.setRate(itemDTO.getRate());
-            item.setDiscount(itemDTO.getDiscount());
-            item.setAmount(itemDTO.getAmount());
+            item.setCategory(items.getCategory());
+            item.setCode(items.getCode());
+            item.setDescription(items.getDescription());
+            item.setOrderQty(items.getOrderQty());
+            item.setUom(items.getUom());
+            item.setApprovedQuantity(items.getApprovedQuantity());
+            item.setRate(items.getRate());
+            item.setDiscount(items.getDiscount());
+            item.setAmount(items.getAmount());
             return item;
         }).collect(Collectors.toList());
 
