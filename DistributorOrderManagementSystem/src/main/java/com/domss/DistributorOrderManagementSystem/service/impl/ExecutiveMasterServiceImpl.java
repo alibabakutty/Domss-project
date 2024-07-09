@@ -1,11 +1,11 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.ExecutiveMasterCreateDto;
-import com.example.imperio.entity.ExecutiveMasterCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.ExecutiveMasterCreateMapper;
-import com.example.imperio.repository.ExecutiveMasterDAO;
-import com.example.imperio.service.ExecutiveMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.ExecutiveMasterDto;
+import com.domss.DistributorOrderManagementSystem.entity.ExecutiveMaster;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.ExecutiveMasterMapper;
+import com.domss.DistributorOrderManagementSystem.repository.ExecutiveMasterRepository;
+import com.domss.DistributorOrderManagementSystem.service.ExecutiveMasterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,60 +18,60 @@ import java.util.List;
 public class ExecutiveMasterServiceImpl implements ExecutiveMasterService {
 
     @Autowired
-    private ExecutiveMasterDAO executiveMasterDAO;
+    private ExecutiveMasterRepository executiveMasterRepository;
 
     @Override
-    public ExecutiveMasterCreateDto createExecutiveMaster(ExecutiveMasterCreateDto executiveMasterCreateDto){
+    public ExecutiveMasterDto createExecutiveMaster(ExecutiveMasterDto executiveMasterDto){
 
         // Validate the executive object
-        validateExecutiveMaster(executiveMasterCreateDto);
+        validateExecutiveMaster(executiveMasterDto);
 
         // Check for duplicate entry
-        if(executiveMasterDAO.existsByExecutiveCode(executiveMasterCreateDto.getExecutiveCode())){
+        if(executiveMasterRepository.existsByExecutiveCode(executiveMasterDto.getExecutiveCode())){
 
-            throw new DuplicateKeyException("Duplicate entry for unique field:" + executiveMasterCreateDto.getExecutiveCode());
+            throw new DuplicateKeyException("Duplicate entry for unique field:" + executiveMasterDto.getExecutiveCode());
 
         }
 
-        ExecutiveMasterCreate executiveMasterCreate = ExecutiveMasterCreateMapper.mapToExecutiveMasterCreate(executiveMasterCreateDto);
+        ExecutiveMaster executiveMasterCreate = ExecutiveMasterMapper.mapToExecutiveMaster(executiveMasterDto);
 
-        ExecutiveMasterCreate savedExecutiveMaster = executiveMasterDAO.save(executiveMasterCreate);
+        ExecutiveMaster savedExecutiveMaster = executiveMasterRepository.save(executiveMasterCreate);
 
-        return ExecutiveMasterCreateMapper.mapToExecutiveMasterCreateDto(savedExecutiveMaster);
+        return ExecutiveMasterMapper.mapToExecutiveMasterDto(savedExecutiveMaster);
 
     }
 
-    private void validateExecutiveMaster(ExecutiveMasterCreateDto executiveMasterCreateDto){
+    private void validateExecutiveMaster(ExecutiveMasterDto executiveMasterDto){
 
-        if(executiveMasterCreateDto.getExecutiveCode() == null || executiveMasterCreateDto.getExecutiveCode().isEmpty()){
+        if(executiveMasterDto.getExecutiveCode() == null || executiveMasterDto.getExecutiveCode().isEmpty()){
             throw new IllegalArgumentException("Unique field cannot be empty!");
         }
     }
 
 
     @Override
-    public ExecutiveMasterCreateDto getExecutiveMaster(String executiveCode){
+    public ExecutiveMasterDto getExecutiveMaster(String executiveCode){
 
-        ExecutiveMasterCreate executiveMasterCreate = executiveMasterDAO.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
 
 
                 new ResourceNotFoundException("Executive is not found with this name:" + executiveCode));
 
-        return ExecutiveMasterCreateMapper.mapToExecutiveMasterCreateDto(executiveMasterCreate);
+        return ExecutiveMasterMapper.mapToExecutiveMasterDto(executiveMasterCreate);
     }
 
     @Override
-    public List<ExecutiveMasterCreateDto> getAllExecutiveMasterCodes(){
+    public List<ExecutiveMasterDto> getAllExecutiveMasterCodes(){
 
-        List<ExecutiveMasterCreate> executiveMasterCreate = executiveMasterDAO.findAll();
+        List<ExecutiveMaster> executiveMasterCreate = executiveMasterRepository.findAll();
 
-        return executiveMasterCreate.stream().map(ExecutiveMasterCreateMapper::mapToExecutiveMasterCreateDto).toList();
+        return executiveMasterCreate.stream().map(ExecutiveMasterMapper::mapToExecutiveMasterDto).toList();
     }
 
     @Override
-    public ExecutiveMasterCreateDto updateExecutive(String executiveCode, ExecutiveMasterCreateDto updatedExecutive){
+    public ExecutiveMasterDto updateExecutive(String executiveCode, ExecutiveMasterDto updatedExecutive){
 
-        ExecutiveMasterCreate executiveMasterCreate = executiveMasterDAO.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Executive is not found with the given name: " + executiveCode));
 
@@ -82,19 +82,19 @@ public class ExecutiveMasterServiceImpl implements ExecutiveMasterService {
         executiveMasterCreate.setEmailId(updatedExecutive.getEmailId());
         executiveMasterCreate.setStatus(updatedExecutive.getStatus());
 
-        ExecutiveMasterCreate executiveMasterCreateObj = executiveMasterDAO.save(executiveMasterCreate);
+        ExecutiveMaster executiveMasterCreateObj = executiveMasterRepository.save(executiveMasterCreate);
 
-        return ExecutiveMasterCreateMapper.mapToExecutiveMasterCreateDto(executiveMasterCreateObj);
+        return ExecutiveMasterMapper.mapToExecutiveMasterDto(executiveMasterCreateObj);
     }
 
     @Override
     public void deleteExecutive(String executiveCode){
 
-        ExecutiveMasterCreate executiveMasterCreate = executiveMasterDAO.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Executive is not exists with this given name: " + executiveCode));
 
-        executiveMasterDAO.deleteById(executiveCode);
+        executiveMasterRepository.deleteById(executiveCode);
     }
 }
 

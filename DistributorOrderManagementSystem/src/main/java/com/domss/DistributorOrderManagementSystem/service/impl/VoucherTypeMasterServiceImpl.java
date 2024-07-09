@@ -1,11 +1,11 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.VoucherTypeMasterCreateDto;
-import com.example.imperio.entity.VoucherTypeMasterCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.VoucherTypeMasterCreateMapper;
-import com.example.imperio.repository.VoucherTypeMasterDAO;
-import com.example.imperio.service.VoucherTypeMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeMasterDto;
+import com.domss.DistributorOrderManagementSystem.entity.VoucherTypeMaster;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.VoucherTypeMasterMapper;
+import com.domss.DistributorOrderManagementSystem.repository.VoucherTypeMasterRepository;
+import com.domss.DistributorOrderManagementSystem.service.VoucherTypeMasterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,85 +18,85 @@ import java.util.List;
 public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
 
     @Autowired
-    private VoucherTypeMasterDAO voucherTypeMasterDAO;
+    private VoucherTypeMasterRepository voucherTypeMasterRepository;
 
     @Override
-    public VoucherTypeMasterCreateDto createVoucherTypeMaster(VoucherTypeMasterCreateDto voucherTypeMasterCreateDto){
+    public VoucherTypeMasterDto createVoucherTypeMaster(VoucherTypeMasterDto voucherTypeMasterDto){
 
         // validate voucher type name object
-        validateVoucherTypeMaster(voucherTypeMasterCreateDto);
+        validateVoucherTypeMaster(voucherTypeMasterDto);
 
         // check for duplicate entry
-        if(voucherTypeMasterDAO.existsByVoucherTypeName(voucherTypeMasterCreateDto.getVoucherTypeName())){
+        if(voucherTypeMasterRepository.existsByVoucherTypeName(voucherTypeMasterDto.getVoucherTypeName())){
 
-            throw new DuplicateKeyException("Duplicate entry for unique field:" + voucherTypeMasterCreateDto.getVoucherTypeName());
+            throw new DuplicateKeyException("Duplicate entry for unique field:" + voucherTypeMasterDto.getVoucherTypeName());
 
 
         }
 
-        VoucherTypeMasterCreate voucherTypeMasterCreate = VoucherTypeMasterCreateMapper.mapToVoucherTypeMasterCreate(voucherTypeMasterCreateDto);
+        VoucherTypeMaster voucherTypeMaster = VoucherTypeMasterMapper.mapToVoucherTypeMaster(voucherTypeMasterDto);
 
-        VoucherTypeMasterCreate savedVoucherTypeMasterCreate = voucherTypeMasterDAO.save(voucherTypeMasterCreate);
+        VoucherTypeMaster savedVoucherTypeMaster = voucherTypeMasterRepository.save(voucherTypeMaster);
 
-        return VoucherTypeMasterCreateMapper.mapToVoucherTypeMasterCreateDto(savedVoucherTypeMasterCreate);
+        return VoucherTypeMasterMapper.mapToVoucherTypeMasterDto(savedVoucherTypeMaster);
 
 
     }
 
-    private void validateVoucherTypeMaster(VoucherTypeMasterCreateDto voucherTypeMasterCreateDto){
+    private void validateVoucherTypeMaster(VoucherTypeMasterDto voucherTypeMasterDto){
 
-        if(voucherTypeMasterCreateDto.getVoucherTypeName() == null || voucherTypeMasterCreateDto.getVoucherTypeName().isEmpty()){
+        if(voucherTypeMasterDto.getVoucherTypeName() == null || voucherTypeMasterDto.getVoucherTypeName().isEmpty()){
 
             throw new IllegalArgumentException("Unique field cannot be empty!");
         }
     }
 
     @Override
-    public VoucherTypeMasterCreateDto getVoucherTypeName(String voucherTypeName){
-        VoucherTypeMasterCreate voucherTypeMasterCreate = voucherTypeMasterDAO.findById(voucherTypeName).orElseThrow(()->
+    public VoucherTypeMasterDto getVoucherTypeName(String voucherTypeName){
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher type name is not found with this name:" + voucherTypeName));
 
-        return VoucherTypeMasterCreateMapper.mapToVoucherTypeMasterCreateDto(voucherTypeMasterCreate);
+        return VoucherTypeMasterMapper.mapToVoucherTypeMasterDto(voucherTypeMaster);
     }
 
     @Override
-    public List<VoucherTypeMasterCreateDto> getAllVoucherTypeMasters(){
+    public List<VoucherTypeMasterDto> getAllVoucherTypeMasters(){
 
-        List<VoucherTypeMasterCreate> voucherTypeMasterCreate = voucherTypeMasterDAO.findAll();
+        List<VoucherTypeMaster> voucherTypeMaster = voucherTypeMasterRepository.findAll();
 
-        return voucherTypeMasterCreate.stream().map(VoucherTypeMasterCreateMapper::mapToVoucherTypeMasterCreateDto).toList();
+        return voucherTypeMaster.stream().map(VoucherTypeMasterMapper::mapToVoucherTypeMasterDto).toList();
 
     }
 
     @Override
-    public VoucherTypeMasterCreateDto updateVoucherTypeMaster(String voucherTypeName, VoucherTypeMasterCreateDto updatedVoucherTypeMaster){
+    public VoucherTypeMasterDto updateVoucherTypeMaster(String voucherTypeName, VoucherTypeMasterDto updatedVoucherTypeMaster){
 
 
-        VoucherTypeMasterCreate voucherTypeMasterCreate = voucherTypeMasterDAO.findById(voucherTypeName).orElseThrow(() ->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(() ->
 
                 new ResourceNotFoundException("Voucher type name is not found with this name:" + voucherTypeName));
 
-        voucherTypeMasterCreate.setVoucherTypeName(updatedVoucherTypeMaster.getVoucherTypeName());
-        voucherTypeMasterCreate.setVoucherType(updatedVoucherTypeMaster.getVoucherType());
-        voucherTypeMasterCreate.setMethodOfVoucherNumbering(updatedVoucherTypeMaster.getMethodOfVoucherNumbering());
-        voucherTypeMasterCreate.setAlterAdditionalNumberingDetails(updatedVoucherTypeMaster.getAlterAdditionalNumberingDetails());
-        voucherTypeMasterCreate.setStartingNumber(updatedVoucherTypeMaster.getStartingNumber());
-        voucherTypeMasterCreate.setWidthOfNumericalPart(updatedVoucherTypeMaster.getWidthOfNumericalPart());
-        voucherTypeMasterCreate.setPrefillWithZero(updatedVoucherTypeMaster.getPrefillWithZero());
-        voucherTypeMasterCreate.setRestartNumberingApplicationForm(updatedVoucherTypeMaster.getRestartNumberingApplicationForm());
-        voucherTypeMasterCreate.setRestartNumberingStartingNumber(updatedVoucherTypeMaster.getRestartNumberingStartingNumber());
-        voucherTypeMasterCreate.setRestartNumberingPeriodicity(updatedVoucherTypeMaster.getRestartNumberingPeriodicity());
-        voucherTypeMasterCreate.setPrefixDetailsApplicationForm(updatedVoucherTypeMaster.getPrefixDetailsApplicationForm());
-        voucherTypeMasterCreate.setPrefixDetailsParticulars(updatedVoucherTypeMaster.getPrefixDetailsParticulars());
-        voucherTypeMasterCreate.setSuffixDetailsApplicationForm(updatedVoucherTypeMaster.getSuffixDetailsApplicationForm());
-        voucherTypeMasterCreate.setSuffixDetailsParticulars(updatedVoucherTypeMaster.getSuffixDetailsParticulars());
-        voucherTypeMasterCreate.setPrintingVoucherAfterSaving(updatedVoucherTypeMaster.getPrintingVoucherAfterSaving());
-        voucherTypeMasterCreate.setNameOfClass(updatedVoucherTypeMaster.getNameOfClass());
+        voucherTypeMaster.setVoucherTypeName(updatedVoucherTypeMaster.getVoucherTypeName());
+        voucherTypeMaster.setVoucherType(updatedVoucherTypeMaster.getVoucherType());
+        voucherTypeMaster.setMethodOfVoucherNumbering(updatedVoucherTypeMaster.getMethodOfVoucherNumbering());
+        voucherTypeMaster.setAlterAdditionalNumberingDetails(updatedVoucherTypeMaster.getAlterAdditionalNumberingDetails());
+        voucherTypeMaster.setStartingNumber(updatedVoucherTypeMaster.getStartingNumber());
+        voucherTypeMaster.setWidthOfNumericalPart(updatedVoucherTypeMaster.getWidthOfNumericalPart());
+        voucherTypeMaster.setPrefillWithZero(updatedVoucherTypeMaster.getPrefillWithZero());
+        voucherTypeMaster.setRestartNumberingApplicationForm(updatedVoucherTypeMaster.getRestartNumberingApplicationForm());
+        voucherTypeMaster.setRestartNumberingStartingNumber(updatedVoucherTypeMaster.getRestartNumberingStartingNumber());
+        voucherTypeMaster.setRestartNumberingPeriodicity(updatedVoucherTypeMaster.getRestartNumberingPeriodicity());
+        voucherTypeMaster.setPrefixDetailsApplicationForm(updatedVoucherTypeMaster.getPrefixDetailsApplicationForm());
+        voucherTypeMaster.setPrefixDetailsParticulars(updatedVoucherTypeMaster.getPrefixDetailsParticulars());
+        voucherTypeMaster.setSuffixDetailsApplicationForm(updatedVoucherTypeMaster.getSuffixDetailsApplicationForm());
+        voucherTypeMaster.setSuffixDetailsParticulars(updatedVoucherTypeMaster.getSuffixDetailsParticulars());
+        voucherTypeMaster.setPrintingVoucherAfterSaving(updatedVoucherTypeMaster.getPrintingVoucherAfterSaving());
+        voucherTypeMaster.setNameOfClass(updatedVoucherTypeMaster.getNameOfClass());
 
-        VoucherTypeMasterCreate voucherTypeMasterCreateObj = voucherTypeMasterDAO.save(voucherTypeMasterCreate);
+        VoucherTypeMaster voucherTypeMasterObj = voucherTypeMasterRepository.save(voucherTypeMaster);
 
-        return VoucherTypeMasterCreateMapper.mapToVoucherTypeMasterCreateDto(voucherTypeMasterCreateObj);
+        return VoucherTypeMasterMapper.mapToVoucherTypeMasterDto(voucherTypeMasterObj);
 
     }
 
@@ -104,11 +104,11 @@ public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
     @Override
     public void deleteVoucherTypeMaster(String voucherTypeName){
 
-        VoucherTypeMasterCreate voucherTypeMasterCreate = voucherTypeMasterDAO.findById(voucherTypeName).orElseThrow(()->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher type name is not found with the given name:" + voucherTypeName));
 
-        voucherTypeMasterDAO.deleteById(voucherTypeName);
+        voucherTypeMasterRepository.deleteById(voucherTypeName);
 
     }
 }

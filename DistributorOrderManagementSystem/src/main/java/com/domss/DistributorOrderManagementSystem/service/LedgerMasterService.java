@@ -1,17 +1,18 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.LedgerMasterCreateDto;
+
+import com.domss.DistributorOrderManagementSystem.dto.LedgerMasterDto;
 
 import java.util.List;
 
 public interface LedgerMasterService {
-    LedgerMasterCreateDto createLedgerMaster(LedgerMasterCreateDto ledgerMasterCreateDto);
+    LedgerMasterDto createLedgerMaster(LedgerMasterDto ledgerMasterDto);
 
-    LedgerMasterCreateDto getLedgerCode(String ledgerCode);
+    LedgerMasterDto getLedgerCode(String ledgerCode);
 
-    List<LedgerMasterCreateDto> getAllLedgerCodes();
+    List<LedgerMasterDto> getAllLedgerCodes();
 
-    LedgerMasterCreateDto updateLedgerMaster(String ledgerCode, LedgerMasterCreateDto updatedLedgerMaster);
+    LedgerMasterDto updateLedgerMaster(String ledgerCode, LedgerMasterDto updatedLedgerMaster);
 
     void deleteLedgerMaster(String ledgerCode);
 }

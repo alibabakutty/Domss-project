@@ -1,11 +1,12 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.RegionMasterCreateDto;
-import com.example.imperio.entity.RegionMasterCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.RegionMasterCreateMapper;
-import com.example.imperio.repository.RegionMasterDAO;
-import com.example.imperio.service.RegionMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.RegionMasterDto;
+import com.domss.DistributorOrderManagementSystem.entity.RegionMaster;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.RegionMasterMapper;
+import com.domss.DistributorOrderManagementSystem.repository.RegionMasterRepository;
+import com.domss.DistributorOrderManagementSystem.service.RegionMasterService;
+
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,31 +19,31 @@ import java.util.List;
 public class RegionMasterServiceImpl implements RegionMasterService {
 
     @Autowired
-    private RegionMasterDAO regionMasterDAO;
+    private RegionMasterRepository regionMasterRepository;
 
     @Override
-    public RegionMasterCreateDto createRegionMaster(RegionMasterCreateDto regionMasterCreateDto){
+    public RegionMasterDto createRegionMaster(RegionMasterDto regionMasterDto){
 
         // Validate the region object
-        validateRegionMaster(regionMasterCreateDto);
+        validateRegionMaster(regionMasterDto);
 
         // Check for duplicate entry
-        if (regionMasterDAO.existsByRegionMasterId(regionMasterCreateDto.getRegionMasterId())) {
-            throw new DuplicateKeyException("Duplicate entry for unique field: " + regionMasterCreateDto.getRegionMasterId());
+        if (regionMasterRepository.existsByRegionMasterId(regionMasterDto.getRegionMasterId())) {
+            throw new DuplicateKeyException("Duplicate entry for unique field: " + regionMasterDto.getRegionMasterId());
         }
 
-        RegionMasterCreate regionMasterCreate = RegionMasterCreateMapper.mapToRegionMasterCreate(regionMasterCreateDto);
+        RegionMaster regionMaster = RegionMasterMapper.mapToRegionMaster(regionMasterDto);
 
-        RegionMasterCreate savedRegionMaster = regionMasterDAO.save(regionMasterCreate);
+        RegionMaster savedRegionMaster = regionMasterRepository.save(regionMaster);
 
-        return RegionMasterCreateMapper.mapToRegionMasterCreateDto(savedRegionMaster);
+        return RegionMasterMapper.mapToRegionMasterDto(savedRegionMaster);
 
 
     }
 
-    private void validateRegionMaster(RegionMasterCreateDto regionMasterCreateDto){
+    private void validateRegionMaster(RegionMasterDto regionMasterDto){
 
-        if(regionMasterCreateDto.getRegionMasterId() == null || regionMasterCreateDto.getRegionMasterId().isEmpty()){
+        if(regionMasterDto.getRegionMasterId() == null || regionMasterDto.getRegionMasterId().isEmpty()){
 
             throw new IllegalArgumentException("Unique field cannot be empty");
         }
@@ -50,47 +51,47 @@ public class RegionMasterServiceImpl implements RegionMasterService {
 
 
     @Override
-    public RegionMasterCreateDto getRegionMaster(String regionMasterId){
+    public RegionMasterDto getRegionMaster(String regionMasterId){
 
-        RegionMasterCreate regionMasterCreate = regionMasterDAO.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
                 new ResourceNotFoundException("Region is not found with this name:" + regionMasterId));
 
-        return RegionMasterCreateMapper.mapToRegionMasterCreateDto(regionMasterCreate);
+        return RegionMasterMapper.mapToRegionMasterDto(regionMaster);
     }
 
 
     @Override
-    public List<RegionMasterCreateDto> getAllRegionMasterIds(){
+    public List<RegionMasterDto> getAllRegionMasterIds(){
 
-        List<RegionMasterCreate> regionMasterCreate = regionMasterDAO.findAll();
-        return regionMasterCreate.stream().map(RegionMasterCreateMapper::mapToRegionMasterCreateDto).toList();
+        List<RegionMaster> regionMaster = regionMasterRepository.findAll();
+        return regionMaster.stream().map(RegionMasterMapper::mapToRegionMasterDto).toList();
     }
 
     @Override
-    public RegionMasterCreateDto updateRegion(String regionMasterId, RegionMasterCreateDto updatedRegion){
+    public RegionMasterDto updateRegion(String regionMasterId, RegionMasterDto updatedRegion){
 
-        RegionMasterCreate regionMasterCreate = regionMasterDAO.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
 
                 new ResourceNotFoundException("Region is not found with the given name: " + regionMasterId));
 
-        regionMasterCreate.setRegionMasterId(updatedRegion.getRegionMasterId());
-        regionMasterCreate.setRegionName(updatedRegion.getRegionName());
-        regionMasterCreate.setRegionState(updatedRegion.getRegionState());
-        regionMasterCreate.setCountry(updatedRegion.getCountry());
+        regionMaster.setRegionMasterId(updatedRegion.getRegionMasterId());
+        regionMaster.setRegionName(updatedRegion.getRegionName());
+        regionMaster.setRegionState(updatedRegion.getRegionState());
+        regionMaster.setCountry(updatedRegion.getCountry());
 
-        RegionMasterCreate regionMasterCreateObj = regionMasterDAO.save(regionMasterCreate);
+        RegionMaster regionMasterObj = regionMasterRepository.save(regionMaster);
 
-        return RegionMasterCreateMapper.mapToRegionMasterCreateDto(regionMasterCreateObj);
+        return RegionMasterMapper.mapToRegionMasterDto(regionMasterObj);
 
     }
 
     @Override
     public void deleteRegion(String regionMasterId){
 
-        RegionMasterCreate regionMasterCreate = regionMasterDAO.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
 
                 new ResourceNotFoundException("Region is not exists with the given name: " + regionMasterId));
 
-        regionMasterDAO.deleteById(regionMasterId);
+        regionMasterRepository.deleteById(regionMasterId);
     }
 }

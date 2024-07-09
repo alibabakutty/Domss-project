@@ -1,11 +1,11 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.VoucherTypeCreateDto;
-import com.example.imperio.entity.VoucherTypeCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.VoucherTypeMapper;
-import com.example.imperio.repository.VoucherTypeDAO;
-import com.example.imperio.service.VoucherTypeService;
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeDto;
+import com.domss.DistributorOrderManagementSystem.entity.VoucherType;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.VoucherTypeMapper;
+import com.domss.DistributorOrderManagementSystem.repository.VoucherTypeRepository;
+import com.domss.DistributorOrderManagementSystem.service.VoucherTypeService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,58 +18,58 @@ import java.util.List;
 public class VoucherTypeImpl implements VoucherTypeService {
 
     @Autowired
-    private VoucherTypeDAO voucherTypeDAO;
+    private VoucherTypeRepository voucherTypeRepository;
 
     @Override
-    public VoucherTypeCreateDto createVoucherType(VoucherTypeCreateDto voucherTypeCreateDto){
+    public VoucherTypeDto createVoucherType(VoucherTypeDto voucherTypeDto){
 
         // Validate voucher type object
-        validateVoucher(new VoucherTypeCreateDto());
+        validateVoucher(new VoucherTypeDto());
 
         // check for duplicate entry
-        if(voucherTypeDAO.existsByVoucherType(voucherTypeCreateDto.getVoucherType())){
-            throw new DuplicateKeyException("Duplicate entry for unique field:" + voucherTypeCreateDto.getVoucherType());
+        if(voucherTypeRepository.existsByVoucherType(voucherTypeDto.getVoucherType())){
+            throw new DuplicateKeyException("Duplicate entry for unique field:" + voucherTypeDto.getVoucherType());
         }
 
-        VoucherTypeCreate voucherTypeCreate = VoucherTypeMapper.mapToVoucherTypeMasterCreate(voucherTypeCreateDto);
+        VoucherType voucherType = VoucherTypeMapper.mapToVoucherTypeMaster(voucherTypeDto);
 
-        VoucherTypeCreate savedVoucherTypeCreate = voucherTypeDAO.save(voucherTypeCreate);
+        VoucherType savedVoucherType = voucherTypeRepository.save(voucherType);
 
-        return VoucherTypeMapper.mapToVoucherTypeMasterCreateDto(savedVoucherTypeCreate);
+        return VoucherTypeMapper.mapToVoucherTypeMasterDto(savedVoucherType);
 
     }
 
-    private void validateVoucher(VoucherTypeCreateDto voucherTypeCreateDto){
+    private void validateVoucher(VoucherTypeDto voucherTypeDto){
 
-        if(voucherTypeCreateDto.getVoucherType() == null || voucherTypeCreateDto.getVoucherType().isEmpty()){
+        if(voucherTypeDto.getVoucherType() == null || voucherTypeDto.getVoucherType().isEmpty()){
             throw new IllegalArgumentException("Unique field cannot be empty");
         }
     }
 
     @Override
-    public VoucherTypeCreateDto getVoucherType(String voucherType){
+    public VoucherTypeDto getVoucherType(String voucherType){
 
-        VoucherTypeCreate voucherTypeCreate = voucherTypeDAO.findById(voucherType).orElseThrow(() ->
+        VoucherType voucherTypeCreate = voucherTypeRepository.findById(voucherType).orElseThrow(() ->
 
                 new ResourceNotFoundException("Voucher Type is not found with this name:" + voucherType));
 
-        return VoucherTypeMapper.mapToVoucherTypeMasterCreateDto(voucherTypeCreate);
+        return VoucherTypeMapper.mapToVoucherTypeMasterDto(voucherTypeCreate);
     }
 
     @Override
-    public List<VoucherTypeCreateDto> getAllVoucherTypes(){
+    public List<VoucherTypeDto> getAllVoucherTypes(){
 
-        List<VoucherTypeCreate> voucherTypeCreate = voucherTypeDAO.findAll();
+        List<VoucherType> voucherType = voucherTypeRepository.findAll();
 
-        return voucherTypeCreate.stream().map(VoucherTypeMapper::mapToVoucherTypeMasterCreateDto).toList();
+        return voucherType.stream().map(VoucherTypeMapper::mapToVoucherTypeMasterDto).toList();
     }
 
     @Override
     public void deleteVoucherType(String voucherType){
-        VoucherTypeCreate voucherTypeCreate = voucherTypeDAO.findById(voucherType).orElseThrow(()->
+        VoucherType voucherTypeCreate = voucherTypeRepository.findById(voucherType).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher Type is not found with this name:" + voucherType));
 
-        voucherTypeDAO.deleteById(voucherType);
+        voucherTypeRepository.deleteById(voucherType);
     }
 }

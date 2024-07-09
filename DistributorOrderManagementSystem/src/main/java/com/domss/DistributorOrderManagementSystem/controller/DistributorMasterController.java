@@ -1,8 +1,8 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
 
-import com.example.imperio.dto.DistributorMasterCreateDto;
-import com.example.imperio.service.DistributorMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.DistributorMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.DistributorMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +20,27 @@ public class DistributorMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addDistributor")
-    public ResponseEntity<DistributorMasterCreateDto> createDistributorEntity(@RequestBody DistributorMasterCreateDto distributorMasterCreateDto){
+    public ResponseEntity<DistributorMasterDto> createDistributorEntity(@RequestBody DistributorMasterDto distributorMasterDto){
 
-        DistributorMasterCreateDto saveDistributorMaster = distributorMasterService.createDistributorMaster(distributorMasterCreateDto);
 
-        return new ResponseEntity<>(saveDistributorMaster, HttpStatus.CREATED);
+
+        return distributorMasterService.createDistributorMaster(distributorMasterDto);
     }
 
     //Build GET Master Ids REST API
     @GetMapping("/displayDistributor/{distributorCode}")
-    public ResponseEntity<DistributorMasterCreateDto> getDataByDistributorCode(@PathVariable String distributorCode){
+    public ResponseEntity<DistributorMasterDto> getDataByDistributorCode(@PathVariable String distributorCode){
 
-        DistributorMasterCreateDto distributorMasterCreateDto = distributorMasterService.getDistributorMaster(distributorCode);
+        DistributorMasterDto distributorMasterDto = distributorMasterService.getDistributorMaster(distributorCode);
 
-        return ResponseEntity.ok(distributorMasterCreateDto);
+        return ResponseEntity.ok(distributorMasterDto);
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allDistributors")
-    public ResponseEntity<List<DistributorMasterCreateDto>> getAllDistributors(){
+    public ResponseEntity<List<DistributorMasterDto>> getAllDistributors(){
 
-        List<DistributorMasterCreateDto> allDistributors = distributorMasterService.getAllDistributors();
+        List<DistributorMasterDto> allDistributors = distributorMasterService.getAllDistributors();
 
         return ResponseEntity.ok(allDistributors);
 
@@ -48,11 +48,11 @@ public class DistributorMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterDistributorMaster/{distributorCode}")
-    public ResponseEntity<DistributorMasterCreateDto> updateDistributor(@PathVariable String distributorCode, @RequestBody DistributorMasterCreateDto updatedDistributor){
+    public ResponseEntity<DistributorMasterDto> updateDistributor(@PathVariable String distributorCode, @RequestBody DistributorMasterDto updatedDistributor){
 
-        DistributorMasterCreateDto distributorMasterCreateDto = distributorMasterService.updateDistributor(distributorCode,updatedDistributor);
+        DistributorMasterDto distributorMasterDto = distributorMasterService.updateDistributor(distributorCode, updatedDistributor);
 
-        return ResponseEntity.ok(distributorMasterCreateDto);
+        return ResponseEntity.ok(distributorMasterDto);
     }
 
     //Build DELETE Ledger REST API

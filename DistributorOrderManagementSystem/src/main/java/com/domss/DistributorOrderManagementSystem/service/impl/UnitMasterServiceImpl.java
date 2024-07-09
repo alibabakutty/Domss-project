@@ -1,11 +1,11 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.UnitMasterCreateDto;
-import com.example.imperio.entity.UnitMasterCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.UnitMasterCreateMapper;
-import com.example.imperio.repository.UnitMasterDAO;
-import com.example.imperio.service.UnitMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.UnitMasterDto;
+import com.domss.DistributorOrderManagementSystem.entity.UnitMaster;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.UnitMasterMapper;
+import com.domss.DistributorOrderManagementSystem.repository.UnitMasterRepository;
+import com.domss.DistributorOrderManagementSystem.service.UnitMasterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,62 +18,62 @@ import java.util.List;
 public class UnitMasterServiceImpl implements UnitMasterService {
 
     @Autowired
-    private UnitMasterDAO unitMasterDAO;
+    private UnitMasterRepository unitMasterRepository;
 
     @Override
-    public UnitMasterCreateDto createUnitMaster(UnitMasterCreateDto unitMasterCreateDto){
+    public UnitMasterDto createUnitMaster(UnitMasterDto unitMasterDto){
 
         // validate the unit object
-        validateUnitMaster(unitMasterCreateDto);
+        validateUnitMaster(unitMasterDto);
 
         // check for duplicate entry
-        if(unitMasterDAO.existsByProductUom(unitMasterCreateDto.getProductUom())){
-            throw new DuplicateKeyException("Duplicate entry for unique field:" + unitMasterCreateDto.getProductUom());
+        if(unitMasterRepository.existsByProductUom(unitMasterDto.getProductUom())){
+            throw new DuplicateKeyException("Duplicate entry for unique field:" + unitMasterDto.getProductUom());
         }
 
-        UnitMasterCreate unitMasterCreate = UnitMasterCreateMapper.mapToUnitMasterCreate(unitMasterCreateDto);
+        UnitMaster unitMaster = UnitMasterMapper.mapToUnitMaster(unitMasterDto);
 
-        UnitMasterCreate savedUnitMaster = unitMasterDAO.save(unitMasterCreate);
+        UnitMaster savedUnitMaster = unitMasterRepository.save(unitMaster);
 
-        return UnitMasterCreateMapper.mapToUnitMasterCreateDto(savedUnitMaster);
+        return UnitMasterMapper.mapToUnitMasterDto(savedUnitMaster);
 
 
     }
 
-    private void validateUnitMaster(UnitMasterCreateDto unitMasterCreateDto){
-        if(unitMasterCreateDto.getProductUom() == null || unitMasterCreateDto.getProductUom().isEmpty()){
+    private void validateUnitMaster(UnitMasterDto unitMasterDto){
+        if(unitMasterDto.getProductUom() == null || unitMasterDto.getProductUom().isEmpty()){
             throw new IllegalArgumentException("Unique field cannot be empty!");
         }
     }
 
     @Override
-    public UnitMasterCreateDto getUnitMaster(String productUom){
-        UnitMasterCreate unitMasterCreate = unitMasterDAO.findById(productUom).orElseThrow(()->
+    public UnitMasterDto getUnitMaster(String productUom){
+        UnitMaster unitMaster = unitMasterRepository.findById(productUom).orElseThrow(()->
 
                 new ResourceNotFoundException("Unit is not found with this name:" + productUom));
 
-        return UnitMasterCreateMapper.mapToUnitMasterCreateDto(unitMasterCreate);
+        return UnitMasterMapper.mapToUnitMasterDto(unitMaster);
 
 
     }
 
     @Override
-    public List<UnitMasterCreateDto> getAllUnits(){
+    public List<UnitMasterDto> getAllUnits(){
 
-        List<UnitMasterCreate> unitMasterCreate = unitMasterDAO.findAll();
+        List<UnitMaster> unitMaster = unitMasterRepository.findAll();
 
-        return unitMasterCreate.stream().map(UnitMasterCreateMapper::mapToUnitMasterCreateDto).toList();
+        return unitMaster.stream().map(UnitMasterMapper::mapToUnitMasterDto).toList();
 
     }
 
     @Override
     public void deleteUnit(String uom){
 
-        UnitMasterCreate unitMasterCreate = unitMasterDAO.findById(uom).orElseThrow(()->
+        UnitMaster unitMaster = unitMasterRepository.findById(uom).orElseThrow(()->
 
                 new ResourceNotFoundException("Units is not found with this name:" + uom));
 
-        unitMasterDAO.deleteById(uom);
+        unitMasterRepository.deleteById(uom);
 
     }
 }

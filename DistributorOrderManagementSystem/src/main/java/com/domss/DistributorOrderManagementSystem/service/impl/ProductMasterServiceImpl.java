@@ -1,11 +1,11 @@
-package com.example.imperio.service.impl;
+package com.domss.DistributorOrderManagementSystem.service.impl;
 
-import com.example.imperio.dto.ProductMasterCreateDto;
-import com.example.imperio.entity.ProductMasterCreate;
-import com.example.imperio.exception.ResourceNotFoundException;
-import com.example.imperio.mapper.ProductMasterCreateMapper;
-import com.example.imperio.repository.ProductMasterDAO;
-import com.example.imperio.service.ProductMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.ProductMasterDto;
+import com.domss.DistributorOrderManagementSystem.entity.ProductMaster;
+import com.domss.DistributorOrderManagementSystem.exception.ResourceNotFoundException;
+import com.domss.DistributorOrderManagementSystem.mapper.ProductMasterMapper;
+import com.domss.DistributorOrderManagementSystem.repository.ProductMasterRepository;
+import com.domss.DistributorOrderManagementSystem.service.ProductMasterService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -18,31 +18,31 @@ import java.util.List;
 public class ProductMasterServiceImpl implements ProductMasterService {
 
     @Autowired
-    private ProductMasterDAO productMasterDAO;
+    private ProductMasterRepository productMasterDAO;
 
     @Override
-    public ProductMasterCreateDto createProductMaster(ProductMasterCreateDto productMasterCreateDto){
+    public ProductMasterDto createProductMaster(ProductMasterDto productMasterDto){
 
 
         // Validate for product object
-        validateProductMaster(productMasterCreateDto);
+        validateProductMaster(productMasterDto);
 
         // check for duplicate entry
-        if(productMasterDAO.existsByProductCode(productMasterCreateDto.getProductCode())){
-            throw new DuplicateKeyException("Duplicate entry for unique field:" + productMasterCreateDto.getProductCode());
+        if(productMasterDAO.existsByProductCode(productMasterDto.getProductCode())){
+            throw new DuplicateKeyException("Duplicate entry for unique field:" + productMasterDto.getProductCode());
 
         }
 
-        ProductMasterCreate productMasterCreate = ProductMasterCreateMapper.mapToProductMasterCreate(productMasterCreateDto);
+        ProductMaster productMaster = ProductMasterMapper.mapToProductMaster(productMasterDto);
 
-        ProductMasterCreate savedProductMasterCreate = productMasterDAO.save(productMasterCreate);
+        ProductMaster savedProductMaster = productMasterDAO.save(productMaster);
 
-        return ProductMasterCreateMapper.mapToProductMasterCreateDto(savedProductMasterCreate);
+        return ProductMasterMapper.mapToProductMasterDto(savedProductMaster);
     }
 
-    private void validateProductMaster(ProductMasterCreateDto productMasterCreateDto){
+    private void validateProductMaster(ProductMasterDto productMasterDto){
 
-        if(productMasterCreateDto.getProductCode() == null || productMasterCreateDto.getProductCode().isEmpty()){
+        if(productMasterDto.getProductCode() == null || productMasterDto.getProductCode().isEmpty()){
 
             throw new IllegalArgumentException("Unique field cannot be empty");
 
@@ -51,44 +51,44 @@ public class ProductMasterServiceImpl implements ProductMasterService {
 
 
     @Override
-    public ProductMasterCreateDto getProductMaster(String productCode){
+    public ProductMasterDto getProductMaster(String productCode){
 
-        ProductMasterCreate productMasterCreate = productMasterDAO.findById(productCode).orElseThrow(()->
+        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(()->
                 new ResourceNotFoundException("Product is not found with this name:" + productCode));
 
-        return ProductMasterCreateMapper.mapToProductMasterCreateDto(productMasterCreate);
+        return ProductMasterMapper.mapToProductMasterDto(productMaster);
     }
 
     @Override
-    public List<ProductMasterCreateDto> getAllProductMasterCodes(){
+    public List<ProductMasterDto> getAllProductMasterCodes(){
 
-        List<ProductMasterCreate> productMasterCreate = productMasterDAO.findAll();
+        List<ProductMaster> productMaster = productMasterDAO.findAll();
 
-        return productMasterCreate.stream().map(ProductMasterCreateMapper::mapToProductMasterCreateDto).toList();
+        return productMaster.stream().map(ProductMasterMapper::mapToProductMasterDto).toList();
 
     }
 
     @Override
-    public ProductMasterCreateDto updateProduct(String productCode, ProductMasterCreateDto updatedProduct){
+    public ProductMasterDto updateProduct(String productCode, ProductMasterDto updatedProduct){
 
-        ProductMasterCreate productMasterCreate = productMasterDAO.findById(productCode).orElseThrow(() ->
+        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(() ->
 
 
                 new ResourceNotFoundException("Product is not found with the given name:" + productCode));
 
 
-        productMasterCreate.setProductCode(updatedProduct.getProductCode());
-        productMasterCreate.setProductDescription(updatedProduct.getProductDescription());
-        productMasterCreate.setProductCategory(updatedProduct.getProductCategory());
-        productMasterCreate.setProductUom(updatedProduct.getProductUom());
-        productMasterCreate.setProductGroup(updatedProduct.getProductGroup());
-        productMasterCreate.setStandardCost(updatedProduct.getStandardCost());
-        productMasterCreate.setSellingPrice(updatedProduct.getSellingPrice());
-        productMasterCreate.setDiscount(updatedProduct.getDiscount());
+        productMaster.setProductCode(updatedProduct.getProductCode());
+        productMaster.setProductDescription(updatedProduct.getProductDescription());
+        productMaster.setProductCategory(updatedProduct.getProductCategory());
+        productMaster.setProductUom(updatedProduct.getProductUom());
+        productMaster.setProductGroup(updatedProduct.getProductGroup());
+        productMaster.setStandardCost(updatedProduct.getStandardCost());
+        productMaster.setSellingPrice(updatedProduct.getSellingPrice());
+        productMaster.setDiscount(updatedProduct.getDiscount());
 
-        ProductMasterCreate productMasterCreateObj = productMasterDAO.save(productMasterCreate);
+        ProductMaster productMasterObj = productMasterDAO.save(productMaster);
 
-        return ProductMasterCreateMapper.mapToProductMasterCreateDto(productMasterCreateObj);
+        return ProductMasterMapper.mapToProductMasterDto(productMasterObj);
 
 
     }
@@ -96,7 +96,7 @@ public class ProductMasterServiceImpl implements ProductMasterService {
     @Override
     public void deleteProduct(String productCode){
 
-        ProductMasterCreate productMasterCreate = productMasterDAO.findById(productCode).orElseThrow(() ->
+        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Product is not exists with this given name: " + productCode));
 

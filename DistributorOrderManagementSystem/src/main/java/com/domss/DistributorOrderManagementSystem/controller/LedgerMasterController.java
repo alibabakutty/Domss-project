@@ -1,7 +1,8 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.LedgerMasterCreateDto;
-import com.example.imperio.service.LedgerMasterService;
+
+import com.domss.DistributorOrderManagementSystem.dto.LedgerMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.LedgerMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class LedgerMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addLedgerMaster")
-    public ResponseEntity<LedgerMasterCreateDto> createLedgerMaster(@RequestBody LedgerMasterCreateDto ledgerMasterCreateDto){
+    public ResponseEntity<LedgerMasterDto> createLedgerMaster(@RequestBody LedgerMasterDto ledgerMasterDto){
 
-        LedgerMasterCreateDto saveLedgerMaster = ledgerMasterService.createLedgerMaster(ledgerMasterCreateDto);
+        LedgerMasterDto saveLedgerMaster = ledgerMasterService.createLedgerMaster(ledgerMasterDto);
 
         return new ResponseEntity<>(saveLedgerMaster, HttpStatus.CREATED);
 
@@ -29,19 +30,19 @@ public class LedgerMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("displayLedger/{ledgerCode}")
-    public ResponseEntity<LedgerMasterCreateDto> getDataByLedger(@PathVariable String ledgerCode){
+    public ResponseEntity<LedgerMasterDto> getDataByLedger(@PathVariable String ledgerCode){
 
-        LedgerMasterCreateDto ledgerMasterCreateDto = ledgerMasterService.getLedgerCode(ledgerCode);
+        LedgerMasterDto ledgerMasterDto = ledgerMasterService.getLedgerCode(ledgerCode);
 
-        return ResponseEntity.ok(ledgerMasterCreateDto);
+        return ResponseEntity.ok(ledgerMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allLedgers")
-    public ResponseEntity<List<LedgerMasterCreateDto>> getAllLedgers(){
+    public ResponseEntity<List<LedgerMasterDto>> getAllLedgers(){
 
-        List<LedgerMasterCreateDto> allLedgers = ledgerMasterService.getAllLedgerCodes();
+        List<LedgerMasterDto> allLedgers = ledgerMasterService.getAllLedgerCodes();
 
         return ResponseEntity.ok(allLedgers);
 
@@ -51,11 +52,11 @@ public class LedgerMasterController {
     //Build UPDATE Master REST API
 
     @PutMapping("/alterLedgerMaster/{ledgerCode}")
-    public ResponseEntity<LedgerMasterCreateDto> updateLedger(@PathVariable String ledgerCode, @RequestBody LedgerMasterCreateDto updatedLedger){
+    public ResponseEntity<LedgerMasterDto> updateLedger(@PathVariable String ledgerCode, @RequestBody LedgerMasterDto updatedLedger){
 
-        LedgerMasterCreateDto ledgerMasterCreateDto = ledgerMasterService.updateLedgerMaster(ledgerCode,updatedLedger);
+        LedgerMasterDto ledgerMasterDto = ledgerMasterService.updateLedgerMaster(ledgerCode,updatedLedger);
 
-        return ResponseEntity.ok(ledgerMasterCreateDto);
+        return ResponseEntity.ok(ledgerMasterDto);
 
     }
 

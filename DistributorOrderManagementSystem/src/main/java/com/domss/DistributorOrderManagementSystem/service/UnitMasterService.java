@@ -1,15 +1,15 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.UnitMasterCreateDto;
+import com.domss.DistributorOrderManagementSystem.dto.UnitMasterDto;
 
 import java.util.List;
 
 public interface UnitMasterService {
-    UnitMasterCreateDto createUnitMaster(UnitMasterCreateDto unitMasterCreateDto);
+    UnitMasterDto createUnitMaster(UnitMasterDto unitMasterDto);
 
-    UnitMasterCreateDto getUnitMaster(String productUom);
+    UnitMasterDto getUnitMaster(String productUom);
 
-    List<UnitMasterCreateDto> getAllUnits();
+    List<UnitMasterDto> getAllUnits();
 
     void deleteUnit(String uom);
 }

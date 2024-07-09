@@ -1,19 +1,21 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.ProductMasterCreateDto;
+
+
+import com.domss.DistributorOrderManagementSystem.dto.ProductMasterDto;
 
 import java.util.List;
 
 public interface ProductMasterService {
 
 
-    ProductMasterCreateDto createProductMaster(ProductMasterCreateDto productMasterCreateDto);
+    ProductMasterDto createProductMaster(ProductMasterDto productMasterDto);
 
-    ProductMasterCreateDto getProductMaster(String productCode);
+    ProductMasterDto getProductMaster(String productCode);
 
-    List<ProductMasterCreateDto> getAllProductMasterCodes();
+    List<ProductMasterDto> getAllProductMasterCodes();
 
-    ProductMasterCreateDto updateProduct(String productCode, ProductMasterCreateDto updatedProduct);
+    ProductMasterDto updateProduct(String productCode, ProductMasterDto updatedProduct);
 
     void deleteProduct(String productCode);
 

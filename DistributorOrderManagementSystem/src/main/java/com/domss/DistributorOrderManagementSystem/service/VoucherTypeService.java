@@ -1,15 +1,15 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.VoucherTypeCreateDto;
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeDto;
 
 import java.util.List;
 
 public interface VoucherTypeService {
-    VoucherTypeCreateDto createVoucherType(VoucherTypeCreateDto voucherTypeCreateDto);
+    VoucherTypeDto createVoucherType(VoucherTypeDto voucherTypeDto);
 
-    VoucherTypeCreateDto getVoucherType(String voucherType);
+    VoucherTypeDto getVoucherType(String voucherType);
 
-    List<VoucherTypeCreateDto> getAllVoucherTypes();
+    List<VoucherTypeDto> getAllVoucherTypes();
 
     void deleteVoucherType(String voucherType);
 }
