@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+### App ###
 application.properties
 
 ### STS ###
