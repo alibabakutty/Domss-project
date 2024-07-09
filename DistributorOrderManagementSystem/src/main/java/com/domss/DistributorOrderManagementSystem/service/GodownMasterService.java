@@ -1,17 +1,19 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.GodownMasterCreateDto;
+
+
+import com.domss.DistributorOrderManagementSystem.dto.GodownMasterDto;
 
 import java.util.List;
 
 public interface GodownMasterService {
-    GodownMasterCreateDto createGodownMaster(GodownMasterCreateDto godownMasterCreateDto);
+    GodownMasterDto createGodownMaster(GodownMasterDto godownMasterDto);
 
-    GodownMasterCreateDto getGodownMaster(String godownCode);
+    GodownMasterDto getGodownMaster(String godownCode);
 
-    List<GodownMasterCreateDto> getAllGodownMasterCodes();
+    List<GodownMasterDto> getAllGodownMasterCodes();
 
-    GodownMasterCreateDto updateGodown(String godownCode, GodownMasterCreateDto updatedGodown);
+    GodownMasterDto updateGodown(String godownCode, GodownMasterDto updatedGodown);
 
     void deleteGodown(String godownCode);
 }

@@ -1,7 +1,7 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.UnitMasterCreateDto;
-import com.example.imperio.service.UnitMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.UnitMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.UnitMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,9 @@ public class UnitController {
 
     //Build ADD Masters REST API
     @PostMapping("/addUnit")
-    public ResponseEntity<UnitMasterCreateDto> createUnitMaster(@RequestBody UnitMasterCreateDto unitMasterCreateDto){
+    public ResponseEntity<UnitMasterDto> createUnitMaster(@RequestBody UnitMasterDto unitMasterDto){
 
-        UnitMasterCreateDto saveUnitMaster = unitMasterService.createUnitMaster(unitMasterCreateDto);
+        UnitMasterDto saveUnitMaster = unitMasterService.createUnitMaster(unitMasterDto);
 
         return new ResponseEntity<>(saveUnitMaster, HttpStatus.CREATED);
 
@@ -29,20 +29,20 @@ public class UnitController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayUnit/{productUom}")
-    public ResponseEntity<UnitMasterCreateDto> getDataByUnitCode(@PathVariable String productUom){
+    public ResponseEntity<UnitMasterDto> getDataByUnitCode(@PathVariable String productUom){
 
-        UnitMasterCreateDto unitMasterCreateDto = unitMasterService.getUnitMaster(productUom);
+        UnitMasterDto unitMasterDto = unitMasterService.getUnitMaster(productUom);
 
-        return ResponseEntity.ok(unitMasterCreateDto);
+        return ResponseEntity.ok(unitMasterDto);
 
     }
 
 
     //Build GET All Master Ids REST API
     @GetMapping("/allUnits")
-    public ResponseEntity<List<UnitMasterCreateDto>> getAllUnits(){
+    public ResponseEntity<List<UnitMasterDto>> getAllUnits(){
 
-        List<UnitMasterCreateDto> allUnits = unitMasterService.getAllUnits();
+        List<UnitMasterDto> allUnits = unitMasterService.getAllUnits();
 
         return ResponseEntity.ok(allUnits);
 

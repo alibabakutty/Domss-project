@@ -1,18 +1,20 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.DistributorMasterCreateDto;
+
+import com.domss.DistributorOrderManagementSystem.dto.DistributorMasterDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface DistributorMasterService {
 
-    DistributorMasterCreateDto createDistributorMaster(DistributorMasterCreateDto distributorMasterCreateDto);
+    ResponseEntity<DistributorMasterDto> createDistributorMaster(DistributorMasterDto distributorMasterDto);
 
-    DistributorMasterCreateDto getDistributorMaster(String distributorCode);
+    DistributorMasterDto getDistributorMaster(String distributorCode);
 
-    List<DistributorMasterCreateDto> getAllDistributors();
+    List<DistributorMasterDto> getAllDistributors();
 
-    DistributorMasterCreateDto updateDistributor(String distributorCode, DistributorMasterCreateDto updatedDistributor);
+    DistributorMasterDto updateDistributor(String distributorCode, DistributorMasterDto updatedDistributor);
 
     void deleteDistributor(String distributorCode);
 }

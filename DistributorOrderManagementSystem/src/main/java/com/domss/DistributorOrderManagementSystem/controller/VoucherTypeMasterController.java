@@ -1,7 +1,8 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.VoucherTypeMasterCreateDto;
-import com.example.imperio.service.VoucherTypeMasterService;
+
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.VoucherTypeMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class VoucherTypeMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addVoucherTypeMaster")
-    public ResponseEntity<VoucherTypeMasterCreateDto> createVoucher(@RequestBody VoucherTypeMasterCreateDto voucherTypeMasterCreateDto){
+    public ResponseEntity<VoucherTypeMasterDto> createVoucher(@RequestBody VoucherTypeMasterDto voucherTypeMasterDto){
 
-        VoucherTypeMasterCreateDto saveVoucher = voucherTypeMasterService.createVoucherTypeMaster(voucherTypeMasterCreateDto);
+        VoucherTypeMasterDto saveVoucher = voucherTypeMasterService.createVoucherTypeMaster(voucherTypeMasterDto);
 
         return new ResponseEntity<>(saveVoucher, HttpStatus.CREATED);
 
@@ -29,19 +30,19 @@ public class VoucherTypeMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayVoucher/{voucherTypeName}")
-    public ResponseEntity<VoucherTypeMasterCreateDto> getDataByVoucherTypeName(@PathVariable String voucherTypeName){
+    public ResponseEntity<VoucherTypeMasterDto> getDataByVoucherTypeName(@PathVariable String voucherTypeName){
 
-        VoucherTypeMasterCreateDto voucherTypeMasterCreateDto = voucherTypeMasterService.getVoucherTypeName(voucherTypeName);
+        VoucherTypeMasterDto voucherTypeMasterDto = voucherTypeMasterService.getVoucherTypeName(voucherTypeName);
 
-        return ResponseEntity.ok(voucherTypeMasterCreateDto);
+        return ResponseEntity.ok(voucherTypeMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allVouchers")
-    public ResponseEntity<List<VoucherTypeMasterCreateDto>> getAllVoucher(@PathVariable String voucherTypeName){
+    public ResponseEntity<List<VoucherTypeMasterDto>> getAllVoucher(@PathVariable String voucherTypeName){
 
-        List<VoucherTypeMasterCreateDto> allVouchers = voucherTypeMasterService.getAllVoucherTypeMasters();
+        List<VoucherTypeMasterDto> allVouchers = voucherTypeMasterService.getAllVoucherTypeMasters();
 
         return ResponseEntity.ok(allVouchers);
 
@@ -49,11 +50,11 @@ public class VoucherTypeMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterVoucherTypeMaster/{voucherTypeName}")
-    public ResponseEntity<VoucherTypeMasterCreateDto> updateVoucher(@PathVariable String voucherTypeName, @RequestBody VoucherTypeMasterCreateDto updatedVoucher){
+    public ResponseEntity<VoucherTypeMasterDto> updateVoucher(@PathVariable String voucherTypeName, @RequestBody VoucherTypeMasterDto updatedVoucher){
 
-        VoucherTypeMasterCreateDto voucherTypeMasterCreateDto = voucherTypeMasterService.updateVoucherTypeMaster(voucherTypeName,updatedVoucher);
+        VoucherTypeMasterDto voucherTypeMasterDto = voucherTypeMasterService.updateVoucherTypeMaster(voucherTypeName,updatedVoucher);
 
-        return ResponseEntity.ok(voucherTypeMasterCreateDto);
+        return ResponseEntity.ok(voucherTypeMasterDto);
 
     }
 

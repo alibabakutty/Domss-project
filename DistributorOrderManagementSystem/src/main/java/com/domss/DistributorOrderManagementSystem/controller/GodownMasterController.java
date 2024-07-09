@@ -1,7 +1,7 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.GodownMasterCreateDto;
-import com.example.imperio.service.GodownMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.GodownMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.GodownMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,9 @@ public class GodownMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addGodown")
-    public ResponseEntity<GodownMasterCreateDto> createGodownMaster(@RequestBody GodownMasterCreateDto godownMasterCreateDto){
+    public ResponseEntity<GodownMasterDto> createGodownMaster(@RequestBody GodownMasterDto godownMasterDto){
 
-        GodownMasterCreateDto saveGodownMaster = godownMasterService.createGodownMaster(godownMasterCreateDto);
+        GodownMasterDto saveGodownMaster = godownMasterService.createGodownMaster(godownMasterDto);
 
         return new ResponseEntity<>(saveGodownMaster, HttpStatus.CREATED);
 
@@ -29,19 +29,19 @@ public class GodownMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayGodown/{godownCode}")
-    public ResponseEntity<GodownMasterCreateDto> getDataByGodownCode(@PathVariable String godownCode){
+    public ResponseEntity<GodownMasterDto> getDataByGodownCode(@PathVariable String godownCode){
 
-        GodownMasterCreateDto godownMasterCreateDto = godownMasterService.getGodownMaster(godownCode);
+        GodownMasterDto godownMasterDto = godownMasterService.getGodownMaster(godownCode);
 
-        return ResponseEntity.ok(godownMasterCreateDto);
+        return ResponseEntity.ok(godownMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allGodowns")
-    public ResponseEntity<List<GodownMasterCreateDto>> getAllGodowns(){
+    public ResponseEntity<List<GodownMasterDto>> getAllGodowns(){
 
-        List<GodownMasterCreateDto> allGodowns = godownMasterService.getAllGodownMasterCodes();
+        List<GodownMasterDto> allGodowns = godownMasterService.getAllGodownMasterCodes();
 
         return ResponseEntity.ok(allGodowns);
 
@@ -49,11 +49,11 @@ public class GodownMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterGodownMaster/{godownCode}")
-    public ResponseEntity<GodownMasterCreateDto> updateGodown(@PathVariable String godownCode, @RequestBody GodownMasterCreateDto updatedGodown){
+    public ResponseEntity<GodownMasterDto> updateGodown(@PathVariable String godownCode, @RequestBody GodownMasterDto updatedGodown){
 
-        GodownMasterCreateDto godownMasterCreateDto = godownMasterService.updateGodown(godownCode,updatedGodown);
+        GodownMasterDto godownMasterDto = godownMasterService.updateGodown(godownCode,updatedGodown);
 
-        return ResponseEntity.ok(godownMasterCreateDto);
+        return ResponseEntity.ok(godownMasterDto);
 
     }
 

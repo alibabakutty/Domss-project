@@ -1,7 +1,7 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.ProductMasterCreateDto;
-import com.example.imperio.service.ProductMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.ProductMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.ProductMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin("http://localhost:4000")
 @RestController
-@RequestMapping("/productMasterApi")
+@RequestMapping("/products")
 public class ProductMasterController {
 
     @Autowired
@@ -19,9 +19,9 @@ public class ProductMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addProduct")
-    public ResponseEntity<ProductMasterCreateDto> createProductMaster(@RequestBody ProductMasterCreateDto productMasterCreateDto){
+    public ResponseEntity<ProductMasterDto> createProductMaster(@RequestBody ProductMasterDto productMasterDto){
 
-        ProductMasterCreateDto saveProductMaster = productMasterService.createProductMaster(productMasterCreateDto);
+        ProductMasterDto saveProductMaster = productMasterService.createProductMaster(productMasterDto);
 
         return new ResponseEntity<>(saveProductMaster, HttpStatus.CREATED);
 
@@ -30,19 +30,19 @@ public class ProductMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayProduct/{productCode}")
-    public ResponseEntity<ProductMasterCreateDto> getDataByProductCode(@PathVariable String productCode){
+    public ResponseEntity<ProductMasterDto> getDataByProductCode(@PathVariable String productCode){
 
-        ProductMasterCreateDto productMasterCreateDto = productMasterService.getProductMaster(productCode);
+        ProductMasterDto productMasterDto = productMasterService.getProductMaster(productCode);
 
-        return ResponseEntity.ok(productMasterCreateDto);
+        return ResponseEntity.ok(productMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allProducts")
-    public ResponseEntity<List<ProductMasterCreateDto>> getAllProducts(){
+    public ResponseEntity<List<ProductMasterDto>> getAllProducts(){
 
-        List<ProductMasterCreateDto> allProducts = productMasterService.getAllProductMasterCodes();
+        List<ProductMasterDto> allProducts = productMasterService.getAllProductMasterCodes();
 
         return ResponseEntity.ok(allProducts);
 
@@ -50,11 +50,11 @@ public class ProductMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterProductMaster/{productCode}")
-    public ResponseEntity<ProductMasterCreateDto> updateProduct(@PathVariable String productCode, @RequestBody ProductMasterCreateDto updatedProduct){
+    public ResponseEntity<ProductMasterDto> updateProduct(@PathVariable String productCode, @RequestBody ProductMasterDto updatedProduct){
 
-        ProductMasterCreateDto productMasterCreateDto = productMasterService.updateProduct(productCode,updatedProduct);
+        ProductMasterDto productMasterDto = productMasterService.updateProduct(productCode,updatedProduct);
 
-        return ResponseEntity.ok(productMasterCreateDto);
+        return ResponseEntity.ok(productMasterDto);
 
     }
 

@@ -1,49 +1,50 @@
-package com.example.imperio.mapper;
+package com.domss.DistributorOrderManagementSystem.mapper;
 
-import com.example.imperio.dto.VoucherTypeCreateDto;
-import com.example.imperio.entity.VoucherTypeCreate;
+
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeDto;
+import com.domss.DistributorOrderManagementSystem.entity.VoucherType;
 
 public class VoucherTypeMapper {
 
-    public static VoucherTypeCreateDto mapToVoucherTypeMasterCreateDto(VoucherTypeCreate voucherTypeCreate){
-        return new VoucherTypeCreateDto(
-                voucherTypeCreate.getVoucherTypeName(),
-                voucherTypeCreate.getVoucherType(),
-                voucherTypeCreate.getMethodOfVoucherNumbering(),
-                voucherTypeCreate.getAlterAdditionalNumberingDetails(),
-                voucherTypeCreate.getStartingNumber(),
-                voucherTypeCreate.getWidthOfNumericalPart(),
-                voucherTypeCreate.getPrefillWithZero(),
-                voucherTypeCreate.getRestartNumberingApplicationForm(),
-                voucherTypeCreate.getRestartNumberingStartingNumber(),
-                voucherTypeCreate.getRestartNumberingPeriodicity(),
-                voucherTypeCreate.getPrefixDetailsApplicationForm(),
-                voucherTypeCreate.getPrefixDetailsParticulars(),
-                voucherTypeCreate.getSuffixDetailsApplicationForm(),
-                voucherTypeCreate.getSuffixDetailsParticulars(),
-                voucherTypeCreate.getPrintingVoucherAfterSaving(),
-                voucherTypeCreate.getNameOfClass()
+    public static VoucherTypeDto mapToVoucherTypeMasterDto(VoucherType voucherType){
+        return new VoucherTypeDto(
+                voucherType.getVoucherTypeName(),
+                voucherType.getVoucherType(),
+                voucherType.getMethodOfVoucherNumbering(),
+                voucherType.getAlterAdditionalNumberingDetails(),
+                voucherType.getStartingNumber(),
+                voucherType.getWidthOfNumericalPart(),
+                voucherType.getPrefillWithZero(),
+                voucherType.getRestartNumberingApplicationForm(),
+                voucherType.getRestartNumberingStartingNumber(),
+                voucherType.getRestartNumberingPeriodicity(),
+                voucherType.getPrefixDetailsApplicationForm(),
+                voucherType.getPrefixDetailsParticulars(),
+                voucherType.getSuffixDetailsApplicationForm(),
+                voucherType.getSuffixDetailsParticulars(),
+                voucherType.getPrintingVoucherAfterSaving(),
+                voucherType.getNameOfClass()
         );
     }
 
-    public static VoucherTypeCreate mapToVoucherTypeMasterCreate(VoucherTypeCreateDto voucherTypeCreateDto){
-        return new VoucherTypeCreate(
-                voucherTypeCreateDto.getVoucherTypeName(),
-                voucherTypeCreateDto.getVoucherType(),
-                voucherTypeCreateDto.getMethodOfVoucherNumbering(),
-                voucherTypeCreateDto.getAlterAdditionalNumberingDetails(),
-                voucherTypeCreateDto.getStartingNumber(),
-                voucherTypeCreateDto.getWidthOfNumericalPart(),
-                voucherTypeCreateDto.getPrefillWithZero(),
-                voucherTypeCreateDto.getRestartNumberingApplicationForm(),
-                voucherTypeCreateDto.getRestartNumberingStartingNumber(),
-                voucherTypeCreateDto.getRestartNumberingPeriodicity(),
-                voucherTypeCreateDto.getPrefixDetailsApplicationForm(),
-                voucherTypeCreateDto.getPrefixDetailsParticulars(),
-                voucherTypeCreateDto.getSuffixDetailsApplicationForm(),
-                voucherTypeCreateDto.getSuffixDetailsParticulars(),
-                voucherTypeCreateDto.getPrintingVoucherAfterSaving(),
-                voucherTypeCreateDto.getNameOfClass()
+    public static VoucherType mapToVoucherTypeMaster(VoucherTypeDto voucherTypeDto){
+        return new VoucherType(
+                voucherTypeDto.getVoucherTypeName(),
+                voucherTypeDto.getVoucherType(),
+                voucherTypeDto.getMethodOfVoucherNumbering(),
+                voucherTypeDto.getAlterAdditionalNumberingDetails(),
+                voucherTypeDto.getStartingNumber(),
+                voucherTypeDto.getWidthOfNumericalPart(),
+                voucherTypeDto.getPrefillWithZero(),
+                voucherTypeDto.getRestartNumberingApplicationForm(),
+                voucherTypeDto.getRestartNumberingStartingNumber(),
+                voucherTypeDto.getRestartNumberingPeriodicity(),
+                voucherTypeDto.getPrefixDetailsApplicationForm(),
+                voucherTypeDto.getPrefixDetailsParticulars(),
+                voucherTypeDto.getSuffixDetailsApplicationForm(),
+                voucherTypeDto.getSuffixDetailsParticulars(),
+                voucherTypeDto.getPrintingVoucherAfterSaving(),
+                voucherTypeDto.getNameOfClass()
         );
     }
 }

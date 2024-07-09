@@ -1,7 +1,8 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.VoucherTypeCreateDto;
-import com.example.imperio.service.VoucherTypeService;
+
+import com.domss.DistributorOrderManagementSystem.dto.VoucherTypeDto;
+import com.domss.DistributorOrderManagementSystem.service.VoucherTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class VoucherTypeController {
 
     //Build ADD Masters REST API
     @PostMapping("/addVoucherType")
-    public ResponseEntity<VoucherTypeCreateDto> createVoucherType(@RequestBody VoucherTypeCreateDto voucherTypeCreateDto){
+    public ResponseEntity<VoucherTypeDto> createVoucherType(@RequestBody VoucherTypeDto voucherTypeDto){
 
-        VoucherTypeCreateDto saveVoucherType = voucherTypeService.createVoucherType(voucherTypeCreateDto);
+        VoucherTypeDto saveVoucherType = voucherTypeService.createVoucherType(voucherTypeDto);
 
         return new ResponseEntity<>(saveVoucherType, HttpStatus.CREATED);
 
@@ -30,20 +31,20 @@ public class VoucherTypeController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayVoucherType/{voucherType}")
-    public ResponseEntity<VoucherTypeCreateDto> getDataByVoucherType(@PathVariable String voucherType){
+    public ResponseEntity<VoucherTypeDto> getDataByVoucherType(@PathVariable String voucherType){
 
-        VoucherTypeCreateDto voucherTypeCreateDto = voucherTypeService.getVoucherType(voucherType);
+        VoucherTypeDto voucherTypeDto = voucherTypeService.getVoucherType(voucherType);
 
-        return ResponseEntity.ok(voucherTypeCreateDto);
+        return ResponseEntity.ok(voucherTypeDto);
 
     }
 
 
     //Build GET All Master Ids REST API
     @GetMapping("allVoucherTypes")
-    public ResponseEntity<List<VoucherTypeCreateDto>> getAllVoucherTypes(){
+    public ResponseEntity<List<VoucherTypeDto>> getAllVoucherTypes(){
 
-        List<VoucherTypeCreateDto> allVoucherTypes = voucherTypeService.getAllVoucherTypes();
+        List<VoucherTypeDto> allVoucherTypes = voucherTypeService.getAllVoucherTypes();
 
         return ResponseEntity.ok(allVoucherTypes);
 

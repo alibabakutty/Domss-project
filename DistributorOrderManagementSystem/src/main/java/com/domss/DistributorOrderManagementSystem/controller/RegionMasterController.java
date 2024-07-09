@@ -1,7 +1,8 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.RegionMasterCreateDto;
-import com.example.imperio.service.RegionMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.RegionMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.RegionMasterService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,9 @@ public class RegionMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addRegion")
-    public ResponseEntity<RegionMasterCreateDto> createRegionMaster(@RequestBody RegionMasterCreateDto regionMasterCreateDto){
+    public ResponseEntity<RegionMasterDto> createRegionMaster(@RequestBody RegionMasterDto regionMasterDto){
 
-        RegionMasterCreateDto saveRegionMaster = regionMasterService.createRegionMaster(regionMasterCreateDto);
+        RegionMasterDto saveRegionMaster = regionMasterService.createRegionMaster(regionMasterDto);
 
         return new ResponseEntity<>(saveRegionMaster, HttpStatus.CREATED);
 
@@ -29,19 +30,19 @@ public class RegionMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("displayRegion/{regionMasterId}")
-    public ResponseEntity<RegionMasterCreateDto> getDataByRegionCode(@PathVariable String regionMasterId){
+    public ResponseEntity<RegionMasterDto> getDataByRegionCode(@PathVariable String regionMasterId){
 
-        RegionMasterCreateDto regionMasterCreateDto = regionMasterService.getRegionMaster(regionMasterId);
+        RegionMasterDto regionMasterDto = regionMasterService.getRegionMaster(regionMasterId);
 
-        return ResponseEntity.ok(regionMasterCreateDto);
+        return ResponseEntity.ok(regionMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("allRegions")
-    public ResponseEntity<List<RegionMasterCreateDto>> getAllRegions(){
+    public ResponseEntity<List<RegionMasterDto>> getAllRegions(){
 
-        List<RegionMasterCreateDto> allRegions = regionMasterService.getAllRegionMasterIds();
+        List<RegionMasterDto> allRegions = regionMasterService.getAllRegionMasterIds();
 
         return ResponseEntity.ok(allRegions);
 
@@ -49,11 +50,11 @@ public class RegionMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterRegionMaster/{regionMasterId}")
-    public ResponseEntity<RegionMasterCreateDto> updateRegion(@PathVariable String regionMasterId, @RequestBody RegionMasterCreateDto updatedRegion){
+    public ResponseEntity<RegionMasterDto> updateRegion(@PathVariable String regionMasterId, @RequestBody RegionMasterDto updatedRegion){
 
-        RegionMasterCreateDto regionMasterCreateDto = regionMasterService.updateRegion(regionMasterId,updatedRegion);
+        RegionMasterDto regionMasterDto = regionMasterService.updateRegion(regionMasterId,updatedRegion);
 
-        return ResponseEntity.ok(regionMasterCreateDto);
+        return ResponseEntity.ok(regionMasterDto);
 
     }
 

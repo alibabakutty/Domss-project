@@ -1,7 +1,7 @@
-package com.example.imperio.controller;
+package com.domss.DistributorOrderManagementSystem.controller;
 
-import com.example.imperio.dto.ExecutiveMasterCreateDto;
-import com.example.imperio.service.ExecutiveMasterService;
+import com.domss.DistributorOrderManagementSystem.dto.ExecutiveMasterDto;
+import com.domss.DistributorOrderManagementSystem.service.ExecutiveMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ public class ExecutiveMasterController {
 
     //Build ADD Masters REST API
     @PostMapping("/addExecutive")
-    public ResponseEntity<ExecutiveMasterCreateDto> createExecutiveMaster(@RequestBody ExecutiveMasterCreateDto executiveMasterCreateDto){
+    public ResponseEntity<ExecutiveMasterDto> createExecutiveMaster(@RequestBody ExecutiveMasterDto executiveMasterDto){
 
-        ExecutiveMasterCreateDto saveExecutiveMaster = executiveMasterService.createExecutiveMaster(executiveMasterCreateDto);
+        ExecutiveMasterDto saveExecutiveMaster = executiveMasterService.createExecutiveMaster(executiveMasterDto);
 
         return new ResponseEntity<>(saveExecutiveMaster, HttpStatus.CREATED);
 
@@ -30,18 +30,18 @@ public class ExecutiveMasterController {
 
     //Build GET Master Ids REST API
     @GetMapping("/displayExecutive/{executiveCode}")
-    public ResponseEntity<ExecutiveMasterCreateDto> getDataByExecutiveCode(@PathVariable String executiveCode){
+    public ResponseEntity<ExecutiveMasterDto> getDataByExecutiveCode(@PathVariable String executiveCode){
 
-        ExecutiveMasterCreateDto executiveMasterCreateDto = executiveMasterService.getExecutiveMaster(executiveCode);
+        ExecutiveMasterDto executiveMasterDto = executiveMasterService.getExecutiveMaster(executiveCode);
 
-        return ResponseEntity.ok(executiveMasterCreateDto);
+        return ResponseEntity.ok(executiveMasterDto);
 
     }
 
     //Build GET All Master Ids REST API
     @GetMapping("/allExecutives")
-    public ResponseEntity<List<ExecutiveMasterCreateDto>> getAllExecutives(){
-        List<ExecutiveMasterCreateDto> allExecutives = executiveMasterService.getAllExecutiveMasterCodes();
+    public ResponseEntity<List<ExecutiveMasterDto>> getAllExecutives(){
+        List<ExecutiveMasterDto> allExecutives = executiveMasterService.getAllExecutiveMasterCodes();
 
         return ResponseEntity.ok(allExecutives);
 
@@ -49,11 +49,11 @@ public class ExecutiveMasterController {
 
     //Build UPDATE Master REST API
     @PutMapping("/alterExecutiveMaster/{executiveCode}")
-    public ResponseEntity<ExecutiveMasterCreateDto> updateExecutive(@PathVariable String executiveCode, @RequestBody ExecutiveMasterCreateDto updatedExecutives){
+    public ResponseEntity<ExecutiveMasterDto> updateExecutive(@PathVariable String executiveCode, @RequestBody ExecutiveMasterDto updatedExecutives){
 
-        ExecutiveMasterCreateDto executiveMasterCreateDto = executiveMasterService.updateExecutive(executiveCode,updatedExecutives);
+        ExecutiveMasterDto executiveMasterDto = executiveMasterService.updateExecutive(executiveCode,updatedExecutives);
 
-        return ResponseEntity.ok(executiveMasterCreateDto);
+        return ResponseEntity.ok(executiveMasterDto);
     }
 
     //Build DELETE REST API

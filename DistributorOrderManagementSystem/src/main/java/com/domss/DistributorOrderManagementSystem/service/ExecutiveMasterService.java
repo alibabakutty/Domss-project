@@ -1,18 +1,20 @@
-package com.example.imperio.service;
+package com.domss.DistributorOrderManagementSystem.service;
 
-import com.example.imperio.dto.ExecutiveMasterCreateDto;
+
+
+import com.domss.DistributorOrderManagementSystem.dto.ExecutiveMasterDto;
 
 import java.util.List;
 
 public interface ExecutiveMasterService {
 
-    ExecutiveMasterCreateDto createExecutiveMaster(ExecutiveMasterCreateDto executiveMasterCreateDto);
+    ExecutiveMasterDto createExecutiveMaster(ExecutiveMasterDto executiveMasterDto);
 
-    ExecutiveMasterCreateDto getExecutiveMaster(String executiveCode);
+    ExecutiveMasterDto getExecutiveMaster(String executiveCode);
 
-    List<ExecutiveMasterCreateDto> getAllExecutiveMasterCodes();
+    List<ExecutiveMasterDto> getAllExecutiveMasterCodes();
 
-    ExecutiveMasterCreateDto updateExecutive(String executiveCode, ExecutiveMasterCreateDto updatedExecutive);
+    ExecutiveMasterDto updateExecutive(String executiveCode, ExecutiveMasterDto updatedExecutive);
 
     void deleteExecutive(String executiveCode);
 }
