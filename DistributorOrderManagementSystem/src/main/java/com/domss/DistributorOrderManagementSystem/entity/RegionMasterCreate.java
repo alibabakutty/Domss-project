@@ -1,20 +1,23 @@
-package com.domss.DistributorOrderManagementSystem.entity;
+package com.example.imperio.entity;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CollectionId;
+import lombok.*;
 
-@Entity
-@Data
-@NoArgsConstructor
+
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
-@Table(name = "region_masters")
-public class RegionMaster {
+@NoArgsConstructor
+@Data
+@Entity
+@Table(name = "region_master")
+public class RegionMasterCreate {
+
 
     @Id
     @Column(name = "region_master_id")
@@ -28,4 +31,6 @@ public class RegionMaster {
 
     @Column(name = "country")
     private String country;
+
+
 }
