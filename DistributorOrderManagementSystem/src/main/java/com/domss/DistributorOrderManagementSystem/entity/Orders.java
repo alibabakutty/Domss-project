@@ -72,6 +72,5 @@ public class Orders {
         if (approvedDateTime == null) {
             approvedDateTime = approvedDate;
         }
-
     }
 }
