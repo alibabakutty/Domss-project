@@ -22,8 +22,6 @@ public class DistributorMasterController {
     @PostMapping("/addDistributor")
     public ResponseEntity<DistributorMasterDto> createDistributorEntity(@RequestBody DistributorMasterDto distributorMasterDto){
 
-
-
         return distributorMasterService.createDistributorMaster(distributorMasterDto);
     }
 
