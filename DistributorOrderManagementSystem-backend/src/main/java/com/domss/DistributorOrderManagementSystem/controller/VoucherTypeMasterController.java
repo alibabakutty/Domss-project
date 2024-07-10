@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin("http://localhost:4000")
 @RestController
-@RequestMapping("voucherTypeMasterApi")
+@RequestMapping("/voucherTypeMasterApi")
 public class VoucherTypeMasterController {
 
     @Autowired
@@ -40,7 +40,7 @@ public class VoucherTypeMasterController {
 
     //Build GET All Master Ids REST API
     @GetMapping("/allVouchers")
-    public ResponseEntity<List<VoucherTypeMasterDto>> getAllVoucher(@PathVariable String voucherTypeName){
+    public ResponseEntity<List<VoucherTypeMasterDto>> getAllVoucher(){
 
         List<VoucherTypeMasterDto> allVouchers = voucherTypeMasterService.getAllVoucherTypeMasters();
 
