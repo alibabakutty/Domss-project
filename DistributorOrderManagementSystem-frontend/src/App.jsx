@@ -9,11 +9,7 @@ import DayBook from "./pages/DayBook"
 import Purchase from "./pages/Purchase"
 import ReportWithItems from "./pages/ReportWithItems"
 import ReportForAccountry from "./pages/ReportForAccountry"
-import OtpVerify from "./others/OtpVerify"
 // import Registration from "./others/Registration"
-import BackSpace from "./pages/utils/BackSpaceHandler"
-import TableComponent from "./others/TableComponent"
-
 // import TodoForm from "./pages/TodoForm"
 // import ProductSubForm from "./pages/ProductSubForm"
 
