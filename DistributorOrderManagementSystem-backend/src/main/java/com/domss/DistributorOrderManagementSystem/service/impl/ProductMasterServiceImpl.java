@@ -53,7 +53,7 @@ public class ProductMasterServiceImpl implements ProductMasterService {
     @Override
     public ProductMasterDto getProductMaster(String productCode){
 
-        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(()->
+        ProductMaster productMaster = productMasterDAO.findByProductCode(productCode).orElseThrow(()->
                 new ResourceNotFoundException("Product is not found with this name:" + productCode));
 
         return ProductMasterMapper.mapToProductMasterDto(productMaster);
@@ -71,17 +71,17 @@ public class ProductMasterServiceImpl implements ProductMasterService {
     @Override
     public ProductMasterDto updateProduct(String productCode, ProductMasterDto updatedProduct){
 
-        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(() ->
+        ProductMaster productMaster = productMasterDAO.findByProductCode(productCode).orElseThrow(() ->
 
 
                 new ResourceNotFoundException("Product is not found with the given name:" + productCode));
 
 
         productMaster.setProductCode(updatedProduct.getProductCode());
-        productMaster.setProductDescription(updatedProduct.getProductDescription());
-        productMaster.setProductCategory(updatedProduct.getProductCategory());
-        productMaster.setProductUom(updatedProduct.getProductUom());
-        productMaster.setProductGroup(updatedProduct.getProductGroup());
+        productMaster.setDescription(updatedProduct.getDescription());
+        productMaster.setStockCategory(updatedProduct.getStockCategory());
+        productMaster.setUom(updatedProduct.getUom());
+        productMaster.setStockGroup(updatedProduct.getStockGroup());
         productMaster.setStandardCost(updatedProduct.getStandardCost());
         productMaster.setSellingPrice(updatedProduct.getSellingPrice());
         productMaster.setDiscount(updatedProduct.getDiscount());
@@ -96,11 +96,11 @@ public class ProductMasterServiceImpl implements ProductMasterService {
     @Override
     public void deleteProduct(String productCode){
 
-        ProductMaster productMaster = productMasterDAO.findById(productCode).orElseThrow(() ->
+        ProductMaster productMaster = productMasterDAO.findByProductCode(productCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Product is not exists with this given name: " + productCode));
 
-        productMasterDAO.deleteById(productCode);
+        productMasterDAO.deleteById(Long.valueOf(productCode));
 
     }
 }

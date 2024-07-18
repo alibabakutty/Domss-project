@@ -15,29 +15,32 @@ import lombok.*;
 public class ProductMaster {
 
     @Id
+    @Column(name = "id")
+    private Long id;
+
     @Column(name = "product_code")
     private String productCode;
 
-    @Column(name = "product_description")
-    private String productDescription;
+    @Column(name = "stock_item_name")
+    private String description;
 
-    @Column(name = "product_category")
-    private String productCategory;
+    @Column(name = "stock_category")
+    private String stockCategory;
 
-    @Column(name = "product_uom")
-    private String productUom;
+    @Column(name = "uom")
+    private String uom;
 
-    @Column(name = "product_group")
-    private String productGroup;
+    @Column(name = "stock_group")
+    private String stockGroup;
 
     @Column(name = "standard_cost")
-    private Long standardCost;
+    private Double standardCost;
 
     @Column(name = "selling_price")
-    private Long sellingPrice;
+    private Double sellingPrice;
 
     @Column(name = "discount")
-    private Long discount;
+    private Double discount;
 
 
 }
