@@ -4,7 +4,6 @@ package com.domss.DistributorOrderManagementSystem.controller;
 import com.domss.DistributorOrderManagementSystem.dto.DistributorMasterDto;
 import com.domss.DistributorOrderManagementSystem.service.DistributorMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +20,6 @@ public class DistributorMasterController {
     //Build ADD Masters REST API
     @PostMapping("/addDistributor")
     public ResponseEntity<DistributorMasterDto> createDistributorEntity(@RequestBody DistributorMasterDto distributorMasterDto){
-
-
 
         return distributorMasterService.createDistributorMaster(distributorMasterDto);
     }
