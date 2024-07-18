@@ -58,7 +58,7 @@ const AlterOrder = () => {
 	},[])
 
 	const loadOrder = async()=>{
-		const response = await axios.get(`http://localhost:8080/orders/getOrder/${id}`);
+		const response = await axios.get(`http://localhost:9080/orders/getOrder/${id}`);
 
 		const order = response.data;
 			setVoucherNo(order.voucherNo);
@@ -136,7 +136,7 @@ const AlterOrder = () => {
 				items
 			};
 			// Handle response if needed
-			await axios.put(`http://localhost:8080/orders/${id}`, formData);
+			await axios.put(`http://localhost:9080/orders/${id}`, formData);
 			// console.log(formData)
 		} catch (error) {
 			

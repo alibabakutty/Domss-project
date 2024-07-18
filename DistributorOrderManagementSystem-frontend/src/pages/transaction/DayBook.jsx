@@ -36,7 +36,7 @@ const DayBook = () => {
 		loadOrder()
 	},[])
 	const loadOrder = async()=>{
-		const response = await axios.get("http://localhost:8080/orders/getAllOrders")
+		const response = await axios.get("http://localhost:9080/orders/getAllOrders")
 		setOrders(response.data);
 		console.log(response.data)
 	}

@@ -27,6 +27,8 @@ const MasterDisplayFilter = () => {
         return <ProductFilter />
       case 'godownFilter':
         return <GodownFilter />
+      default:
+        return <div>404 Not Found</div>
     }
   }
   return (

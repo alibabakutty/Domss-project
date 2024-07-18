@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
 const DisplayOFMasters = () => {
@@ -32,15 +32,28 @@ const DisplayOFMasters = () => {
 
                 const prevIndex = (currentIndex - 1 + links.length) % links.length;
                 links[prevIndex].current.focus();
+            } else if (event.key === 'Escape'){
+              event.preventDefault();
+              backButtonRef.current.click();
             }
         };
 
+        const handleMouseDown = (event) => {
+          // Check if the clicked element is one of the links
+
+          if(!links.some(link => link.current === event.target)){
+            event.preventDefault();
+          }
+        }
+
         document.addEventListener('keydown', handleKeyDown);
+        document.addEventListener('mousedown', handleMouseDown);
 
         return () => {
             document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('mousedown', handleMouseDown);
         };
-    }, [links])
+    }, [links]);
   return (
     <>
       <div className='flex justify-evenly'>
@@ -56,31 +69,31 @@ const DisplayOFMasters = () => {
                 <h2>DOMSS MASTER</h2>
               </li>
 
-              <Link to={'/display/voucherType'} ref={voucherTypeRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/voucherTypeFilter'} ref={voucherTypeRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Voucher Type Master</li>
               </Link>
 
-              <Link to={'/display/ledger'} ref={ledgerRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/ledgerFilter'} ref={ledgerRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Ledger Master</li>
               </Link>
 
-              <Link to={'/display/region'} ref={regionRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/regionFilter'} ref={regionRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Region Master</li>
               </Link>
 
-              <Link to={'/display/executive'} ref={executiveRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/executiveFilter'} ref={executiveRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Executive Master</li>
               </Link>
 
-              <Link to={'/display/distributor'} ref={distributorRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/distributorFilter'} ref={distributorRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Distributor Master</li>
               </Link>
               
-              <Link to={'/display/product'} ref={productRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/productFilter'} ref={productRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Product Master</li>
               </Link>
               
-              <Link to={'/display/godown'} ref={godownRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
+              <Link to={'/display/godownFilter'} ref={godownRef} className='block outline-none focus:bg-yellow-500 mb-[2px]'>
                 <li className='w-full pl-20'>Godown Master</li>
               </Link>
 

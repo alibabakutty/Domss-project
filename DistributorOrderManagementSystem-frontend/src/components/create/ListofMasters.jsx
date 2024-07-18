@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -36,13 +36,27 @@ const ListofMasters = () => {
         event.preventDefault();
         const prevIndex = (currentIndex - 1 + links.length) % links.length;
         links[prevIndex].current.focus();
+      } else if (event.key === 'Escape'){
+        event.preventDefault();
+        if(backButtonRef.current){
+          backButtonRef.current.click();
+        }
+      }
+    };
+
+    const handleMouseDown = (event) => {
+      // check if the clicked element is one of the links
+      if(!links.some(link => link.current === event.target)){
+        event.preventDefault();
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleMouseDown);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleMouseDown);
     };
 
 }, [links]);

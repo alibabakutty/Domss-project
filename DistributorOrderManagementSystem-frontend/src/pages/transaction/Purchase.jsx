@@ -58,16 +58,17 @@ const Purchase = () => {
 	}, []);
 
 	const loadCategory = async () => {
-		const response = await axios.get("http://localhost:8080/get");
+		const response = await axios.get("http://localhost:9080/products/allProducts");
 		setProductData(response.data);
+		
 	};
 
 	const loadRegion = async () => {
 		const response = await axios.get(
-			"http://localhost:8080/regionMaster/getRegion"
+			"http://localhost:9080/regionMasterApi/allRegions"
 		);
 
-		setDistributorData(response.data);
+		setDistributorData(response.data)
 	};
 
 	useEffect(() => {
@@ -129,13 +130,21 @@ const Purchase = () => {
 				handleDistributor(distributorData[selectIndexDist]);
 				setShowDistributor(false);
 				tableRefs.current[0].focus();
+			} else if(e.key === 'Backspace'){
+				if(e.target.value !== ""){
+					return;
+				} else {
+					setShowDistributor(false);
+					e.preventDefault()
+					inputRefs.current[1].focus();
+				}
 			}
 		}
 	};
 
 	const handleDistributor = (item) => {
-		setDistributorName(item.ledgerName);
-		setDistributorCode(item.ledgerCode);
+		setDistributorName(item.regionMasterId);
+		setDistributorCode(item.regionMasterId);
 	};
 
 	// const handleTotal = (e, index) => {
@@ -178,12 +187,40 @@ const Purchase = () => {
 				) {
 					inputRefs.current[3].focus();
 				} else {
-					tableRefs.current[
-						rowIndex * 5 + (property === "category" ? 1 : 2)
-					]?.focus();
+					tableRefs.current[rowIndex * 5 + (property === "category" ? 1 : 2)]?.focus();
 				}
 			} else if (e.key === "Tab") {
 				e.preventDefault();
+			} else if(e.key === "Backspace"){
+				if (property === "category") {
+					if(e.target.value !== ""){
+						return
+					} else {
+						if (rowIndex > 0) {
+							const prevRowIndex = rowIndex - 1;
+							const prevRow = prevRowIndex * 5 + 2;
+							e.preventDefault();
+							tableRefs.current[prevRow]?.focus();
+						} else {
+							e.preventDefault();
+							inputRefs.current[2]?.focus();
+						}
+					}
+					
+				} else if (property === 'code'){
+					if(e.target.value !== ""){
+						return;
+					} else {
+						if (rowIndex > 0) {
+							e.preventDefault();
+							tableRefs.current[rowIndex * 5 + 0]?.focus();
+						} else {
+							e.preventDefault();
+							tableRefs.current[0]?.focus();
+						}
+					}
+					
+				}
 			}
 		} else {
 			setSelectIndex(0);
@@ -260,7 +297,33 @@ const Purchase = () => {
 					// console.log(tableRefs)
 				}
 			}
-		}
+		} else if(e.key === "Backspace" ){
+			if (isTable) {
+				const prevIndex = rowIndex * 5 + colIndex - 1;
+				if (e.target.value.trim() !== "") {
+					return;
+				} else {
+					
+					e.preventDefault()
+					tableRefs.current[prevIndex]?.focus();
+					tableRefs.current[prevIndex].setSelectionRange(0,0)
+				}
+			} else {
+				if (e.target.value.trim() !== "") {
+					return;
+				} else {
+					const prevIndex = rowIndex - 1;
+					if (prevIndex < inputRefs.current.length) {
+						e.preventDefault();
+						inputRefs.current[prevIndex]?.focus();
+
+						// inputRefs.current[prevIndex].setSelectionRange(0,0);
+					}
+				}
+			}
+
+		
+		} 
 	};
 
 	const addRow = () => {
@@ -276,7 +339,6 @@ const Purchase = () => {
 		]);
 		setTimeout(() => {
 			const newRowIndex = tableData.length;
-			console.log(newRowIndex * 5);
 			tableRefs.current[newRowIndex * 5].focus();
 			setFilteredOption(category);
 		}, 0);
@@ -313,8 +375,8 @@ const Purchase = () => {
 				items,
 			};
 			// Handle response if needed
-			await axios.post("http://localhost:8080/orders/booking", formData);
-			console.log(formData);
+			await axios.post("http://localhost:9080/orders/booking", formData);
+			
 		} catch (error) {
 			console.error("Error:", error);
 		}
@@ -326,6 +388,13 @@ const Purchase = () => {
 			if (e.target.value !== "") {
 				const userConfirmed = window.confirm("Do you want confirm order");
 				if (userConfirmed) handleSubmit();
+			}
+		} else if(e.key === 'Backspace'){
+			if(e.target.value !== '') {
+				return
+			} else {
+				e.preventDefault();
+				inputRefs.current[3].focus();
 			}
 		}
 	};
@@ -418,7 +487,7 @@ const Purchase = () => {
 											ref={(el) => (distListRef.current[index] = el)}
 										>
 											<>
-												{item.ledgerCode} - {item.ledgerName}
+												{item.regionMasterId} - {item.ledgerName}
 											</>
 										</li>
 									))}
@@ -500,7 +569,7 @@ const Purchase = () => {
 											className="w-full outline-0 pl-0.5"
 										/>
 										{showList && (
-											<div className="absolute bg-[#def1fc] w-48 top-[84px] right-2 text-left h-52">
+											<div className="absolute bg-[#def1fc] w-48 top-[84px] right-[7px] text-left h-52">
 												<h1 className="bg-[#2a67b1] text-white pl-2">
 													List of Category
 												</h1>
@@ -548,7 +617,7 @@ const Purchase = () => {
 											className="w-full outline-0 text-center"
 										/>
 										{showProdList && (
-											<div className="absolute bg-[#def1fc] w-96 top-[84px] right-2 text-left h-[450px] overflow-y-scroll">
+											<div className="absolute bg-[#def1fc] w-96 top-[84px] right-[7px] text-left h-[450px] overflow-y-scroll">
 												<h1 className="bg-[#2a67b1] text-white pl-2 sticky top-0">
 													List of Porduct
 												</h1>
@@ -627,9 +696,22 @@ const Purchase = () => {
 								type="text"
 								ref={(el) => (inputRefs.current[3] = el)}
 								onKeyDown={(e) =>
-									e.key === "Enter" &&
-									e.target.value !== "" &&
-									inputRefs.current[4].focus()
+									{
+										if(e.key === "Enter" && e.target.value !== "" ){
+											inputRefs.current[4].focus();
+										} else if(e.key === "Backspace"){
+											if(e.target.value !== ""){
+												return;
+											} else {
+												const lastRowIndex = tableData.length - 1;
+												const lastCellKey = lastRowIndex * 5 + 0;
+												if(tableRefs.current[lastCellKey]){
+													tableRefs.current[lastCellKey].focus();
+													tableRefs.current[lastCellKey].setSelectionRange(0,0)
+												}
+											}
+										}
+									}
 								}
 								className="w-[65%] border border-fuchsia-700 h-[18px] focus:bg-[#fee8af] focus:border-blue-500 text-[13px] pl-0.5 bg-transparent outline-0 font-semibold"
 							/>

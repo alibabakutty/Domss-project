@@ -27,7 +27,8 @@ const MasterAlterFilter = () => {
         return <ProductAlter />
       case 'godownAlter':
         return <GodownAlter />
-      // case 'voucherTy'
+      default:
+        return <div>404 Not Found</div>
     }
   }
   return (

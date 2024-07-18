@@ -61,12 +61,12 @@ const VoucherCreation = () => {
 	}, []);
 
 	const loadCategory = async () => {
-		const response = await axios.get("http://localhost:8080/get");
+		const response = await axios.get("http://localhost:9080/products/allProducts");
 		setProductData(response.data);
 	};
 
 	const loadRegion = async ()=>{
-		const response = await axios.get("http://localhost:8080/regionMaster/getRegion")
+		const response = await axios.get("http://localhost:9080/regionMasterApi/allRegions")
 
 		setDistributorData(response.data);
 	}
@@ -134,7 +134,7 @@ const VoucherCreation = () => {
 	}
 	
 	const handleDistributor = (item)=>{
-		setDistributorName(item.ledgerName)
+		setDistributorName(item.regionMaster)
 		setDistributorCode(item.ledgerCode)
 	}
 
@@ -320,7 +320,7 @@ const VoucherCreation = () => {
 				orderItems
 			};
 			// Handle response if needed
-			// await axios.post("http://localhost:8080/orders/booking", formData);
+			await axios.post("http://localhost:9080/orders/booking", formData);
 			console.log(formData)
 		} catch (error) {
 			
