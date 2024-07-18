@@ -44,18 +44,15 @@ const DisplayExecutiveMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setExecutive({ ...executive, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
-    if (inputRefs.current.executiveCode) {
-      inputRefs.current.executiveCode.focus();
-      pulseCursor(inputRefs.current.executiveCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.executiveCode) {
+        inputRefs.current.executiveCode.focus();
+        pulseCursor(inputRefs.current.executiveCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadExecutive();
 
@@ -208,12 +205,12 @@ const DisplayExecutiveMaster = () => {
                   id="executiveCode"
                   name="executiveCode"
                   value={executive.executiveCode}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => {
                     inputRefs.current.executiveCode = input;
                   }}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -231,10 +228,10 @@ const DisplayExecutiveMaster = () => {
                   id="executiveMaster"
                   name="executiveMaster"
                   value={executive.executiveMaster}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.executiveMaster = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -249,10 +246,10 @@ const DisplayExecutiveMaster = () => {
                   id="dateOfJoin"
                   name="dateOfJoin"
                   value={executive.dateOfJoin}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.dateOfJoin = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -267,10 +264,10 @@ const DisplayExecutiveMaster = () => {
                   id="mobileNo"
                   name="mobileNo"
                   value={executive.mobileNo}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.mobileNo = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -285,10 +282,10 @@ const DisplayExecutiveMaster = () => {
                   id="emailId"
                   name="emailId"
                   value={executive.emailId}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.emailId = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -303,10 +300,10 @@ const DisplayExecutiveMaster = () => {
                   id="status"
                   name="status"
                   value={executive.status}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.status = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -314,8 +311,8 @@ const DisplayExecutiveMaster = () => {
           </div>
 
           <div className="mt-[330px] ml-[270px]">
-            <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.status && inputRefs.current.status.focus){inputRefs.current.status.focus()}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
-            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span>
+            {/* <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.status && inputRefs.current.status.focus){inputRefs.current.status.focus()}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
+            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
       </div>

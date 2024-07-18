@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ExecutiveMasterDto {
 
+    private Long id;
 
     private String executiveCode;
 

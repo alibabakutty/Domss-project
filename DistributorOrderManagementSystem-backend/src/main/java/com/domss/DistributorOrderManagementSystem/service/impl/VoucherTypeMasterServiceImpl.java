@@ -53,7 +53,7 @@ public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
 
     @Override
     public VoucherTypeMasterDto getVoucherTypeName(String voucherTypeName){
-        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(()->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findByVoucherTypeName(voucherTypeName).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher type name is not found with this name:" + voucherTypeName));
 
@@ -73,10 +73,11 @@ public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
     public VoucherTypeMasterDto updateVoucherTypeMaster(String voucherTypeName, VoucherTypeMasterDto updatedVoucherTypeMaster){
 
 
-        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(() ->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findByVoucherTypeName(voucherTypeName).orElseThrow(() ->
 
                 new ResourceNotFoundException("Voucher type name is not found with this name:" + voucherTypeName));
 
+        voucherTypeMaster.setId(updatedVoucherTypeMaster.getId());
         voucherTypeMaster.setVoucherTypeName(updatedVoucherTypeMaster.getVoucherTypeName());
         voucherTypeMaster.setVoucherType(updatedVoucherTypeMaster.getVoucherType());
         voucherTypeMaster.setMethodOfVoucherNumbering(updatedVoucherTypeMaster.getMethodOfVoucherNumbering());
@@ -104,11 +105,11 @@ public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
     @Override
     public void deleteVoucherTypeMaster(String voucherTypeName){
 
-        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(voucherTypeName).orElseThrow(()->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findByVoucherTypeName(voucherTypeName).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher type name is not found with the given name:" + voucherTypeName));
 
-        voucherTypeMasterRepository.deleteById(voucherTypeName);
+        voucherTypeMasterRepository.deleteById(Long.valueOf(voucherTypeName));
 
     }
 }

@@ -57,26 +57,28 @@ const DisplayVoucherTypeMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setVoucher({ ...voucher, [name]: capitalizedValue });
-  };
-
   const handleNavigation = () => {
     navigate("/display/voucherTypeFilter");
   };
 
   useEffect(() => {
-    if (inputRefs.current.voucherTypeName) {
-      inputRefs.current.voucherTypeName.focus();
-      pulseCursor(inputRefs.current.voucherTypeName);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.voucherTypeName) {
+        inputRefs.current.voucherTypeName.focus();
+        pulseCursor(inputRefs.current.voucherTypeName);
+      }
+
+      if (showSubFormModal) {
+        if (inputRefs.current.startingNumber){
+        inputRefs.current.startingNumber.focus();
+        pulseCursor(inputRefs.current.startingNumber);
+      }
+      }
     }
 
-    if (showSubFormModal) {
-      startingNumberRef.current.focus();
-    }
+    setTimeout(focusAndPulseCursor,100);
+
+    
 
     if (voucherTypeName) {
       loadVoucherTypeName();
@@ -345,12 +347,12 @@ const DisplayVoucherTypeMaster = () => {
                 id="voucherTypeName"
                 name="voucherTypeName"
                 value={voucher.voucherTypeName}
-                onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 ref={(input) => {
                   inputRefs.current.voucherTypeName = input;
                 }}
                 className="w-[300px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                readOnly
                 autoComplete="off"
               />
             </div>
@@ -369,10 +371,10 @@ const DisplayVoucherTypeMaster = () => {
                     id="voucherType"
                     name="voucherType"
                     value={voucher.voucherType}
-                    onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={(input) => (inputRefs.current.voucherType = input)}
                     className="w-[200px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -391,11 +393,11 @@ const DisplayVoucherTypeMaster = () => {
                     name="methodOfVoucherNumbering"
                     value={voucher.methodOfVoucherNumbering}
                     onKeyDown={handleKeyDown}
-                    onChange={handleChange}
                     ref={(input) =>
                       (inputRefs.current.methodOfVoucherNumbering = input)
                     }
                     className="w-[200px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -414,12 +416,12 @@ const DisplayVoucherTypeMaster = () => {
                     name="alterAdditionalNumberingDetails"
                     value={voucher.alterAdditionalNumberingDetails}
                     onKeyDown={handleKeyDown}
-                    onChange={handleChange}
                     ref={(input) =>
                       (inputRefs.current.alterAdditionalNumberingDetails =
                         input)
                     }
                     className="w-[100px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                   {showSubFormModal && (
@@ -455,13 +457,13 @@ const DisplayVoucherTypeMaster = () => {
                                   id="startingNumber"
                                   name="startingNumber"
                                   value={voucher.startingNumber}
-                                  onChange={handleChange}
                                   onKeyDown={handleKeyDown}
                                   ref={(input) => {
                                     inputRefs.current.startingNumber = input;
                                     startingNumberRef.current = input;
                                   }}
                                   className="w-[80px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                  readOnly
                                   autoComplete="off"
                                 />
                               </div>
@@ -479,13 +481,13 @@ const DisplayVoucherTypeMaster = () => {
                                   id="widthOfNumericalPart"
                                   name="widthOfNumericalPart"
                                   value={voucher.widthOfNumericalPart}
-                                  onChange={handleChange}
                                   onKeyDown={handleKeyDown}
                                   ref={(input) => {
                                     inputRefs.current.widthOfNumericalPart =
                                       input;
                                   }}
                                   className="w-[80px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                  readOnly
                                   autoComplete="off"
                                 />
                               </div>
@@ -503,12 +505,12 @@ const DisplayVoucherTypeMaster = () => {
                                   id="prefillWithZero"
                                   name="prefillWithZero"
                                   value={voucher.prefillWithZero}
-                                  onChange={handleChange}
                                   onKeyDown={handleKeyDown}
                                   ref={(input) => {
                                     inputRefs.current.prefillWithZero = input;
                                   }}
                                   className="w-[80px] ml-2 mb-1 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                  readOnly
                                   autoComplete="off"
                                 />
                               </div>
@@ -542,12 +544,12 @@ const DisplayVoucherTypeMaster = () => {
                                         value={
                                           voucher.restartNumberingApplicationForm
                                         }
-                                        onChange={handleChange}
                                         ref={(input) => {
                                           inputRefs.current.restartNumberingApplicationForm =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 text-right capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -562,12 +564,12 @@ const DisplayVoucherTypeMaster = () => {
                                         value={
                                           voucher.restartNumberingStartingNumber
                                         }
-                                        onChange={handleChange}
                                         ref={(input) => {
                                           inputRefs.current.restartNumberingStartingNumber =
                                             input;
                                         }}
                                         className="w-[70px] ml-2 h-5 text-right capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -582,12 +584,12 @@ const DisplayVoucherTypeMaster = () => {
                                         value={
                                           voucher.restartNumberingPeriodicity
                                         }
-                                        onChange={handleChange}
                                         ref={(input) => {
                                           inputRefs.current.restartNumberingPeriodicity =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -617,13 +619,13 @@ const DisplayVoucherTypeMaster = () => {
                                         value={
                                           voucher.prefixDetailsApplicationForm
                                         }
-                                        onChange={handleChange}
                                         onKeyDown={handleKeyDown}
                                         ref={(input) => {
                                           inputRefs.current.prefixDetailsApplicationForm =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 text-right capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -635,13 +637,13 @@ const DisplayVoucherTypeMaster = () => {
                                         id="prefixDetailsParticulars"
                                         name="prefixDetailsParticulars"
                                         value={voucher.prefixDetailsParticulars}
-                                        onChange={handleChange}
                                         onKeyDown={handleKeyDown}
                                         ref={(input) => {
                                           inputRefs.current.prefixDetailsParticulars =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 text-left capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -671,13 +673,13 @@ const DisplayVoucherTypeMaster = () => {
                                         value={
                                           voucher.suffixDetailsApplicationForm
                                         }
-                                        onChange={handleChange}
                                         onKeyDown={handleKeyDown}
                                         ref={(input) => {
                                           inputRefs.current.suffixDetailsApplicationForm =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 text-right capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -689,13 +691,13 @@ const DisplayVoucherTypeMaster = () => {
                                         id="suffixDetailsParticulars"
                                         name="suffixDetailsParticulars"
                                         value={voucher.suffixDetailsParticulars}
-                                        onChange={handleChange}
                                         onKeyDown={handleKeyDown}
                                         ref={(input) => {
                                           inputRefs.current.suffixDetailsParticulars =
                                             input;
                                         }}
                                         className="w-[100px] ml-2 h-5 text-left capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                                        readOnly
                                         autoComplete="off"
                                       />
                                     </div>
@@ -736,11 +738,11 @@ const DisplayVoucherTypeMaster = () => {
                     name="printingVoucherAfterSaving"
                     value={voucher.printingVoucherAfterSaving}
                     onKeyDown={handleKeyDown}
-                    onChange={handleChange}
                     ref={(input) =>
                       (inputRefs.current.printingVoucherAfterSaving = input)
                     }
                     className="w-[100px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -755,10 +757,10 @@ const DisplayVoucherTypeMaster = () => {
                     id="nameOfClass"
                     name="nameOfClass"
                     value={voucher.nameOfClass}
-                    onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={(input) => (inputRefs.current.nameOfClass = input)}
                     className="w-[200px] ml-2 mt-3 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -768,7 +770,7 @@ const DisplayVoucherTypeMaster = () => {
         </div>
 
         <div className="ml-[55%]">
-          <input
+          {/* <input
             type="button"
             id="backButton"
             className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
@@ -789,7 +791,7 @@ const DisplayVoucherTypeMaster = () => {
             }}
             onClick={handleNavigation}
           />
-          <span className="text-sm absolute top-[583px] left-[698px] underline decoration-black" style={{textDecorationThickness: '2px'}}>Q</span>
+          <span className="text-sm absolute top-[583px] left-[698px] underline decoration-black" style={{textDecorationThickness: '2px'}}>Q</span> */}
         </div>
       </div>
 

@@ -52,7 +52,7 @@ public class ExecutiveMasterServiceImpl implements ExecutiveMasterService {
     @Override
     public ExecutiveMasterDto getExecutiveMaster(String executiveCode){
 
-        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findByExecutiveCode(executiveCode).orElseThrow(() ->
 
 
                 new ResourceNotFoundException("Executive is not found with this name:" + executiveCode));
@@ -71,10 +71,11 @@ public class ExecutiveMasterServiceImpl implements ExecutiveMasterService {
     @Override
     public ExecutiveMasterDto updateExecutive(String executiveCode, ExecutiveMasterDto updatedExecutive){
 
-        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findByExecutiveCode(executiveCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Executive is not found with the given name: " + executiveCode));
 
+        executiveMasterCreate.setId(updatedExecutive.getId());
         executiveMasterCreate.setExecutiveCode(updatedExecutive.getExecutiveCode());
         executiveMasterCreate.setExecutiveMaster(updatedExecutive.getExecutiveMaster());
         executiveMasterCreate.setDateOfJoin(updatedExecutive.getDateOfJoin());
@@ -90,11 +91,11 @@ public class ExecutiveMasterServiceImpl implements ExecutiveMasterService {
     @Override
     public void deleteExecutive(String executiveCode){
 
-        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findById(executiveCode).orElseThrow(() ->
+        ExecutiveMaster executiveMasterCreate = executiveMasterRepository.findByExecutiveCode(executiveCode).orElseThrow(() ->
 
                 new ResourceNotFoundException("Executive is not exists with this given name: " + executiveCode));
 
-        executiveMasterRepository.deleteById(executiveCode);
+        executiveMasterRepository.deleteById(Long.valueOf(executiveCode));
     }
 }
 

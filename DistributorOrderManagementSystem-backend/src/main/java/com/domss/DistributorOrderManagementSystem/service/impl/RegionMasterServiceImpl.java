@@ -53,7 +53,7 @@ public class RegionMasterServiceImpl implements RegionMasterService {
     @Override
     public RegionMasterDto getRegionMaster(String regionMasterId){
 
-        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findByRegionMasterId(regionMasterId).orElseThrow(() ->
                 new ResourceNotFoundException("Region is not found with this name:" + regionMasterId));
 
         return RegionMasterMapper.mapToRegionMasterDto(regionMaster);
@@ -70,10 +70,11 @@ public class RegionMasterServiceImpl implements RegionMasterService {
     @Override
     public RegionMasterDto updateRegion(String regionMasterId, RegionMasterDto updatedRegion){
 
-        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findByRegionMasterId(regionMasterId).orElseThrow(() ->
 
                 new ResourceNotFoundException("Region is not found with the given name: " + regionMasterId));
 
+        regionMaster.setId(updatedRegion.getId());
         regionMaster.setRegionMasterId(updatedRegion.getRegionMasterId());
         regionMaster.setRegionName(updatedRegion.getRegionName());
         regionMaster.setRegionState(updatedRegion.getRegionState());
@@ -88,10 +89,10 @@ public class RegionMasterServiceImpl implements RegionMasterService {
     @Override
     public void deleteRegion(String regionMasterId){
 
-        RegionMaster regionMaster = regionMasterRepository.findById(regionMasterId).orElseThrow(() ->
+        RegionMaster regionMaster = regionMasterRepository.findByRegionMasterId(regionMasterId).orElseThrow(() ->
 
                 new ResourceNotFoundException("Region is not exists with the given name: " + regionMasterId));
 
-        regionMasterRepository.deleteById(regionMasterId);
+        regionMasterRepository.deleteById(Long.valueOf(regionMasterId));
     }
 }

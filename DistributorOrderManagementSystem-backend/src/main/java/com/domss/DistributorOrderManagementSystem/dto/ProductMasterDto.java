@@ -8,22 +8,21 @@ import lombok.*;
 @NoArgsConstructor
 public class ProductMasterDto {
 
+    private Long id;
+
     private String productCode;
 
+    private String description;
 
-    private String productDescription;
+    private String stockCategory;
 
+    private String uom;
 
-    private String productCategory;
+    private String stockGroup;
 
+    private Double standardCost;
 
-    private String productUom;
+    private Double sellingPrice;
 
-    private String productGroup;
-
-    private Long standardCost;
-
-    private Long sellingPrice;
-
-    private Long discount;
+    private Double discount;
 }

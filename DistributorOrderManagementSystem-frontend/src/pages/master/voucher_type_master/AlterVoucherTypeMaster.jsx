@@ -85,14 +85,21 @@ const AlterVoucherTypeMaster = () => {
   };
 
   useEffect(() => {
-    if (inputRefs.current.voucherTypeName) {
-      inputRefs.current.voucherTypeName.focus();
-      pulseCursor(inputRefs.current.voucherTypeName);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.voucherTypeName) {
+        inputRefs.current.voucherTypeName.focus();
+        pulseCursor(inputRefs.current.voucherTypeName);
+      }
+
+      if (showSubFormModal) {
+        if(inputRefs.current.startingNumber){
+          inputRefs.current.startingNumber.focus();
+          pulseCursor(inputRefs.current.startingNumber);
+        }
+      }
     }
 
-    if (showSubFormModal) {
-      startingNumberRef.current.focus();
-    }
+    setTimeout(focusAndPulseCursor,100);
 
     if (voucherTypeName) {
       loadVoucherTypeName();

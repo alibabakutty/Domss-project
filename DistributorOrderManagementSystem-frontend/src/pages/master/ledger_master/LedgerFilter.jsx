@@ -79,7 +79,7 @@ const LedgerFilter = () => {
       filtered = ledger.filter((led) =>
         led.ledgerCode.toLowerCase().includes(ledgerCode.toLowerCase())
       );
-      filtered = ledger.slice(0,20); // Limit to 20 elements
+      filtered = filtered.slice(0,20); // Limit to 20 elements
     }
     setFilteredLedgers(filtered);
     setSelectedIndex(2);  // Reset selected index to the first element in the filtered list

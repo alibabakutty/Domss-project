@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class RegionMasterDto {
 
-
+    private Long id;
 
     private String regionMasterId;
 

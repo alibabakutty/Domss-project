@@ -140,7 +140,7 @@ const GodownMaster = () => {
       .then((response) => {
         console.log(response.data);
 
-        // navigator('/addedGodown');
+        navigator('/create');
       })
       .catch((error) => {
         console.error("Error creating godown master:", error);

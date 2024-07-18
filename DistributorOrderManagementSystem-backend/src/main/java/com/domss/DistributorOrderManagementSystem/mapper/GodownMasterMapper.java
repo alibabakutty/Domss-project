@@ -9,6 +9,7 @@ public class GodownMasterMapper {
 
     public static GodownMasterDto mapToGodownMasterDto(GodownMaster godownMaster){
         return new GodownMasterDto(
+                godownMaster.getId(),
                 godownMaster.getGodownCode(),
                 godownMaster.getGodownName()
         );
@@ -17,6 +18,7 @@ public class GodownMasterMapper {
 
     public static GodownMaster mapToGodownMaster(GodownMasterDto godownMasterCreateDto){
         return new GodownMaster(
+                godownMasterCreateDto.getId(),
                 godownMasterCreateDto.getGodownCode(),
                 godownMasterCreateDto.getGodownName()
         );

@@ -7,5 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 public class UnitMasterDto {
 
+    private Long id;
+
     private String productUom;
+
+    private String uom;
 }

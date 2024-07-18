@@ -1,9 +1,6 @@
 package com.domss.DistributorOrderManagementSystem.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -15,29 +12,34 @@ import lombok.*;
 public class ProductMaster {
 
     @Id
-    @Column(name = "product_code")
+    @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "product_code", nullable = false, unique = true)
     private String productCode;
 
-    @Column(name = "product_description")
-    private String productDescription;
+    @Column(name = "stock_item_name")
+    private String description;
 
-    @Column(name = "product_category")
-    private String productCategory;
+    @Column(name = "stock_category")
+    private String stockCategory;
 
-    @Column(name = "product_uom")
-    private String productUom;
+    @Column(name = "uom")
+    private String uom;
 
-    @Column(name = "product_group")
-    private String productGroup;
+    @Column(name = "stock_group")
+    private String stockGroup;
 
     @Column(name = "standard_cost")
-    private Long standardCost;
+    private Double standardCost;
 
     @Column(name = "selling_price")
-    private Long sellingPrice;
+    private Double sellingPrice;
 
     @Column(name = "discount")
-    private Long discount;
+    private Double discount;
 
 
 }

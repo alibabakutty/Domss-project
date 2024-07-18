@@ -39,12 +39,6 @@ const DisplayLedgerMaster = () => {
     navigate("/display/ledgerFilter");
   };
 
-  const onInputChange = (e) => {
-    const { name, value } = e.target;
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setLedger({ ...ledger, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
     const focusAndPulseCursor = () => {
       if (inputRefs.current.ledgerCode) {
@@ -207,12 +201,12 @@ const DisplayLedgerMaster = () => {
                     id={field}
                     name={field}
                     value={ledger[field]}
-                    onChange={onInputChange}
                     onKeyDown={handleKeyDown}
                     ref={(input) => {
                       inputRefs.current[field] = input;
                     }}
                     className="w-[300px] h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -221,7 +215,7 @@ const DisplayLedgerMaster = () => {
           </div>
 
           <div className="mt-[450px] ml-[900px]">
-            <input
+            {/* <input
               type="button"
               id="backButton"
               className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
@@ -242,7 +236,7 @@ const DisplayLedgerMaster = () => {
               }}
               onClick={handleNavigation}
             />
-            <span className="text-sm absolute left-[925px] top-[602px] underline decoration-black" style={{textDecorationThickness: '2px'}}>Q</span>
+            <span className="text-sm absolute left-[925px] top-[602px] underline decoration-black" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
       </div>

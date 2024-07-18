@@ -49,7 +49,7 @@ public class VoucherTypeImpl implements VoucherTypeService {
     @Override
     public VoucherTypeDto getVoucherType(String voucherType){
 
-        VoucherType voucherTypeCreate = voucherTypeRepository.findById(voucherType).orElseThrow(() ->
+        VoucherType voucherTypeCreate = voucherTypeRepository.findByVoucherType(voucherType).orElseThrow(() ->
 
                 new ResourceNotFoundException("Voucher Type is not found with this name:" + voucherType));
 
@@ -66,10 +66,10 @@ public class VoucherTypeImpl implements VoucherTypeService {
 
     @Override
     public void deleteVoucherType(String voucherType){
-        VoucherType voucherTypeCreate = voucherTypeRepository.findById(voucherType).orElseThrow(()->
+        VoucherType voucherTypeCreate = voucherTypeRepository.findByVoucherType(voucherType).orElseThrow(()->
 
                 new ResourceNotFoundException("Voucher Type is not found with this name:" + voucherType));
 
-        voucherTypeRepository.deleteById(voucherType);
+        voucherTypeRepository.deleteById(Long.valueOf(voucherType));
     }
 }

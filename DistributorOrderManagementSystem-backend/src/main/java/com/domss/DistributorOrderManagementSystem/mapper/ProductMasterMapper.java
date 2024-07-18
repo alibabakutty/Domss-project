@@ -10,12 +10,12 @@ public class ProductMasterMapper {
     public static ProductMasterDto mapToProductMasterDto(ProductMaster productMaster){
 
         return new ProductMasterDto(
-
+                productMaster.getId(),
                 productMaster.getProductCode(),
-                productMaster.getProductDescription(),
-                productMaster.getProductCategory(),
-                productMaster.getProductUom(),
-                productMaster.getProductGroup(),
+                productMaster.getDescription(),
+                productMaster.getStockCategory(),
+                productMaster.getUom(),
+                productMaster.getStockGroup(),
                 productMaster.getStandardCost(),
                 productMaster.getSellingPrice(),
                 productMaster.getDiscount()
@@ -27,12 +27,12 @@ public class ProductMasterMapper {
 
 
         return new ProductMaster(
-
+                productMasterDto.getId(),
                 productMasterDto.getProductCode(),
-                productMasterDto.getProductDescription(),
-                productMasterDto.getProductCategory(),
-                productMasterDto.getProductUom(),
-                productMasterDto.getProductGroup(),
+                productMasterDto.getDescription(),
+                productMasterDto.getStockCategory(),
+                productMasterDto.getUom(),
+                productMasterDto.getStockGroup(),
                 productMasterDto.getStandardCost(),
                 productMasterDto.getSellingPrice(),
                 productMasterDto.getDiscount()

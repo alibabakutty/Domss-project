@@ -9,7 +9,7 @@ public class ExecutiveMasterMapper {
 
     public static ExecutiveMasterDto mapToExecutiveMasterDto(ExecutiveMaster executiveMaster){
         return new ExecutiveMasterDto(
-
+                executiveMaster.getId(),
                 executiveMaster.getExecutiveCode(),
                 executiveMaster.getExecutiveMaster(),
                 executiveMaster.getDateOfJoin(),
@@ -22,6 +22,7 @@ public class ExecutiveMasterMapper {
     public static ExecutiveMaster mapToExecutiveMaster(ExecutiveMasterDto executiveMasterDto){
 
         return new ExecutiveMaster(
+                executiveMasterDto.getId(),
                 executiveMasterDto.getExecutiveCode(),
                 executiveMasterDto.getExecutiveMaster(),
                 executiveMasterDto.getDateOfJoin(),
