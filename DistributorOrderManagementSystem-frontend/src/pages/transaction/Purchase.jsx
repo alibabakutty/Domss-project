@@ -16,6 +16,7 @@ const Purchase = () => {
 			uom: "",
 		},
 	]);
+	const [focusedRow, setFocusedRow] = useState(null)
 	const [createdBy, setCreatedBy] = useState("");
 	const [narration, setNarration] = useState("");
 
@@ -95,26 +96,31 @@ const Purchase = () => {
 		setProdFilter(filteredData);
 	};
 
-	const handleSelect = (property, item, index) => {
+	const handleSelect = (property, item, rowIndex) => {
 		const newTableData = [...tableData];
 		if (property === "category") {
-			newTableData[index][property] = item;
+			newTableData[rowIndex][property] = item;
+			newTableData[rowIndex].code = "";
+			newTableData[rowIndex].description = "";
+			newTableData[rowIndex].uom = "";
 			setTableData(newTableData);
 			setShowList(false);
 			if (item !== "♦ End of List") {
 				handleFilter(item);
 				setShowProdList(true);
 			}
+			console.log({property, item, rowIndex})
 		} else if (property === "code") {
 			const option = item;
-			newTableData[index].code = option.productCode;
-			newTableData[index].description = option.stockItemName;
-			newTableData[index].uom = option.uom;
-			newTableData[index].rate = parseFloat(option.rate).toFixed(2);
-			newTableData[index].discount = parseFloat(option.discount).toFixed(2);
+			newTableData[rowIndex].code = option.productCode;
+			newTableData[rowIndex].description = option.description;
+			newTableData[rowIndex].uom = option.uom;
+			newTableData[rowIndex].rate = parseFloat(option.rate).toFixed(2);
+			newTableData[rowIndex].discount = parseFloat(option.discount).toFixed(2);
 			setTableData(newTableData);
 			setShowProdList(false);
 		}
+		
 	};
 
 	const handleDistributorSelect = (e) => {
@@ -147,20 +153,10 @@ const Purchase = () => {
 		setDistributorCode(item.regionMasterId);
 	};
 
-	// const handleTotal = (e, index) => {
-	// 	const { value } = e.target;
-	// 	if (value) {
-	// 		const total = parseFloat(value * tableData[index].rate).toFixed(2);
-	// 		const discount = parseFloat(
-	// 			(total * tableData[index].discount) / 100
-	// 		).toFixed(2);
-	// 		const price = parseFloat(total - discount).toFixed(2);
-	// 		tableData[index].amount = price;
-	// 		setTableData([...tableData]);
-	// 	}
-	// };
+	
 
 	const handleKeySelect = (e, rowIndex, options, property) => {
+		console.log("row "+ rowIndex + " options " + options[3] + " property " + property)
 		if (selectIndex < options.length) {
 			if (e.key === "ArrowUp" && selectIndex > 0) {
 				if (property === "category") {
@@ -227,14 +223,17 @@ const Purchase = () => {
 		}
 	};
 
-	const handleFocus = (property) => {
+	const handleFocus = (property, index) => {
 		if (property === "category") {
 			setSelectIndex(selectIndexCat);
 			setShowList(true);
+			setFocusedRow(index)
 		}
 		if (property === "code") {
 			setSelectIndex(selectIndexProd);
 			setShowProdList(true);
+			setFocusedRow(index)
+
 		}
 	};
 
@@ -561,7 +560,7 @@ const Purchase = () => {
 											onKeyDown={(e) =>
 												handleKeySelect(e, rowIndex, filterDisplay, "category")
 											}
-											onFocus={() => handleFocus("category")}
+											onFocus={() => handleFocus("category", rowIndex)}
 											onBlur={() => setShowList(false)}
 											ref={(input) =>
 												(tableRefs.current[rowIndex * 5 + 0] = input)
@@ -582,9 +581,11 @@ const Purchase = () => {
 														<li
 															tabIndex="0"
 															key={catIndex}
-															onClick={() => {
-																handleSelect("category", cat, rowIndex);
-																tableRefs.current[rowIndex * 5 + 1].focus();
+															onClick={() => 
+															{
+																
+																handleSelect("category", cat, focusedRow);
+																tableRefs.current[focusedRow * 5 + 1].focus();
 																setSelectIndexCat(catIndex);
 															}}
 															ref={(el) => (listRefs.current[catIndex] = el)}
@@ -606,7 +607,7 @@ const Purchase = () => {
 											name="code"
 											value={data.code}
 											onChange={(e) => handleChange(e, rowIndex)}
-											onFocus={() => handleFocus("code")}
+											onFocus={() => handleFocus("code", rowIndex)}
 											onBlur={() => setShowProdList(false)}
 											onKeyDown={(e) =>
 												handleKeySelect(e, rowIndex, prodFilter, "code")
@@ -630,8 +631,10 @@ const Purchase = () => {
 														<li
 															tabIndex="0"
 															key={prodIndex}
-															onClick={() =>
-																handleSelect("code", prod, rowIndex)
+															onClick={() =>{
+																handleSelect('code', prod, focusedRow)
+																tableRefs.current[focusedRow * 5 + 2].focus();
+															}
 															}
 															ref={(el) => (listRefs.current[prodIndex] = el)}
 															className={`cursor-pointer ${
@@ -639,11 +642,9 @@ const Purchase = () => {
 															} pl-1  text-[13px]  border-b border-[#fff]`}
 														>
 															<>
-																<>{prod.productCode} </>
-															</>
-															<>
+																{prod.productCode}	
 																<span className="ml-1">
-																	- {prod.stockItemName}
+																	- {prod.description}
 																</span>
 															</>
 														</li>
