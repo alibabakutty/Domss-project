@@ -7,6 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 public class VoucherTypeDto {
 
+    private Long id;
+
     private String voucherTypeName;
 
     private String voucherType;

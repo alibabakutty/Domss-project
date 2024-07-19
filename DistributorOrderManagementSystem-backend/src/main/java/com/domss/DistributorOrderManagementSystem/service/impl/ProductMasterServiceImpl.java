@@ -76,7 +76,7 @@ public class ProductMasterServiceImpl implements ProductMasterService {
 
                 new ResourceNotFoundException("Product is not found with the given name:" + productCode));
 
-
+        productMaster.setId(updatedProduct.getId());
         productMaster.setProductCode(updatedProduct.getProductCode());
         productMaster.setDescription(updatedProduct.getDescription());
         productMaster.setStockCategory(updatedProduct.getStockCategory());

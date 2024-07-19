@@ -37,18 +37,15 @@ const DisplayGodownMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setGodown({ ...godown, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
-    if (inputRefs.current.godownCode) {
-      inputRefs.current.godownCode.focus();
-      pulseCursor(inputRefs.current.godownCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.godownCode) {
+        inputRefs.current.godownCode.focus();
+        pulseCursor(inputRefs.current.godownCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadGodown();
 
@@ -195,12 +192,12 @@ const DisplayGodownMaster = () => {
                 id="godownCode"
                 name="godownCode"
                 value={godown.godownCode}
-                onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 ref={(input) => {
                   inputRefs.current.godownCode = input;
                 }}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                readOnly
                 autoComplete="off"
               />
             </div>
@@ -215,18 +212,18 @@ const DisplayGodownMaster = () => {
                 id="godownName"
                 name="godownName"
                 value={godown.godownName}
-                onChange={handleChange}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.godownName = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                readOnly
                 autoComplete="off"
               />
             </div>
           </form>
 
           <div className="mt-[465px] ml-[205px]">
-            <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) =>{if(e.key === 'Backspace'){e.preventDefault(); if(inputRefs.current.godownName && inputRefs.current.godownName.focus){inputRefs.current.godownName.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
-            <span className="text-sm underline decoration-black absolute left-[989px] top-[602px]" style={{textDecorationThickness: '2px'}}>Q</span>
+            {/* <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) =>{if(e.key === 'Backspace'){e.preventDefault(); if(inputRefs.current.godownName && inputRefs.current.godownName.focus){inputRefs.current.godownName.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
+            <span className="text-sm underline decoration-black absolute left-[989px] top-[602px]" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
 

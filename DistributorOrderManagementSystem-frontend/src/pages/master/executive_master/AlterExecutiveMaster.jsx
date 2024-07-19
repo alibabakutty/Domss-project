@@ -26,6 +26,7 @@ const AlterExecutiveMaster = () => {
     acceptButton: null,
   });
 
+  const formWrapperRef = useRef(null);
   const acceptButtonRef = useRef(null);
   const yesQuitButtonRef = useRef(null);
   const cancelModalConfirmRef = useRef(null);
@@ -59,10 +60,14 @@ const AlterExecutiveMaster = () => {
   };
 
   useEffect(() => {
-    if (inputRefs.current.executiveCode) {
-      inputRefs.current.executiveCode.focus();
-      pulseCursor(inputRefs.current.executiveCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.executiveCode) {
+        inputRefs.current.executiveCode.focus();
+        pulseCursor(inputRefs.current.executiveCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadExecutive();
 
@@ -90,6 +95,21 @@ const AlterExecutiveMaster = () => {
       document.removeEventListener("keydown", handleCtrlA);
     };
   }, [navigate]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (formWrapperRef.current && !formWrapperRef.current.contains(event.target)) {
+        inputRefs.current.executiveCode.focus();
+        pulseCursor(inputRefs.current.executiveCode);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (showModal) {
@@ -221,7 +241,7 @@ const AlterExecutiveMaster = () => {
 
   return (
     <>
-      <div className="flex" onClick={() => inputRefs.current.executiveCode.focus()}>
+      <div ref={formWrapperRef} className="flex" onClick={() => inputRefs.current.executiveCode.focus()}>
         <div className="w-1/2 h-[100vh] border border-bg-gray-500"></div>
         <div className="w-1/2 border border-bg-gray-500">
           <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[80px] mt-10 border border-gray-500 border-b-0">

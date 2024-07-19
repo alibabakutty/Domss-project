@@ -48,7 +48,7 @@ public class GodownMasterServiceImpl implements GodownMasterService {
 
     @Override
     public GodownMasterDto getGodownMaster(String godownCode){
-        GodownMaster godownMaster = godownMasterRepository.findById(godownCode).orElseThrow(()->
+        GodownMaster godownMaster = godownMasterRepository.findByGodownCode(godownCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Godown is not found with this name:" + godownCode));
 
@@ -70,10 +70,10 @@ public class GodownMasterServiceImpl implements GodownMasterService {
 
     @Override
     public GodownMasterDto updateGodown(String godownCode, GodownMasterDto updatedGodown){
-        GodownMaster godownMaster = godownMasterRepository.findById(godownCode).orElseThrow(()->
+        GodownMaster godownMaster = godownMasterRepository.findByGodownCode(godownCode).orElseThrow(()->
                 new ResourceNotFoundException("Godown is not found with the given name:" + godownCode));
 
-
+        godownMaster.setId(updatedGodown.getId());
         godownMaster.setGodownCode(updatedGodown.getGodownCode());
         godownMaster.setGodownName(updatedGodown.getGodownName());
 
@@ -84,10 +84,10 @@ public class GodownMasterServiceImpl implements GodownMasterService {
 
     @Override
     public void deleteGodown(String godownCode){
-        GodownMaster godownMaster = godownMasterRepository.findById(godownCode).orElseThrow(()->
+        GodownMaster godownMaster = godownMasterRepository.findByGodownCode(godownCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Godown is not exists with the given name:" + godownCode));
 
-        godownMasterRepository.deleteById(godownCode);
+        godownMasterRepository.deleteById(Long.valueOf(godownCode));
     }
 }

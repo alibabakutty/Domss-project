@@ -138,10 +138,6 @@ const ExecutiveMaster = () => {
   function saveExecutiveMaster(e) {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
-
     const executive = {
       executiveCode,
       executiveMaster,
@@ -291,7 +287,7 @@ const ExecutiveMaster = () => {
                 }}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.dateOfJoin = input)}
-                className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
+                className="w-[300px] ml-2 h-5 font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>
@@ -309,7 +305,7 @@ const ExecutiveMaster = () => {
                 onChange={(e) => setMobileNo(e.target.value)}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.mobileNo = input)}
-                className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
+                className="w-[300px] ml-2 h-5 font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>
@@ -327,7 +323,7 @@ const ExecutiveMaster = () => {
                 onChange={(e) => setEmailId(e.target.value)}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.emailId = input)}
-                className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
+                className="w-[300px] ml-2 h-5 font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>

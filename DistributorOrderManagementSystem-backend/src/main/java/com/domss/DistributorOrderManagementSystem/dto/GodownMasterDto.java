@@ -7,6 +7,8 @@ import lombok.*;
 @NoArgsConstructor
 public class GodownMasterDto {
 
+    private Long id;
+
     private String godownCode;
 
 

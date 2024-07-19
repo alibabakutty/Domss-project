@@ -8,10 +8,10 @@ const AlterProductMaster = () => {
 
   const [product, setProduct] = useState({
     productCode: "",
-    productDescription: "",
-    productCategory: "",
-    productUom: "",
-    productGroup: "",
+    description: "",
+    stockCategory: "",
+    uom: "",
+    stockGroup: "",
     standardCost: "",
     sellingPrice: "",
     discount: "",
@@ -19,24 +19,22 @@ const AlterProductMaster = () => {
 
   const inputRefs = useRef({
     productCode: null,
-    productDescription: null,
-    productCategory: null,
-    productUom: null,
-    productGroup: null,
+    description: null,
+    stockCategory: null,
+    uom: null,
+    stockGroup: null,
     standardCost: null,
     sellingPrice: null,
     discount: null,
     acceptButton: null,
   });
 
-  const [errors, setErrors] = useState({});
-
   const [unitsSuggestions, setUnitsSuggestions] = useState([]);
   const [filteredUnitsSuggestions, setFilteredUnitsSuggestions] = useState([]);
   const [uomFocused, setUomFocused] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [highlightedSuggestionIndex, setHighlightedSuggestionIndex] =
-    useState(0);
+    useState('');
 
   const acceptButtonRef = useRef(null);
   const yesQuitButtonRef = useRef(null);
@@ -78,10 +76,14 @@ const AlterProductMaster = () => {
 
   useEffect(() => {
     // Focus on the first input element after the component mounts
-    if (inputRefs.current.productCode) {
-      inputRefs.current.productCode.focus();
-      pulseCursor(inputRefs.current.productCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.productCode) {
+        inputRefs.current.productCode.focus();
+        pulseCursor(inputRefs.current.productCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadProduct();
 
@@ -199,7 +201,7 @@ const AlterProductMaster = () => {
       }
     }
 
-    if (target.id === "productUom") {
+    if (target.id === "uom") {
       if (keyCode === 40) {
         event.preventDefault();
         setHighlightedSuggestionIndex(
@@ -224,7 +226,7 @@ const AlterProductMaster = () => {
 
   const handleUomChange = (e) => {
     const value = e.target.value;
-    setProduct({ ...product, productUom: value }); // Update the UOM state
+    setProduct({ ...product, uom: value }); // Update the UOM state
 
     const filteredSuggestions = unitsSuggestions.filter((unit) =>
       unit.productUom.toLowerCase().includes(value.toLowerCase())
@@ -263,13 +265,13 @@ const AlterProductMaster = () => {
   };
 
   const selectUnit = (unit) => {
-    setProduct({ ...product, productUom: unit.productUom }); // Update the UOM state with the selected unit
+    setProduct({ ...product, uom: unit.uom.toUpperCase() }); // Update the UOM state with the selected unit
     setFilteredUnitsSuggestions([]); // Clear filtered suggestions
   };
 
   const handleInputFocus = (e) => {
     const { id } = e.target;
-    if (id === "productUom") {
+    if (id === "uom") {
       setUomFocused(true);
       setFilteredUnitsSuggestions(unitsSuggestions); // Show all suggestions when focused
     } else {
@@ -277,6 +279,13 @@ const AlterProductMaster = () => {
       setFilteredUnitsSuggestions([]); // Clear suggestions when other inputs are focused
     }
   };
+
+  const handleInputBlur = (e) => {
+    const { id } = e.target;
+    if (id === 'uom'){
+      setUomFocused(false);
+    }
+  }
 
   const handleModalClose = () => {
     setShowModal(false);
@@ -291,37 +300,23 @@ const AlterProductMaster = () => {
     navigate("/productAlter/filter");
   };
 
-  const validateForm = () => {
-    const validationErrors = {};
-
-    if (!productCode.trim()) {
-      validationErrors.productCode = "Product Code is required";
-    }
-
-    setErrors(validationErrors);
-
-    return Object.keys(validationErrors).length === 0;
-  };
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    if (validateForm()) {
-      try {
-        await axios.put(
-          `http://localhost:9080/products/alterProductMaster/${productCode}`,
-          {
-            ...product,
-            standardCost: parseFloat(product.standardCost),
-            sellingPrice: parseFloat(product.sellingPrice),
-            discount: parseFloat(product.discount),
-          }
-        );
+    try {
+      await axios.put(
+        `http://localhost:9080/products/alterProductMaster/${productCode}`,
+        {
+          ...product,
+          standardCost: parseFloat(product.standardCost),
+          sellingPrice: parseFloat(product.sellingPrice),
+          discount: parseFloat(product.discount),
+        }
+      );
 
-        navigate('/productAlter/filter');
-      } catch (error) {
-        console.error("Error updating the product", error);
-      }
+      navigate('/productAlter/filter');
+    } catch (error) {
+      console.error("Error updating the product", error);
     }
   };
 
@@ -357,14 +352,11 @@ const AlterProductMaster = () => {
               className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
               autoComplete="off"
             />
-            {errors.productCode && (
-              <p className="text-red-500 text-xs ml-2">{errors.productCode}</p>
-            )}
           </div>
 
           <div className="input-ldgr">
             <label
-              htmlFor="productDescription"
+              htmlFor="description"
               className="text-sm mr-[9.5px] ml-2"
             >
               Product Descriptions
@@ -372,58 +364,58 @@ const AlterProductMaster = () => {
             :{" "}
             <input
               type="text"
-              id="productDescription"
-              name="productDescription"
-              value={product.productDescription}
+              id="description"
+              name="description"
+              value={product.description}
               onChange={onInputChange}
               onKeyDown={handleKeyDown}
-              ref={(input) => (inputRefs.current.productDescription = input)}
+              ref={(input) => (inputRefs.current.description = input)}
               className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
               autoComplete="off"
             />
           </div>
 
           <div className="input-ldgr">
-            <label htmlFor="productCategory" className="text-sm mr-[30px] ml-2">
+            <label htmlFor="stockCategory" className="text-sm mr-[30px] ml-2">
               Product Category
             </label>
             :{" "}
             <input
               type="text"
-              id="productCategory"
-              name="productCategory"
-              value={product.productCategory}
+              id="stockCategory"
+              name="stockCategory"
+              value={product.stockCategory}
               onChange={onInputChange}
               onKeyDown={handleKeyDown}
-              ref={(input) => (inputRefs.current.productCategory = input)}
+              ref={(input) => (inputRefs.current.stockCategory = input)}
               className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
               autoComplete="off"
             />
           </div>
 
           <div className="input-ldgr">
-            <label htmlFor="productUom" className="text-sm mr-[55px] ml-2">
+            <label htmlFor="uom" className="text-sm mr-[55px] ml-2">
               Product UOM
             </label>
             :{" "}
             <input
               type="text"
-              id="productUom"
-              name="productUom"
-              value={product.productUom}
+              id="uom"
+              name="uom"
+              value={product.uom}
               onChange={handleUomChange}
               onKeyDown={handleKeyDown}
               ref={(input) => {
-                inputRefs.current.productUom = input;
+                inputRefs.current.uom = input;
                 uomInputRef.current = input;
               }}
               onFocus={handleInputFocus}
-              onBlur={() => setUomFocused(false)}
+              onBlur={handleInputBlur}
               className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
               autoComplete="off"
             />
             {uomFocused && filteredUnitsSuggestions.length > 0 && (
-              <div className="absolute top-[72px] left-[1031px] text-left bg-[#CAF4FF] w-[20%] h-[550px] border border-gray-500">
+              <div className="absolute top-[72px] left-[1031px] text-left bg-[#CAF4FF] w-[20%] h-[550px] border border-gray-500 overflow-y-scroll">
                 <div className=" bg-[#003285] text-[13.5px] pl-2 text-white">
                   <p>List Of Uom</p>
                 </div>
@@ -451,18 +443,18 @@ const AlterProductMaster = () => {
           </div>
 
           <div className="input-ldgr">
-            <label htmlFor="productGroup" className="text-sm mr-[48.5px] ml-2">
+            <label htmlFor="stockGroup" className="text-sm mr-[48.5px] ml-2">
               Product Group
             </label>
             :{" "}
             <input
               type="text"
-              id="productGroup"
-              name="productGroup"
-              value={product.productGroup}
+              id="stockGroup"
+              name="stockGroup"
+              value={product.stockGroup}
               onChange={onInputChange}
               onKeyDown={handleKeyDown}
-              ref={(input) => (inputRefs.current.productGroup = input)}
+              ref={(input) => (inputRefs.current.stockGroup = input)}
               className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
               autoComplete="off"
             />

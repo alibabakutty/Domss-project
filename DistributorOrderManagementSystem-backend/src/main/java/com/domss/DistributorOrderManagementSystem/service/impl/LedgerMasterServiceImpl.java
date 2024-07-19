@@ -48,7 +48,7 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 
     @Override
     public LedgerMasterDto getLedgerCode(String ledgerCode){
-        LedgerMaster ledgerMaster = ledgerMasterRepository.findById(ledgerCode).orElseThrow(()->
+        LedgerMaster ledgerMaster = ledgerMasterRepository.findByLedgerCode(ledgerCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Ledger Code is not found with this name:" + ledgerCode));
 
@@ -67,10 +67,11 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
     @Override
     public LedgerMasterDto updateLedgerMaster(String ledgerCode, LedgerMasterDto updatedLedgerMaster){
 
-        LedgerMaster ledgerMaster = ledgerMasterRepository.findById(ledgerCode).orElseThrow(()->
+        LedgerMaster ledgerMaster = ledgerMasterRepository.findByLedgerCode(ledgerCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Ledger Code is not found with this name:" + ledgerCode));
 
+        ledgerMaster.setId(updatedLedgerMaster.getId());
         ledgerMaster.setLedgerCode(updatedLedgerMaster.getLedgerCode());
         ledgerMaster.setLedgerName(updatedLedgerMaster.getLedgerName());
 
@@ -82,11 +83,11 @@ public class LedgerMasterServiceImpl implements LedgerMasterService {
 
     @Override
     public void deleteLedgerMaster(String ledgerCode){
-        LedgerMaster ledgerMaster = ledgerMasterRepository.findById(ledgerCode).orElseThrow(()->
+        LedgerMaster ledgerMaster = ledgerMasterRepository.findByLedgerCode(ledgerCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Ledger Code is not found with this name:" + ledgerCode));
 
-        ledgerMasterRepository.deleteById(ledgerCode);
+        ledgerMasterRepository.deleteById(Long.valueOf(ledgerCode));
 
     }
 }

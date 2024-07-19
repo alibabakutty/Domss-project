@@ -1,14 +1,9 @@
 package com.domss.DistributorOrderManagementSystem.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
-@Getter
-@Setter
-@ToString
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -17,7 +12,13 @@ import lombok.*;
 public class DistributorMaster {
 
     @Id
-    @Column(name = "distributor_code")
+    @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "id_seq")
+    @Column(name = "id")
+    private Long id;
+
+
+    @Column(name = "distributor_code", nullable = false, unique = true)
     private String distributorCode;
 
     @Column(name = "distributor_company_name")

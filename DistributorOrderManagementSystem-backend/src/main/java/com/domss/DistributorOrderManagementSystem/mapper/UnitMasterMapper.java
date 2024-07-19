@@ -8,13 +8,17 @@ public class UnitMasterMapper {
 
     public static UnitMasterDto mapToUnitMasterDto(UnitMaster unitMaster) {
         return new UnitMasterDto(
-                unitMaster.getProductUom()
+                unitMaster.getId(),
+                unitMaster.getProductUom(),
+                unitMaster.getUom()
         );
     }
 
     public static UnitMaster mapToUnitMaster(UnitMasterDto unitMasterDto) {
         return new UnitMaster(
-                unitMasterDto.getProductUom()
+                unitMasterDto.getId(),
+                unitMasterDto.getProductUom(),
+                unitMasterDto.getUom()
         );
     }
 }

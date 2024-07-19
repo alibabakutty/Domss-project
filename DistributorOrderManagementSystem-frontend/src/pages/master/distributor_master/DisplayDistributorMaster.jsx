@@ -52,18 +52,15 @@ const DisplayDistributorMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setDistributor({ ...distributor, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
-    if (inputRefs.current.distributorCode) {
-      inputRefs.current.distributorCode.focus();
-      pulseCursor(inputRefs.current.distributorCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.distributorCode) {
+        inputRefs.current.distributorCode.focus();
+        pulseCursor(inputRefs.current.distributorCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadDistributor();
 
@@ -267,12 +264,12 @@ const DisplayDistributorMaster = () => {
                     id={field.id}
                     name={field.id}
                     value={field.value}
-                    onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={(input) => {
                       inputRefs.current[field.id] = input;
                     }}
                     className="w-[300px] h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                    readOnly
                     autoComplete="off"
                   />
                 </div>
@@ -281,8 +278,8 @@ const DisplayDistributorMaster = () => {
           </div>
 
           <div className="mt-[234px] ml-[270px]">
-            <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.contactMobileNo && inputRefs.current.contactMobileNo.focus){inputRefs.current.contactMobileNo.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
-            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span>
+            {/* <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.contactMobileNo && inputRefs.current.contactMobileNo.focus){inputRefs.current.contactMobileNo.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
+            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
       </div>

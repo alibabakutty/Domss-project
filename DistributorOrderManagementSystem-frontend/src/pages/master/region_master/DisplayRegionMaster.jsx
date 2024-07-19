@@ -47,18 +47,16 @@ const DisplayRegionMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setRegion({ ...region, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
-    if (inputRefs.current.regionMasterId) {
-      inputRefs.current.regionMasterId.focus();
-      pulseCursor(inputRefs.current.regionMasterId);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.regionMasterId) {
+        inputRefs.current.regionMasterId.focus();
+        pulseCursor(inputRefs.current.regionMasterId);
+      }
     }
     loadRegion();
+
+    setTimeout(focusAndPulseCursor,100);
 
     const handleKeyDown = (event) => {
       const { ctrlKey, key } = event;
@@ -211,11 +209,11 @@ const DisplayRegionMaster = () => {
                   id="regionMasterId"
                   name="regionMasterId"
                   value={region.regionMasterId}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   onFocus={(e) => pulseCursor(e.target)}
                   ref={(input) => (inputRefs.current.regionMasterId = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -229,11 +227,11 @@ const DisplayRegionMaster = () => {
                   id="regionName"
                   name="regionName"
                   value={region.regionName}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   onFocus={(e) => pulseCursor(e.target)}
                   ref={(input) => (inputRefs.current.regionName = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -247,11 +245,11 @@ const DisplayRegionMaster = () => {
                   id="regionState"
                   name="regionState"
                   value={region.regionState}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   onFocus={(e) => pulseCursor(e.target)}
                   ref={(input) => (inputRefs.current.regionState = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -265,21 +263,21 @@ const DisplayRegionMaster = () => {
                   id="country"
                   name="country"
                   value={region.country}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   onFocus={(e) => pulseCursor(e.target)}
                   ref={(input) => (inputRefs.current.country = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
             </form>
           </div>
           <div className="mt-[400px] ml-[30px]">
-            <input type="button" id="backButton" className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative" onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.country && inputRefs.current.country.focus){
+            {/* <input type="button" id="backButton" className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative" onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.country && inputRefs.current.country.focus){
               inputRefs.current.country.focus();
             }}}} value={': Quit'} ref={(button) => {backButtonRef.current = button;}} onClick={handleNavigation} />
-            <span className="text-sm absolute left-[736px] top-[602px] underline decoration-black">Q</span>
+            <span className="text-sm absolute left-[736px] top-[602px] underline decoration-black">Q</span> */}
           </div>
         </div>
       </div>

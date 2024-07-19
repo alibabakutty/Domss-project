@@ -48,7 +48,7 @@ public class UnitMasterServiceImpl implements UnitMasterService {
 
     @Override
     public UnitMasterDto getUnitMaster(String productUom){
-        UnitMaster unitMaster = unitMasterRepository.findById(productUom).orElseThrow(()->
+        UnitMaster unitMaster = unitMasterRepository.findByProductUom(productUom).orElseThrow(()->
 
                 new ResourceNotFoundException("Unit is not found with this name:" + productUom));
 
@@ -69,11 +69,11 @@ public class UnitMasterServiceImpl implements UnitMasterService {
     @Override
     public void deleteUnit(String uom){
 
-        UnitMaster unitMaster = unitMasterRepository.findById(uom).orElseThrow(()->
+        UnitMaster unitMaster = unitMasterRepository.findByProductUom(uom).orElseThrow(()->
 
                 new ResourceNotFoundException("Units is not found with this name:" + uom));
 
-        unitMasterRepository.deleteById(uom);
+        unitMasterRepository.deleteById(Long.valueOf(uom));
 
     }
 }

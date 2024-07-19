@@ -9,6 +9,7 @@ public class VoucherTypeMasterMapper {
     public static VoucherTypeMasterDto mapToVoucherTypeMasterDto(VoucherTypeMaster voucherTypeMaster){
 
         return new VoucherTypeMasterDto(
+                voucherTypeMaster.getId(),
                 voucherTypeMaster.getVoucherTypeName(),
                 voucherTypeMaster.getVoucherType(),
                 voucherTypeMaster.getMethodOfVoucherNumbering(),
@@ -31,6 +32,7 @@ public class VoucherTypeMasterMapper {
 
     public static VoucherTypeMaster mapToVoucherTypeMaster(VoucherTypeMasterDto voucherTypeMasterDto){
         return new VoucherTypeMaster(
+                voucherTypeMasterDto.getId(),
                 voucherTypeMasterDto.getVoucherTypeName(),
                 voucherTypeMasterDto.getVoucherType(),
                 voucherTypeMasterDto.getMethodOfVoucherNumbering(),

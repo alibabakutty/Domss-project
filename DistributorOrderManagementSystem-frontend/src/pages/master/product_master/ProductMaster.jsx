@@ -246,7 +246,7 @@ const ProductMaster = () => {
   };
 
   const selectUnit = (unit) => {
-    setProductUom(unit.productUom); // Update the UOM state with the selected unit
+    setProductUom(unit.uom.toUpperCase()); // Update the UOM state with the selected unit
     setFilteredUnitsSuggestions([]); // Clear filtered suggestions
   };
 
@@ -291,7 +291,7 @@ const ProductMaster = () => {
     createNewProductMaster(product)
         .then((response) => {
           console.log(response.data);
-          // navigate('/addedProduct');
+          navigate('/create');
 
           // Focus on the first input field
           if (inputRefs.current.productCode) {
@@ -403,11 +403,11 @@ const ProductMaster = () => {
                 autoComplete="off"
               />
               {uomFocused && filteredUnitsSuggestions.length > 0 && (
-                <div className="absolute top-[72px] left-[1031px] text-left bg-[#CAF4FF] w-[20%] h-[550px] border border-gray-500">
+                <div className="absolute top-[72px] left-[1031px] text-left bg-[#CAF4FF] w-[20%] h-[550px] border border-gray-500 overflow-y-scroll">
                   <div className=" bg-[#003285] text-[13.5px] pl-2 text-white">
                     <p>List Of Uom</p>
                   </div>
-                  <ul className=" bg-[#CAF4FF] mt-5 w-full border border-gray-300 text-[12.5px]">
+                  <ul className=" bg-[#CAF4FF] mt-5 w-full border border-gray-300 text-[12.5px] ">
                     {filteredUnitsSuggestions.map((unit, index) => (
                       <li
                         key={unit.id || index}
@@ -422,7 +422,7 @@ const ProductMaster = () => {
                             : ""
                         }`}
                       >
-                        {unit.productUom}
+                        {unit.productUom.toUpperCase()}
                       </li>
                     ))}
                   </ul>

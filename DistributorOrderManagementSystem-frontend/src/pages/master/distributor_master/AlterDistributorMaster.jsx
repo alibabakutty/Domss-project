@@ -81,11 +81,14 @@ const AlterDistributorMaster = () => {
   };
 
   useEffect(() => {
-    if (inputRefs.current.distributorCode) {
-      inputRefs.current.distributorCode.focus();
-      pulseCursor(inputRefs.current.distributorCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.distributorCode) {
+        inputRefs.current.distributorCode.focus();
+        pulseCursor(inputRefs.current.distributorCode);
+      }
     }
 
+    setTimeout(focusAndPulseCursor,100);
     loadDistributor();
 
     const fetchExecutiveSuggestions = async () => {

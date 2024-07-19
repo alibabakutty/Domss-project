@@ -55,10 +55,14 @@ const AlterGodownMaster = () => {
   };
 
   useEffect(() => {
-    if (inputRefs.current.godownCode) {
-      inputRefs.current.godownCode.focus();
-      pulseCursor(inputRefs.current.godownCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.godownCode) {
+        inputRefs.current.godownCode.focus();
+        pulseCursor(inputRefs.current.godownCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadGodown();
 

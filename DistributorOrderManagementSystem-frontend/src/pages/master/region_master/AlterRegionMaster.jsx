@@ -70,13 +70,17 @@ const AlterRegionMaster = () => {
   };
 
   useEffect(() => {
-    loadRegion();
-
     // Focus on ledgerCode input and pulse cursor
-    if (inputRefs.current.regionMasterId) {
-      inputRefs.current.regionMasterId.focus();
-      pulseCursor(inputRefs.current.regionMasterId);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.regionMasterId) {
+        inputRefs.current.regionMasterId.focus();
+        pulseCursor(inputRefs.current.regionMasterId);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
+
+    loadRegion();
 
     const handleKeyDown = (event) => {
       const { ctrlKey, key } = event;

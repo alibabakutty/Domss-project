@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LedgerMasterDto {
 
+    private Long id;
+
     private String ledgerCode;
 
     private String ledgerName;

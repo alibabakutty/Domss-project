@@ -55,6 +55,14 @@ const AlterLedgerMaster = () => {
   };
 
   useEffect(() => {
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.ledgerCode) {
+        inputRefs.current.ledgerCode.focus();
+        pulseCursor(inputRefs.current.ledgerCode);
+      }
+    }
+
+    setTimeout(focusAndPulseCursor,100);
 
     const loadLedger = async () => {
       try {
@@ -68,11 +76,6 @@ const AlterLedgerMaster = () => {
     };
 
     loadLedger();
-
-    if (inputRefs.current.ledgerCode) {
-      inputRefs.current.ledgerCode.focus();
-      pulseCursor(inputRefs.current.ledgerCode);
-    }
 
     const handleKeyDown = (event) => {
       const { ctrlKey, key } = event;

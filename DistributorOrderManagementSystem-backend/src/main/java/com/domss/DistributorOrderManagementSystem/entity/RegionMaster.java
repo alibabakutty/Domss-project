@@ -1,10 +1,7 @@
 package com.domss.DistributorOrderManagementSystem.entity;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -15,10 +12,15 @@ import lombok.*;
 @Entity
 @Table(name = "region_master")
 public class RegionMaster {
-
-
     @Id
-    @Column(name = "region_master_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "id_seq")
+    @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
+    @Column(name = "id")
+    private Long id;
+
+
+
+    @Column(name = "region_master_id", nullable = false, unique = true)
     private String regionMasterId;
 
     @Column(name = "region_name")

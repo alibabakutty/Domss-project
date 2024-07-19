@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class DistributorMasterDto {
 
-
+    private Long id;
 
     private String distributorCode;
 

@@ -10,10 +10,10 @@ const DisplayProductMaster = () => {
 
   const [product, setProduct] = useState({
     productCode: "",
-    productDescription: "",
-    productCategory: "",
-    productUom: "",
-    productGroup: "",
+    description: "",
+    stockCategory: "",
+    uom: "",
+    stockGroup: "",
     standardCost: "",
     sellingPrice: "",
     discount: "",
@@ -21,10 +21,10 @@ const DisplayProductMaster = () => {
 
   const inputRefs = useRef({
     productCode: null,
-    productDescription: null,
-    productUom: null,
-    productCategory: null,
-    productGroup: null,
+    description: null,
+    uom: null,
+    stockCategory: null,
+    stockGroup: null,
     standardCost: null,
     sellingPrice: null,
     discount: null,
@@ -48,18 +48,15 @@ const DisplayProductMaster = () => {
     }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-    setProduct({ ...product, [name]: capitalizedValue });
-  };
-
   useEffect(() => {
-    if (inputRefs.current.productCode) {
-      inputRefs.current.productCode.focus();
-      pulseCursor(inputRefs.current.productCode);
+    const focusAndPulseCursor = () => {
+      if (inputRefs.current.productCode) {
+        inputRefs.current.productCode.focus();
+        pulseCursor(inputRefs.current.productCode);
+      }
     }
+
+    setTimeout(focusAndPulseCursor,100);
 
     loadProduct();
 
@@ -209,19 +206,19 @@ const DisplayProductMaster = () => {
                   id="productCode"
                   name="productCode"
                   value={product.productCode}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => {
                     inputRefs.current.productCode = input;
                   }}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr mt-1">
                 <label
-                  htmlFor="productDescription"
+                  htmlFor="description"
                   className="text-sm mr-[22px] ml-2"
                 >
                   Product Description
@@ -229,40 +226,40 @@ const DisplayProductMaster = () => {
                 :{" "}
                 <input
                   type="text"
-                  id="productDescription"
-                  name="productDescription"
-                  value={product.productDescription}
-                  onChange={handleChange}
+                  id="description"
+                  name="description"
+                  value={product.description}
                   onKeyDown={handleKeyDown}
                   ref={(input) =>
-                    (inputRefs.current.productDescription = input)
+                    (inputRefs.current.description = input)
                   }
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
-                <label htmlFor="productUom" className="text-sm mr-[60px] ml-2">
+                <label htmlFor="uom" className="text-sm mr-[60px] ml-2">
                   Product UOM
                 </label>
                 :{" "}
                 <input
                   type="text"
-                  id="productUom"
-                  name="productUom"
-                  value={product.productUom}
-                  onChange={handleChange}
+                  id="uom"
+                  name="uom"
+                  value={product.uom}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.productUom = input)}
+                  ref={(input) => (inputRefs.current.uom = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
                 <label
-                  htmlFor="productCategory"
+                  htmlFor="stockCategory"
                   className="text-sm mr-[36px] ml-2"
                 >
                   Product Category
@@ -270,20 +267,20 @@ const DisplayProductMaster = () => {
                 :{" "}
                 <input
                   type="text"
-                  id="productCategory"
-                  name="productCategory"
-                  value={product.productCategory}
-                  onChange={handleChange}
+                  id="stockCategory"
+                  name="stockCategory"
+                  value={product.stockCategory}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.productCategory = input)}
+                  ref={(input) => (inputRefs.current.stockCategory = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
                 <label
-                  htmlFor="productGroup"
+                  htmlFor="stockGroup"
                   className="text-sm mr-[55px] ml-2"
                 >
                   Product Group
@@ -291,15 +288,13 @@ const DisplayProductMaster = () => {
                 :{" "}
                 <input
                   type="text"
-                  id="productGroup"
-                  name="productGroup"
-                  value={product.productGroup}
-                  onChange={(e) =>
-                    setProduct({ ...product, productGroup: e.target.value })
-                  }
+                  id="stockGroup"
+                  name="stockGroup"
+                  value={product.stockGroup}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.productGroup = input)}
+                  ref={(input) => (inputRefs.current.stockGroup = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -317,12 +312,10 @@ const DisplayProductMaster = () => {
                   id="standardCost"
                   name="standardCost"
                   value={product.standardCost}
-                  onChange={(e) =>
-                    setProduct({ ...product, standardCost: e.target.value })
-                  }
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.standardCost = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -340,12 +333,10 @@ const DisplayProductMaster = () => {
                   id="sellingPrice"
                   name="sellingPrice"
                   value={product.sellingPrice}
-                  onChange={(e) =>
-                    setProduct({ ...product, sellingPrice: e.target.value })
-                  }
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.sellingPrice = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -360,10 +351,10 @@ const DisplayProductMaster = () => {
                   id="discount"
                   name="discount"
                   value={product.discount}
-                  onChange={handleChange}
                   onKeyDown={handleKeyDown}
                   ref={(input) => (inputRefs.current.discount = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
+                  readOnly
                   autoComplete="off"
                 />
               </div>
@@ -371,8 +362,8 @@ const DisplayProductMaster = () => {
           </div>
 
           <div className="mt-[305px] ml-[270px]">
-            <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.discount && inputRefs.current.discount.focus){inputRefs.current.discount.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
-            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span>
+            {/* <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.discount && inputRefs.current.discount.focus){inputRefs.current.discount.focus();}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
+            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
       </div>

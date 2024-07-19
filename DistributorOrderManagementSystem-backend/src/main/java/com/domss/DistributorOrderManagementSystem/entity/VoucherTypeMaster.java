@@ -1,9 +1,6 @@
 package com.domss.DistributorOrderManagementSystem.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -15,6 +12,12 @@ import lombok.*;
 public class VoucherTypeMaster {
 
     @Id
+    @Column(name = "id")
+    @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
+    private Long id;
+
+
     @Column(name = "voucher_type_name")
     private String voucherTypeName;
 

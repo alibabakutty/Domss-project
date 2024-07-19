@@ -58,7 +58,7 @@ public class DistributorMasterServiceImpl implements DistributorMasterService {
 
     @Override
     public DistributorMasterDto getDistributorMaster(String distributorCode){
-        DistributorMaster distributorMaster = distributorMasterRepository.findById(distributorCode).orElseThrow(()->
+        DistributorMaster distributorMaster = distributorMasterRepository.findByDistributorCode(distributorCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Distributor is not found with this name:" + distributorCode));
 
@@ -76,10 +76,11 @@ public class DistributorMasterServiceImpl implements DistributorMasterService {
     @Override
     public DistributorMasterDto updateDistributor(String distributorCode, DistributorMasterDto updatedDistributor){
 
-        DistributorMaster distributorMaster = distributorMasterRepository.findById(distributorCode).orElseThrow(()->
+        DistributorMaster distributorMaster = distributorMasterRepository.findByDistributorCode(distributorCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Distributor is not found with this name:" + distributorCode));
 
+        distributorMaster.setId(updatedDistributor.getId());
         distributorMaster.setDistributorCode(updatedDistributor.getDistributorCode());
         distributorMaster.setDistributorCompanyName(updatedDistributor.getDistributorCompanyName());
         distributorMaster.setDistributorOwnerName(updatedDistributor.getDistributorOwnerName());
@@ -98,10 +99,10 @@ public class DistributorMasterServiceImpl implements DistributorMasterService {
 
     @Override
     public void deleteDistributor(String distributorCode){
-        DistributorMaster distributorMaster = distributorMasterRepository.findById(distributorCode).orElseThrow(()->
+        DistributorMaster distributorMaster = distributorMasterRepository.findByDistributorCode(distributorCode).orElseThrow(()->
 
                 new ResourceNotFoundException("Distributor is not exists with this name:" + distributorCode));
 
-        distributorMasterRepository.deleteById(distributorCode);
+        distributorMasterRepository.deleteById(Long.valueOf(distributorCode));
     }
 }
