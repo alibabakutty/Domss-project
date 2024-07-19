@@ -75,7 +75,7 @@ const Home = () => {
 					<div className=" w-1/2 bg-slate-100 flex justify-center items-center">
 						<div className=" w-[300px] h-96 border border-blue-400 text-sm bg-[#def]">
 							<h2 className=" text-center text-bold text-white bg-[#2a67b1] px-4">
-								Gtaeway of Imperio
+								Gateway of Imperio
 							</h2>
 							<div>
 								<h2 className=" py-3 ml-20 text-[10px] text-[#2a67b1]">

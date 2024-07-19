@@ -37,7 +37,7 @@ const VoucherCreation = () => {
 		"Luxury Perfume",
 		"Soap",
 	]);
-	const [distributorData, setDistributorData] = useState([])
+	const [distributorData, setDistributorData] = useState([]);
 	const [productData, setProductData] = useState([]);
 	const [prodFilter, setProdFilter] = useState([]);
 	const [showDistributor, setShowDistributor] = useState(false)
@@ -47,7 +47,9 @@ const VoucherCreation = () => {
 	const [selectIndexCat, setSelectIndexCat] = useState(0);
 	const [selectIndexProd, setSelectIndexProd] = useState(0);
 	const [selectIndex, setSelectIndex] = useState(0);
-	const [selectIndexDist, setSelectIndexDist] = useState(0)
+	const [selectIndexDist, setSelectIndexDist] = useState(0);
+	const [focusedRow, setFofusedRow] = useState(null);
+	const [total, setTotal] = useState("")
 
 	const inputRefs = useRef([]);
 	const listRefs = useRef([]);
@@ -63,10 +65,11 @@ const VoucherCreation = () => {
 	const loadCategory = async () => {
 		const response = await axios.get("http://localhost:9080/products/allProducts");
 		setProductData(response.data);
+		console.log(productData);
 	};
 
 	const loadRegion = async ()=>{
-		const response = await axios.get("http://localhost:9080/regionMasterApi/allRegions")
+		const response = await axios.get("http://localhost:9080/ledgerMasterApi/allLedgers")
 
 		setDistributorData(response.data);
 	}
@@ -96,10 +99,18 @@ const VoucherCreation = () => {
 		setProdFilter(filteredData);
 	};
 
-	const handleSelect = (property, item, index) => {
+	const handleSelect = (property, item, rowIndex) => {
 		const newTableData = [...tableData];
 		if (property === "category") {
-			newTableData[index][property] = item;
+			newTableData[rowIndex][property] = item;
+			newTableData[rowIndex].code = "";
+			newTableData[rowIndex].description = "";
+			newTableData[rowIndex].uom = "";
+			newTableData[rowIndex].orderQty="";
+			newTableData[rowIndex].rate = "";
+			newTableData[rowIndex].discount = "";
+			newTableData[rowIndex].approvedQuantity = "";
+			newTableData[rowIndex].amount = "";
 			setTableData(newTableData);
 			setShowList(false);
 			if(item !=="♦ End of List"){
@@ -109,11 +120,11 @@ const VoucherCreation = () => {
 			
 		} else if (property === "code") {
 			const option = item;
-			newTableData[index].code = option.productCode;
-			newTableData[index].description = option.stockItemName;
-			newTableData[index].uom = option.uom;
-			newTableData[index].rate = parseFloat(option.rate).toFixed(2);
-			newTableData[index].discount = parseFloat(option.discount).toFixed(2);
+			newTableData[rowIndex].code = option.productCode;
+			newTableData[rowIndex].description = option.description;
+			newTableData[rowIndex].uom = option.uom;
+			newTableData[rowIndex].rate = parseFloat(option.sellingPrice).toFixed(2);
+			newTableData[rowIndex].discount = parseFloat(option.discount).toFixed(2);
 			setTableData(newTableData);
 			setShowProdList(false);
 		}
@@ -134,7 +145,7 @@ const VoucherCreation = () => {
 	}
 	
 	const handleDistributor = (item)=>{
-		setDistributorName(item.regionMaster)
+		setDistributorName(item.ledgerName)
 		setDistributorCode(item.ledgerCode)
 	}
 
@@ -187,14 +198,16 @@ const VoucherCreation = () => {
 		}
 	};
 
-	const handleFocus = (property) => {
+	const handleFocus = (property, index) => {
 		if (property === "category") {
 			setSelectIndex(selectIndexCat)
 			setShowList(true);
+			setFofusedRow(index)
 		}
 		if (property === "code") {
 			setSelectIndex(selectIndexProd);
 			setShowProdList(true);
+			setFofusedRow(index)
 		}
 
 	};
@@ -517,7 +530,7 @@ const VoucherCreation = () => {
 											onKeyDown={(e) =>
 												handleKeySelect(e, rowIndex, filterDisplay, "category")
 											}
-											onFocus={() => handleFocus("category")}
+											onFocus={() => handleFocus("category", rowIndex)}
 											onBlur={() => setShowList(false)}
 											ref={(input) =>
 												(tableRefs.current[rowIndex * 10 + 0] = input)
@@ -539,8 +552,8 @@ const VoucherCreation = () => {
 															tabIndex="0"
 															key={catIndex}
 															onClick={() => {
-																handleSelect("category", cat, rowIndex);
-																tableRefs.current[rowIndex * 10 + 1].focus();
+																handleSelect("category", cat, focusedRow);
+																tableRefs.current[focusedRow * 10 + 1].focus();
 																setSelectIndexCat(catIndex);
 															}}
 															ref={(el) => (listRefs.current[catIndex] = el)}
@@ -562,7 +575,7 @@ const VoucherCreation = () => {
 											name="code"
 											value={data.code}
 											onChange={(e) => handleChange(e, rowIndex)}
-											onFocus={() => handleFocus("code")}
+											onFocus={() => handleFocus("code", rowIndex)}
 											onBlur={() => setShowProdList(false)}
 											onKeyDown={(e) =>
 												handleKeySelect(e, rowIndex, prodFilter, "code")
@@ -586,8 +599,10 @@ const VoucherCreation = () => {
 														<li
 															tabIndex="0"
 															key={prodIndex}
-															onClick={() =>
-																handleSelect("code", prod, rowIndex)
+															onClick={() =>{
+																handleSelect("code", prod, focusedRow)
+																tableRefs.current[focusedRow * 10 + 2].focus();
+															}
 															}
 															ref={(el) => (listRefs.current[prodIndex] = el)}
 															className={`cursor-pointer ${
@@ -599,7 +614,7 @@ const VoucherCreation = () => {
 															</>
 															<>
 																<span className="ml-1">
-																	- {prod.stockItemName}
+																	- {prod.description}
 																</span>
 															</>
 														</li>
@@ -672,8 +687,16 @@ const VoucherCreation = () => {
 									</td>
 								</tr>
 							))}
+							<tr>
+								
+							</tr>
 						</tbody>
 					</table>
+				</div>
+
+				<div className="w-full flex">
+				<div className="w-3/4"></div>
+				<div className="w-1/4 border-b-2">Total:</div>
 				</div>
 				<div className=" px-1 flex text-[14px] mt-3 w-full justify-between">
 					<div className="w-[600px] flex justify-between ">
@@ -721,6 +744,7 @@ const VoucherCreation = () => {
 					</div>
 
 					<div className="w-[550px] ">
+					
 						<div className="flex leading-4 ">
 							<label htmlFor="" className="w-[11%]">
 								Narration
