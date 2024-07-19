@@ -524,22 +524,22 @@ const Purchase = () => {
 					<table className="border-collapse border border-slate-300 ">
 						<thead className=" bg-[#F9F3CC] text-[13px] border border-slate-300 font-semibold sticky top-0">
 							<tr className="h-[17px] leading-4 border border-slate-300">
-								<td className="w-[60px] text-center border border-slate-300">
+								<td className="w-[73px] text-center border border-slate-300">
 									S.No
 								</td>
-								<td className="w-[120px] text-center border border-slate-300">
+								<td className="w-[190px] text-center border border-slate-300">
 									Product Category
 								</td>
-								<td className="w-[100px] text-center border border-slate-300">
+								<td className="w-[170px] text-center border border-slate-300">
 									Product Code
 								</td>
-								<td className="w-[500px] text-center border border-slate-300">
+								<td className="w-[550px] text-center border border-slate-300">
 									Product Description
 								</td>
-								<td className="w-[80px] text-center border border-slate-300">
+								<td className="w-[150px] text-center border border-slate-300">
 									Order Qty
 								</td>
-								<td className="w-[50px] text-center border border-slate-300">
+								<td className="w-[80px] text-center border border-slate-300">
 									Uom
 								</td>
 							</tr>
@@ -568,7 +568,7 @@ const Purchase = () => {
 											className="w-full outline-0 pl-0.5"
 										/>
 										{showList && (
-											<div className="absolute bg-[#def1fc] w-48 top-[84px] right-[7px] text-left h-52">
+											<div className="absolute bg-[#def1fc] w-52 top-[84px] right-[7px] text-left h-52">
 												<h1 className="bg-[#2a67b1] text-white pl-2">
 													List of Category
 												</h1>

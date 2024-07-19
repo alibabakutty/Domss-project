@@ -49,9 +49,10 @@ const VoucherCreation = () => {
 	const [selectIndex, setSelectIndex] = useState(0);
 	const [selectIndexDist, setSelectIndexDist] = useState(0);
 	const [focusedRow, setFofusedRow] = useState(null);
-	// const [total, setTotal] = useState("")
+	const [total, setTotal] = useState("")
 
 	const inputRefs = useRef([]);
+	const distRefs = useRef([])
 	const listRefs = useRef([]);
 	const tableRefs = useRef([])
 
@@ -82,8 +83,8 @@ const VoucherCreation = () => {
 				inline: "nearest"
 			});
 			
-		}else if(selectIndexDist >= 0 && listRefs.current[selectIndexDist]){
-			listRefs.current[selectIndexDist].scrollIntoView({
+		}else if(selectIndexDist >= 0 && distRefs.current[selectIndexDist]){
+			distRefs.current[selectIndexDist].scrollIntoView({
 				behavior: "auto",
 				block: "end",
 				inline: "nearest"
@@ -159,9 +160,21 @@ const VoucherCreation = () => {
 			const price = parseFloat(total - discount).toFixed(2);
 			tableData[index].amount = price;
 			setTableData([...tableData]);
+			handleNetTotal();
 		}
+		
 	};
-
+	
+	const handleNetTotal = ()=>{
+		const netTotal = tableData.filter(item=>{
+			if(item.amount !== ""){
+				return true;
+			} else {
+				return false;
+			}
+		}).reduce((acc, item)=> acc +  parseFloat(item.amount), 0);
+		setTotal(netTotal.toFixed(2))
+	}
 	const handleKeySelect = (e, rowIndex, options, property) => {
 		
 		if (selectIndex < options.length) {
@@ -273,7 +286,27 @@ const VoucherCreation = () => {
 					
 				}
 			}
+		} else if(e.key === 'Backspace'){
+			if (isTable) {
+				const prevIndex = rowIndex * 10 + colIndex - 1;
+				if(e.target.value.trim() !== ""){
+					return;
+				} else {
+					e.preventDefault()
+					tableRefs.current[prevIndex]?.focus();
+					tableRefs.current[prevIndex].setSelectionRange(0,0)
+				}
+		} else {
+			const prevIndex = rowIndex - 1;
+			if(e.target.value.trim() !== ""){
+				return;
+			} else {
+				e.preventDefault()
+				inputRefs.current[prevIndex]?.focus();
+				inputRefs.current[prevIndex].setSelectionRange(0,0)
+			}
 		}
+	}
 	};
 
 	const addRow = () => {
@@ -441,7 +474,7 @@ const VoucherCreation = () => {
 												handleDistributor(item);
 												tableRefs.current[0].focus();
 											}}
-											ref={(el) => (listRefs.current[index] = el)}
+											ref={(el) => (distRefs.current[index] = el)}
 										>
 											<>
 												{item.ledgerCode} - {item.ledgerName}
@@ -478,7 +511,7 @@ const VoucherCreation = () => {
 					</div>
 				</div>
 				
-				<div className="h-[78vh] w-full overflow-y-scroll pl-1 border">
+				<div className="h-[80vh] w-full overflow-y-scroll pl-1 border">
 					<table className="border-collapse border border-slate-300 ">
 						<thead className=" bg-[#F9F3CC] text-[13px] border border-slate-300 font-semibold sticky top-0">
 							<tr className="h-[17px] leading-4 border border-slate-300">
@@ -661,6 +694,7 @@ const VoucherCreation = () => {
 											onBlur={(e) => {
 												handleTotal(e, rowIndex);
 												handleBlur(e, rowIndex);
+												
 											}}
 											className="w-full outline-0 text-right pr-0.5"
 										/>
@@ -694,9 +728,9 @@ const VoucherCreation = () => {
 					</table>
 				</div>
 
-				<div className="w-full flex">
-				<div className="w-3/4"></div>
-				<div className="w-1/4 border-b-2">Total:</div>
+				<div className="w-full flex justify-end">
+				<div className="w-40 border-b h-[18px] text-[13px] font-semibold text-right pr-2">
+				{total}</div>
 				</div>
 				<div className=" px-1 flex text-[14px] mt-3 w-full justify-between">
 					<div className="w-[600px] flex justify-between ">
