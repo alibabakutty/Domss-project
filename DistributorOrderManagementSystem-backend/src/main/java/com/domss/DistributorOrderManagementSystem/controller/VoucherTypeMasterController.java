@@ -59,10 +59,10 @@ public class VoucherTypeMasterController {
     }
 
     //Build DELETE Ledger REST API
-    @DeleteMapping("deleteVoucher/{voucherTypeName}")
-    public ResponseEntity<String> deleteVoucher(@PathVariable String voucherTypeName){
+    @DeleteMapping("deleteVoucher/{id}")
+    public ResponseEntity<String> deleteVoucher(@PathVariable Long id){
 
-        voucherTypeMasterService.deleteVoucherTypeMaster(voucherTypeName);
+        voucherTypeMasterService.deleteVoucherTypeMaster(id);
 
         return ResponseEntity.ok("Voucher deleted successfully!");
 

@@ -6,7 +6,7 @@ import com.domss.DistributorOrderManagementSystem.entity.VoucherType;
 
 public class VoucherTypeMapper {
 
-    public static VoucherTypeDto mapToVoucherTypeMasterDto(VoucherType voucherType){
+    public static VoucherTypeDto mapToVoucherTypeDto(VoucherType voucherType){
         return new VoucherTypeDto(
                 voucherType.getId(),
                 voucherType.getVoucherTypeName(),
@@ -28,7 +28,7 @@ public class VoucherTypeMapper {
         );
     }
 
-    public static VoucherType mapToVoucherTypeMaster(VoucherTypeDto voucherTypeDto){
+    public static VoucherType mapToVoucherType(VoucherTypeDto voucherTypeDto){
         return new VoucherType(
                 voucherTypeDto.getId(),
                 voucherTypeDto.getVoucherTypeName(),

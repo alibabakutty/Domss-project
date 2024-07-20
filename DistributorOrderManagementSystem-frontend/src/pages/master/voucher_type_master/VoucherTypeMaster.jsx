@@ -222,6 +222,7 @@ const VoucherTypeMaster = () => {
             inputRefs.current.printingVoucherAfterSaving.focus
           ) {
             inputRefs.current.printingVoucherAfterSaving.focus();
+            pulseCursor(inputRefs.current.printingVoucherAfterSaving);
           }
         } else {
           const nextInputIndex = currentInputIndex + 1;
@@ -371,10 +372,6 @@ const VoucherTypeMaster = () => {
   const saveVoucherTypeMaster = (e) => {
     e.preventDefault();
 
-    if (!validateForm()) {
-      return;
-    }
-
     const voucher = {
       voucherTypeName,
       voucherType,
@@ -439,6 +436,7 @@ const VoucherTypeMaster = () => {
       inputRefs.current.printingVoucherAfterSaving.focus
     ) {
       inputRefs.current.printingVoucherAfterSaving.focus();
+      pulseCursor(inputRefs.current.printingVoucherAfterSaving);
     }
   };
 
@@ -750,13 +748,13 @@ const VoucherTypeMaster = () => {
                                   e.key === "Enter" &&
                                   selectVoucherType(voucher)
                                 }
-                                className={`pl-2 cursor-pointer ${
+                                className={`pl-2 cursor-pointer text-[12px] ${
                                   highlightedSuggestionVoucherType === index
                                     ? "bg-yellow-200"
                                     : ""
                                 }`}
                               >
-                                {voucher.voucherType}
+                                {voucher.voucherType.toUpperCase()}
                               </li>
                             )
                           )}

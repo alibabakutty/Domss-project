@@ -97,10 +97,10 @@ const RegionFilter = () => {
   return (
     <>
       <div className="flex justify-evenly" onClick={() => inputRef.current.focus()}>
-        <div className="w-[90%] flex h-screen">
-          <div className="w-1/2 bg-white"></div>
+        <div className="w-[80%] flex h-screen">
+          <div className="w-[50%] bg-white"></div>
 
-          <div className="w-1/2 bg-slate-100 flex justify-center items-center flex-col">
+          <div className="w-[65%] bg-slate-100 flex justify-center items-center flex-col">
             <div className="w-[50%] h-16 flex flex-col justify-center items-center border border-black bg-white border-b-0 ">
               <p className="text-[13px] font-semibold underline underline-offset-4 decoration-gray-400">
                 Region Display
