@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const DisplayOFMasters = () => {
 
@@ -14,38 +14,54 @@ const DisplayOFMasters = () => {
 
     const links = [voucherTypeRef, ledgerRef, regionRef, executiveRef, distributorRef, productRef, godownRef,  backButtonRef];
 
+    const location = useLocation();
+
+    useEffect(() => {
+      // Unique session storage key for displayOfMasters
+      const sessionKey = 'displayOfMastersFocusIndex';
+      const savedFocusIndex = sessionStorage.getItem(sessionKey);
+      if (savedFocusIndex != null){
+        const index = parseInt(savedFocusIndex, 10);
+        if (links[index]?.current){
+          links[index].current.focus();
+        }
+      } else{
+        // Default focus on voucherTypeRef if no saved index
+        if (voucherTypeRef.current){
+          voucherTypeRef.current.focus();
+        }
+      }
+    },[location]);
+
+    const handleKeyDown = (event) => {
+      const currentIndex = links.findIndex(link => link.current === document.activeElement);
+
+      if(event.key === 'ArrowDown'){
+          event.preventDefault();
+          const nextIndex = (currentIndex + 1) % links.length;
+          sessionStorage.setItem('displayOfMastersFocusIndex', nextIndex);
+          links[nextIndex].current.focus();
+      }else if(event.key === 'ArrowUp'){
+          event.preventDefault();
+          const prevIndex = (currentIndex - 1 + links.length) % links.length;
+          sessionStorage.setItem('displayOfMastersFocusIndex', prevIndex);
+          links[prevIndex].current.focus();
+      } else if (event.key === 'Escape'){
+        event.preventDefault();
+        if (backButtonRef.current){
+          backButtonRef.current.click();
+        }
+      }
+  };
+
+  const handleMouseDown = (event) => {
+    // Check if the clicked element is one of the links
+    if(!links.some(link => link.current === event.target)){
+      event.preventDefault();
+    }
+  }
 
     useEffect(() =>{
-        if(voucherTypeRef.current){
-            voucherTypeRef.current.focus();
-        }
-
-        const handleKeyDown = (event) => {
-            const currentIndex = links.findIndex(link => link.current === document.activeElement);
-
-            if(event.key === 'ArrowDown'){
-                event.preventDefault();
-                const nextIndex = (currentIndex + 1) % links.length;
-                links[nextIndex].current.focus();
-            }else if(event.key === 'ArrowUp'){
-                event.preventDefault();
-
-                const prevIndex = (currentIndex - 1 + links.length) % links.length;
-                links[prevIndex].current.focus();
-            } else if (event.key === 'Escape'){
-              event.preventDefault();
-              backButtonRef.current.click();
-            }
-        };
-
-        const handleMouseDown = (event) => {
-          // Check if the clicked element is one of the links
-
-          if(!links.some(link => link.current === event.target)){
-            event.preventDefault();
-          }
-        }
-
         document.addEventListener('keydown', handleKeyDown);
         document.addEventListener('mousedown', handleMouseDown);
 
