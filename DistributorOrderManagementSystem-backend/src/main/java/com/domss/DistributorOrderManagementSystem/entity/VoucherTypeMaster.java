@@ -12,9 +12,10 @@ import lombok.*;
 public class VoucherTypeMaster {
 
     @Id
-    @Column(name = "id")
+
     @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
+    @Column(name = "id")
     private Long id;
 
 

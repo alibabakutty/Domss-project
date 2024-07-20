@@ -64,11 +64,11 @@ const AlterofMasters = () => {
   return (
     <>
       <div className='flex justify-evenly'>
-        <div className='w-[90%] flex h-screen'>
-          <div className='w-1/2 bg-white'></div>
+        <div className='w-[80%] flex h-screen'>
+          <div className='w-[50%] bg-white'></div>
 
-          <div className='w-1/2 bg-slate-100 flex justify-center items-center flex-col'>
-          <div className='w-[300px] h-96 border border-blue-400 text-sm bg-[#def1fc]'>
+          <div className='w-[65%] bg-slate-100 flex justify-center items-center flex-col'>
+          <div className='w-[300px] h-96 border border-blue-400 text-sm bg-[#def1fc] mt-[94px] ml-[2px]'>
             <h2 className=' text-white bg-[#2a67b1] px-20'>Alter of Masters</h2>
 
             <ul>

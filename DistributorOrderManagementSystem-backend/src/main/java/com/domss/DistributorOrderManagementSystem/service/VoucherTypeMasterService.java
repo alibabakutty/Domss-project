@@ -13,5 +13,5 @@ public interface VoucherTypeMasterService {
 
     VoucherTypeMasterDto updateVoucherTypeMaster(String voucherTypeName, VoucherTypeMasterDto updatedVoucherTypeMaster);
 
-    void deleteVoucherTypeMaster(String voucherTypeName);
+    void deleteVoucherTypeMaster(Long id);
 }

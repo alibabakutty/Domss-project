@@ -103,13 +103,13 @@ public class VoucherTypeMasterServiceImpl implements VoucherTypeMasterService {
 
 
     @Override
-    public void deleteVoucherTypeMaster(String voucherTypeName){
+    public void deleteVoucherTypeMaster(Long id){
 
-        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findByVoucherTypeName(voucherTypeName).orElseThrow(()->
+        VoucherTypeMaster voucherTypeMaster = voucherTypeMasterRepository.findById(id).orElseThrow(()->
 
-                new ResourceNotFoundException("Voucher type name is not found with the given name:" + voucherTypeName));
+                new ResourceNotFoundException("Voucher type name is not found with the given name:" + id));
 
-        voucherTypeMasterRepository.deleteById(Long.valueOf(voucherTypeName));
+        voucherTypeMasterRepository.deleteById(id);
 
     }
 }

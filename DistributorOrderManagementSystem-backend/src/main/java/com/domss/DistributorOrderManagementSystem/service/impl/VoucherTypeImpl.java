@@ -24,18 +24,18 @@ public class VoucherTypeImpl implements VoucherTypeService {
     public VoucherTypeDto createVoucherType(VoucherTypeDto voucherTypeDto){
 
         // Validate voucher type object
-        validateVoucher(new VoucherTypeDto());
+        validateVoucher(voucherTypeDto);
 
         // check for duplicate entry
         if(voucherTypeRepository.existsByVoucherType(voucherTypeDto.getVoucherType())){
             throw new DuplicateKeyException("Duplicate entry for unique field:" + voucherTypeDto.getVoucherType());
         }
 
-        VoucherType voucherType = VoucherTypeMapper.mapToVoucherTypeMaster(voucherTypeDto);
+        VoucherType voucherType = VoucherTypeMapper.mapToVoucherType(voucherTypeDto);
 
         VoucherType savedVoucherType = voucherTypeRepository.save(voucherType);
 
-        return VoucherTypeMapper.mapToVoucherTypeMasterDto(savedVoucherType);
+        return VoucherTypeMapper.mapToVoucherTypeDto(savedVoucherType);
 
     }
 
@@ -53,7 +53,7 @@ public class VoucherTypeImpl implements VoucherTypeService {
 
                 new ResourceNotFoundException("Voucher Type is not found with this name:" + voucherType));
 
-        return VoucherTypeMapper.mapToVoucherTypeMasterDto(voucherTypeCreate);
+        return VoucherTypeMapper.mapToVoucherTypeDto(voucherTypeCreate);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class VoucherTypeImpl implements VoucherTypeService {
 
         List<VoucherType> voucherType = voucherTypeRepository.findAll();
 
-        return voucherType.stream().map(VoucherTypeMapper::mapToVoucherTypeMasterDto).toList();
+        return voucherType.stream().map(VoucherTypeMapper::mapToVoucherTypeDto).toList();
     }
 
     @Override
