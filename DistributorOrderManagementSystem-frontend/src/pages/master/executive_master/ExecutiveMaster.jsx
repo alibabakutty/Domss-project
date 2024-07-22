@@ -215,9 +215,17 @@ const ExecutiveMaster = () => {
     setDateOfJoin(formattedValue);
   };
 
+  const handleClickOutsideInputs = (e) => {
+    const inputs = ["executiveCode", "executiveMaster", "dateOfJoin", "mobileNo", "emailId", "status"];
+    if (!inputs.includes(e.target.id) && inputRefs.current.executiveCode){
+      inputRefs.current.executiveCode.focus();
+      pulseCursor(inputRefs.current.executiveCode);
+    }
+  };
+
   return (
     <>
-      <div className="w-1/2 border h-[100vh]" onClick={() => inputRefs.current.executiveCode.focus()}>
+      <div className="w-1/2 border h-[100vh]" onClick={handleClickOutsideInputs}>
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Executive Master</h2>
           <span className="cursor-pointer mt-[5px] mr-2">
