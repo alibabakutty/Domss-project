@@ -157,9 +157,17 @@ const RegionMaster = () => {
     navigate("/create");
   };
 
+  const handleClickOutsideInputs = (e) => {
+    const inputs = ["regionMasterId", "regionName", "regionState", "country"];
+    if (!inputs.includes(e.target.id) && inputRefs.current.regionMasterId){
+      inputRefs.current.regionMasterId.focus();
+      pulseCursor(inputRefs.current.regionMasterId);
+    }
+  };
+
   return (
     <>
-      <div id="primary-div" className="w-1/2 border h-[100vh]">
+      <div className="w-1/2 border h-[100vh]" onClick={handleClickOutsideInputs}>
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Region Master</h2>
           <span className="cursor-pointer mt-[5px] mr-2">
