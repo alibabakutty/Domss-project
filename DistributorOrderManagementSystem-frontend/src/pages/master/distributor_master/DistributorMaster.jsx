@@ -353,17 +353,9 @@ const DistributorMaster = () => {
     }
   };
 
-  const handleClickOutsideInputs = (e) => {
-    const inputs = ["distributorCode", "distributorCompanyName", "distributorOwnerName", "mobileNo", "executiveCode", "executiveMaster", "regionCode", "regionMaster", "contactPersonName", "contactMobileNo"];
-    if (!inputs.includes(e.target.id) && inputRefs.current.distributorCode){
-      inputRefs.current.distributorCode.focus();
-      pulseCursor(inputRefs.current.distributorCode);
-    }
-  };
-
   return (
     <>
-      <div className="w-1/2 border h-[100vh]" onClick={handleClickOutsideInputs}>
+      <div className="w-1/2 border h-[100vh]" onClick={() => inputRefs.current.distributorCode.focus()}>
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[190px]">Distributor Master</h2>
           <span className="cursor-pointer mt-[5px] mr-2">

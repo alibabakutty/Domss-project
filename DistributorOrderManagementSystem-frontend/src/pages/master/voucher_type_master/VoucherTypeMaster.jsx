@@ -430,16 +430,14 @@ const VoucherTypeMaster = () => {
     setSuffixDetailsParticulars(suffixDetailsParticulars);
     setShowSubFormModal(false);
 
-    // After saving, set focus to printingVoucherAfterSaving Use setTimeout to delay focus
-    setTimeout(() => {
-      if (
-        inputRefs.current.printingVoucherAfterSaving &&
-        inputRefs.current.printingVoucherAfterSaving.focus
-      ) {
-        inputRefs.current.printingVoucherAfterSaving.focus();
-        pulseCursor(inputRefs.current.printingVoucherAfterSaving);
-      }
-    }, 0); // Adjust the delay as needed
+    // After saving, set focus to printingVoucherAfterSaving
+    if (
+      inputRefs.current.printingVoucherAfterSaving &&
+      inputRefs.current.printingVoucherAfterSaving.focus
+    ) {
+      inputRefs.current.printingVoucherAfterSaving.focus();
+      pulseCursor(inputRefs.current.printingVoucherAfterSaving);
+    }
   };
 
   const handleSubFormCancel = () => {
@@ -655,14 +653,6 @@ const VoucherTypeMaster = () => {
     setHighlightedMethodOfVoucherNumbering(0);
   };
 
-  const handleClickOutsideInputs = (e) => {
-    const inputs = ["voucherTypeName", "voucherType", "methodOfVoucherNumbering", "alterAdditionalNumberingDetails", "startingNumber", "widthOfNumericalPart", "prefillWithZero", "restartNumberingApplicationForm", "restartNumberingStartingNumber", "restartNumberingPeriodicity", "prefixDetailsApplicationForm", "prefixDetailsParticulars", "suffixDetailsApplicationForm", "suffixDetailsParticulars", "printingVoucherAfterSaving", "nameOfClass"];
-    if (!inputs.includes(e.target.id) && inputRefs.current.voucherTypeName){
-      inputRefs.current.voucherTypeName.focus();
-      pulseCursor(inputRefs.current.voucherTypeName);
-    }
-  };
-
   return (
     <>
       <div className="#FFF5E1 w-[90%] h-[95vh]">
@@ -679,7 +669,7 @@ const VoucherTypeMaster = () => {
           <form>
             <div
               className="w-[100%] h-[10vh] border border-b-slate-500"
-              onClick={handleClickOutsideInputs}
+              onClick={() => inputRefs.current.voucherTypeName.focus()}
             >
               <label htmlFor="voucherTypeName" className="mr-5 mt-3 ml-1">
                 Name
@@ -704,7 +694,7 @@ const VoucherTypeMaster = () => {
             <div className="flex text-sm h-[75vh]">
               <div
                 className="general w-[45%] border border-r-slate-500"
-                onClick={handleClickOutsideInputs}
+                onClick={() => inputRefs.current.voucherType.focus()}
               >
                 <p className="underline text-center">General</p>
 
