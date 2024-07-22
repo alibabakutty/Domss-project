@@ -6,7 +6,7 @@ import { createNewLedgerMaster } from "../../../services/MasterService";
 const LedgerMaster = () => {
   const [ledgerCode, setLedgerCode] = useState("");
   const [ledgerName, setLedgerName] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState(false); 
 
   const inputRefs = useRef({
     ledgerCode: null,
@@ -147,7 +147,7 @@ const LedgerMaster = () => {
       .then((response) => {
         console.log(response.data);
 
-        // navigator('/addedLedger');
+        navigator('/create');
       })
       .catch((error) => {
         console.error("Error creating ledger master:", ledger);
@@ -171,7 +171,7 @@ const LedgerMaster = () => {
     <>
       <div
         className="w-1/2 border h-[100vh]"
-        onClick={() => inputRefs.current.ledgerCode.focus()}
+        onClick={(e) => {if (e.target.id !== "ledgerName" && inputRefs.current.ledgerCode){inputRefs.current.ledgerCode.focus(); pulseCursor(inputRefs.current.ledgerCode); } }}
       >
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Ledger Master</h2>
