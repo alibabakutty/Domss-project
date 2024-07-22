@@ -12,10 +12,9 @@ import lombok.*;
 @Entity
 @Table(name = "region_master")
 public class RegionMaster {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "id_seq")
-    @SequenceGenerator(name = "id_seq", sequenceName = "id_seq", allocationSize = 1)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 
