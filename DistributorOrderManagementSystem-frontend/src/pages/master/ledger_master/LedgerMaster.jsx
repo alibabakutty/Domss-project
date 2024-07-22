@@ -150,7 +150,7 @@ const LedgerMaster = () => {
         navigator('/create');
       })
       .catch((error) => {
-        console.error("Error creating ledger master:", ledger);
+        console.error("Error creating ledger master:", error);
       });
   }
 
@@ -167,11 +167,19 @@ const LedgerMaster = () => {
     navigator("/create");
   };
 
+  const handleClickOutsideInputs = (e) => {
+    const inputs = ["ledgerCode", "ledgerName"];
+    if (!inputs.includes(e.target.id) && inputRefs.current.ledgerCode){
+      inputRefs.current.ledgerCode.focus();
+      pulseCursor(inputRefs.current.ledgerCode);
+    }
+  }
+
   return (
     <>
       <div
         className="w-1/2 border h-[100vh]"
-        onClick={(e) => {if (e.target.id !== "ledgerName" && inputRefs.current.ledgerCode){inputRefs.current.ledgerCode.focus(); pulseCursor(inputRefs.current.ledgerCode); } }}
+        onClick={handleClickOutsideInputs}
       >
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Ledger Master</h2>

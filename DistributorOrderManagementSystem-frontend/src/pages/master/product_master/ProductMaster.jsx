@@ -6,10 +6,10 @@ import axios from "axios";
 
 const ProductMaster = () => {
   const [productCode, setProductCode] = useState("");
-  const [productDescription, setProductDescription] = useState("");
-  const [productCategory, setProductCategory] = useState("");
-  const [productUom, setProductUom] = useState("");
-  const [productGroup, setProductGroup] = useState("");
+  const [description, setDescription] = useState("");
+  const [stockCategory, setStockCategory] = useState("");
+  const [uom, setUom] = useState("");
+  const [stockGroup, setStockGroup] = useState("");
   const [standardCost, setStandardCost] = useState("");
   const [sellingPrice, setSellingPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -23,10 +23,10 @@ const ProductMaster = () => {
 
   const inputRefs = useRef({
     productCode: null,
-    productDescription: null,
-    productCategory: null,
-    productUom: null,
-    productGroup: null,
+    description: null,
+    stockCategory: null,
+    uom: null,
+    stockGroup: null,
     standardCost: null,
     sellingPrice: null,
     discount: null,
@@ -182,7 +182,7 @@ const ProductMaster = () => {
     }
 
     // Handle UOM input suggestions navigation
-    if (target.id === "productUom") {
+    if (target.id === "uom") {
       if (keyCode === 40) {
         // Down arrow
         event.preventDefault();
@@ -207,10 +207,10 @@ const ProductMaster = () => {
 
   const handleUomChange = (e) => {
     const value = e.target.value;
-    setProductUom(value); // Update the UOM state
+    setUom(value); // Update the UOM state
 
     const filteredSuggestions = unitsSuggestions.filter((unit) =>
-      unit.productUom.toLowerCase().includes(value.toLowerCase())
+      unit.uom.toLowerCase().includes(value.toLowerCase())
     );
 
     setFilteredUnitsSuggestions(filteredSuggestions); // Update filtered suggestions
@@ -220,7 +220,7 @@ const ProductMaster = () => {
 
     // Find the index of the suggestion that exactly matches the input value
     const exactMatchIndex = filteredSuggestions.findIndex(
-      (unit) => unit.productUom.toLowerCase() === value.toLowerCase()
+      (unit) => unit.uom.toLowerCase() === value.toLowerCase()
     );
 
     if (exactMatchIndex !== -1) {
@@ -229,7 +229,7 @@ const ProductMaster = () => {
     } else if (filteredSuggestions.length > 0) {
       // Otherwise, find the index of the first suggestion that starts with the input value
       highlightedIndex = filteredSuggestions.findIndex((unit) =>
-        unit.productUom.toLowerCase().startsWith(value.toLowerCase())
+        unit.uom.toLowerCase().startsWith(value.toLowerCase())
       );
       if (highlightedIndex === -1) {
         // If no match found, default to highlighting the first suggestion
@@ -239,20 +239,20 @@ const ProductMaster = () => {
 
     setHighlightedSuggestionIndex(highlightedIndex); // Update highlighted index
 
-    // Focus on the suggestion related to the selected productUom
+    // Focus on the suggestion related to the selected uom
     if (exactMatchIndex !== -1 && suggestionRefs.current[exactMatchIndex]) {
       suggestionRefs.current[exactMatchIndex].focus();
     }
   };
 
   const selectUnit = (unit) => {
-    setProductUom(unit.uom.toUpperCase()); // Update the UOM state with the selected unit
+    setuom(unit.uom.toUpperCase()); // Update the UOM state with the selected unit
     setFilteredUnitsSuggestions([]); // Clear filtered suggestions
   };
 
   const handleInputFocus = (e) => {
     const { id } = e.target;
-    if (id === "productUom") {
+    if (id === "uom") {
       setUomFocused(true);
       setFilteredUnitsSuggestions(unitsSuggestions); // Show all suggestions when focused
     } else {
@@ -279,10 +279,10 @@ const ProductMaster = () => {
 
     const product = {
       productCode,
-      productDescription,
-      productCategory,
-      productUom,
-      productGroup,
+      description,
+      stockCategory,
+      uom,
+      stockGroup,
       standardCost,
       sellingPrice,
       discount,
@@ -303,9 +303,28 @@ const ProductMaster = () => {
         });
   };
 
+  const handleClickOutsideInputs = (e) => {
+    const inputs = ["productCode", "description", "stockCategory", "uom", "stockGroup", "standardCost", "sellingPrice", "discount"];
+    if (!inputs.includes(e.target.id) && inputRefs.current.productCode){
+      inputRefs.current.productCode.focus();
+      pulseCursor(inputRefs.current.productCode);
+    }
+  };
+
+  // Handle input change and format decimal values
+  const handleInputChange = (setter) => (e) => {
+    // Get the input value
+    const value = e.target.value;
+
+    // Ensure the value is a valid decimal or empty
+    if (/^\d*\.?\d*$/.test(value)) {
+      setter(value);
+    }
+  };
+
   return (
     <>
-      <div className="w-1/2 border h-[100vh]" onClick={() => inputRefs.current.productCode.focus()}>
+      <div className="w-1/2 border h-[100vh]" onClick={handleClickOutsideInputs}>
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Product Master</h2>
           <span className="cursor-pointer mt-[5px] mr-2">
@@ -339,7 +358,7 @@ const ProductMaster = () => {
 
             <div className="input-ldgr">
               <label
-                htmlFor="productDescription"
+                htmlFor="description"
                 className="text-sm mr-[9.5px] ml-2"
               >
                 Product Descriptions
@@ -347,12 +366,12 @@ const ProductMaster = () => {
               :{" "}
               <input
                 type="text"
-                id="productDescription"
-                name="productDescription"
-                value={productDescription}
-                onChange={(e) => setProductDescription(e.target.value)}
+                id="description"
+                name="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.productDescription = input)}
+                ref={(input) => (inputRefs.current.description = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
@@ -360,7 +379,7 @@ const ProductMaster = () => {
 
             <div className="input-ldgr">
               <label
-                htmlFor="productCategory"
+                htmlFor="stockCategory"
                 className="text-sm mr-[30px] ml-2"
               >
                 Product Category
@@ -368,33 +387,33 @@ const ProductMaster = () => {
               :{" "}
               <input
                 type="text"
-                id="productCategory"
-                name="productCategory"
-                value={productCategory}
-                onChange={(e) => setProductCategory(e.target.value)}
+                id="stockCategory"
+                name="stockCategory"
+                value={stockCategory}
+                onChange={(e) => setStockCategory(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.productCategory = input)}
+                ref={(input) => (inputRefs.current.stockCategory = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>
 
             <div className="input-ldgr">
-              <label htmlFor="productUom" className="text-sm mr-[55px] ml-2">
+              <label htmlFor="uom" className="text-sm mr-[55px] ml-2">
                 Product UOM
               </label>
               :{" "}
               <input
                 type="text"
-                id="productUom"
-                name="productUom"
-                value={productUom}
+                id="uom"
+                name="uom"
+                value={uom}
                 onChange={(e) => {
                   handleUomChange(e);
                 }}
                 onKeyDown={handleKeyDown}
                 ref={(input) => {
-                  inputRefs.current.productUom = input;
+                  inputRefs.current.uom = input;
                   uomInputRef.current = input;
                 }}
                 onFocus={handleInputFocus}
@@ -432,7 +451,7 @@ const ProductMaster = () => {
 
             <div className="input-ldgr">
               <label
-                htmlFor="productGroup"
+                htmlFor="stockGroup"
                 className="text-sm mr-[48.5px] ml-2"
               >
                 Product Group
@@ -440,12 +459,12 @@ const ProductMaster = () => {
               :{" "}
               <input
                 type="text"
-                id="productGroup"
-                name="productGroup"
-                value={productGroup}
-                onChange={(e) => setProductGroup(e.target.value)}
+                id="stockGroup"
+                name="stockGroup"
+                value={stockGroup}
+                onChange={(e) => setStockGroup(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.productGroup = input)}
+                ref={(input) => (inputRefs.current.stockGroup = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
@@ -461,7 +480,7 @@ const ProductMaster = () => {
                 id="standardCost"
                 name="standardCost"
                 value={standardCost}
-                onChange={(e) => setStandardCost(Number(e.target.value))}
+                onChange={handleInputChange(setStandardCost)}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.standardCost = input)}
                 className="w-[150px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -479,7 +498,7 @@ const ProductMaster = () => {
                 id="sellingPrice"
                 name="sellingPrice"
                 value={sellingPrice}
-                onChange={(e) => setSellingPrice(Number(e.target.value))}
+                onChange={handleInputChange(setSellingPrice)}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.sellingPrice = input)}
                 className="w-[150px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -497,7 +516,7 @@ const ProductMaster = () => {
                 id="discount"
                 name="discount"
                 value={discount}
-                onChange={(e) => setDiscount(Number(e.target.value))}
+                onChange={handleInputChange(setDiscount)}
                 onKeyDown={handleKeyDown}
                 ref={(input) => (inputRefs.current.discount = input)}
                 className="w-[150px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
