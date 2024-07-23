@@ -16,7 +16,7 @@ const Purchase = () => {
 			uom: "",
 		},
 	]);
-	const [focusedRow, setFocusedRow] = useState(null)
+	const [focusedRow, setFocusedRow] = useState(null);
 	const [createdBy, setCreatedBy] = useState("");
 	const [narration, setNarration] = useState("");
 
@@ -45,7 +45,7 @@ const Purchase = () => {
 
 	const inputRefs = useRef([]);
 	const listRefs = useRef([]);
-	const distListRef = useRef([])
+	const distListRef = useRef([]);
 	const tableRefs = useRef([]);
 
 	const filterDisplay =
@@ -55,21 +55,30 @@ const Purchase = () => {
 
 	useEffect(() => {
 		loadCategory();
-		loadRegion();
+		loadLedger();
+		loadVoucherNo();
 	}, []);
 
 	const loadCategory = async () => {
-		const response = await axios.get("http://localhost:9080/products/allProducts");
+		const response = await axios.get(
+			"http://localhost:9080/products/allProducts"
+		);
 		setProductData(response.data);
-		
 	};
 
-	const loadRegion = async () => {
+	const loadLedger = async () => {
 		const response = await axios.get(
-			"http://localhost:9080/regionMasterApi/allRegions"
+			"http://localhost:9080/ledgerMasterApi/allLedgers"
 		);
 
-		setDistributorData(response.data)
+		setDistributorData(response.data);
+	};
+
+	const loadVoucherNo = async () => {
+		const response = await axios.get(
+			"http://localhost:9080/generate/currentVoucher"
+		);
+		setVoucherNo(response.data);
 	};
 
 	useEffect(() => {
@@ -109,18 +118,16 @@ const Purchase = () => {
 				handleFilter(item);
 				setShowProdList(true);
 			}
-			console.log({property, item, rowIndex})
 		} else if (property === "code") {
 			const option = item;
 			newTableData[rowIndex].code = option.productCode;
 			newTableData[rowIndex].description = option.description;
 			newTableData[rowIndex].uom = option.uom;
-			newTableData[rowIndex].rate = parseFloat(option.rate).toFixed(2);
+			newTableData[rowIndex].rate = parseFloat(option.standardCost).toFixed(2);
 			newTableData[rowIndex].discount = parseFloat(option.discount).toFixed(2);
 			setTableData(newTableData);
 			setShowProdList(false);
 		}
-		
 	};
 
 	const handleDistributorSelect = (e) => {
@@ -136,12 +143,12 @@ const Purchase = () => {
 				handleDistributor(distributorData[selectIndexDist]);
 				setShowDistributor(false);
 				tableRefs.current[0].focus();
-			} else if(e.key === 'Backspace'){
-				if(e.target.value !== ""){
+			} else if (e.key === "Backspace") {
+				if (e.target.value !== "") {
 					return;
 				} else {
 					setShowDistributor(false);
-					e.preventDefault()
+					e.preventDefault();
 					inputRefs.current[1].focus();
 				}
 			}
@@ -149,14 +156,11 @@ const Purchase = () => {
 	};
 
 	const handleDistributor = (item) => {
-		setDistributorName(item.regionMasterId);
-		setDistributorCode(item.regionMasterId);
+		setDistributorCode(item.ledgerCode);
+		setDistributorName(item.ledgerName);
 	};
 
-	
-
 	const handleKeySelect = (e, rowIndex, options, property) => {
-		console.log("row "+ rowIndex + " options " + options[3] + " property " + property)
 		if (selectIndex < options.length) {
 			if (e.key === "ArrowUp" && selectIndex > 0) {
 				if (property === "category") {
@@ -183,14 +187,16 @@ const Purchase = () => {
 				) {
 					inputRefs.current[3].focus();
 				} else {
-					tableRefs.current[rowIndex * 5 + (property === "category" ? 1 : 2)]?.focus();
+					tableRefs.current[
+						rowIndex * 5 + (property === "category" ? 1 : 2)
+					]?.focus();
 				}
 			} else if (e.key === "Tab") {
 				e.preventDefault();
-			} else if(e.key === "Backspace"){
+			} else if (e.key === "Backspace") {
 				if (property === "category") {
-					if(e.target.value !== ""){
-						return
+					if (e.target.value !== "") {
+						return;
 					} else {
 						if (rowIndex > 0) {
 							const prevRowIndex = rowIndex - 1;
@@ -202,9 +208,8 @@ const Purchase = () => {
 							inputRefs.current[2]?.focus();
 						}
 					}
-					
-				} else if (property === 'code'){
-					if(e.target.value !== ""){
+				} else if (property === "code") {
+					if (e.target.value !== "") {
 						return;
 					} else {
 						if (rowIndex > 0) {
@@ -215,7 +220,6 @@ const Purchase = () => {
 							tableRefs.current[0]?.focus();
 						}
 					}
-					
 				}
 			}
 		} else {
@@ -227,13 +231,12 @@ const Purchase = () => {
 		if (property === "category") {
 			setSelectIndex(selectIndexCat);
 			setShowList(true);
-			setFocusedRow(index)
+			setFocusedRow(index);
 		}
 		if (property === "code") {
 			setSelectIndex(selectIndexProd);
 			setShowProdList(true);
-			setFocusedRow(index)
-
+			setFocusedRow(index);
 		}
 	};
 
@@ -296,16 +299,15 @@ const Purchase = () => {
 					// console.log(tableRefs)
 				}
 			}
-		} else if(e.key === "Backspace" ){
+		} else if (e.key === "Backspace") {
 			if (isTable) {
 				const prevIndex = rowIndex * 5 + colIndex - 1;
 				if (e.target.value.trim() !== "") {
 					return;
 				} else {
-					
-					e.preventDefault()
+					e.preventDefault();
 					tableRefs.current[prevIndex]?.focus();
-					tableRefs.current[prevIndex].setSelectionRange(0,0)
+					tableRefs.current[prevIndex].setSelectionRange(0, 0);
 				}
 			} else {
 				if (e.target.value.trim() !== "") {
@@ -320,9 +322,7 @@ const Purchase = () => {
 					}
 				}
 			}
-
-		
-		} 
+		}
 	};
 
 	const addRow = () => {
@@ -373,12 +373,31 @@ const Purchase = () => {
 				narration,
 				items,
 			};
+			console.log(formData)
 			// Handle response if needed
 			await axios.post("http://localhost:9080/orders/booking", formData);
+
+			await axios.get("http://localhost:9080/generate/incrementVoucher");
+			loadVoucherNo();
+			console.log(formData)
 			
 		} catch (error) {
 			console.error("Error:", error);
 		}
+		setVDate(""),
+		setDistributorName("")
+		setDistributorCode("");
+		setCreatedBy(""),
+		setNarration(""),
+		setTableData([
+			{
+				category: "",
+				code: "",
+				description: "",
+				orderQty: "",
+				uom: "",
+			},
+		]);
 	};
 
 	const handleKeyDown = (e) => {
@@ -388,9 +407,9 @@ const Purchase = () => {
 				const userConfirmed = window.confirm("Do you want confirm order");
 				if (userConfirmed) handleSubmit();
 			}
-		} else if(e.key === 'Backspace'){
-			if(e.target.value !== '') {
-				return
+		} else if (e.key === "Backspace") {
+			if (e.target.value !== "") {
+				return;
 			} else {
 				e.preventDefault();
 				inputRefs.current[3].focus();
@@ -419,9 +438,9 @@ const Purchase = () => {
 						<input
 							ref={(el) => (inputRefs.current[0] = el)}
 							autoComplete="off"
-							onChange={(e) => setVoucherNo(e.target.value)}
 							name="voucherNo"
 							value={voucherNo}
+							readOnly
 							type="text"
 							id="vno"
 							onKeyDown={(e) => handleKeyPress(e, 0, null, false)}
@@ -441,7 +460,8 @@ const Purchase = () => {
 							onChange={(e) => setVDate(e.target.value)}
 							onKeyDown={(e) => handleKeyPress(e, 1, null, false)}
 							value={vDate}
-							placeholder="DD-MM-YYYY"
+							autoFocus
+							// placeholder="DD-MM-YYYY"
 							type="text"
 							className="w-24 border border-fuchsia-700 h-[18px] focus:bg-[#fee8af] focus:border-blue-500 text-[13px] pl-0.5 bg-transparent outline-0 font-semibold"
 						/>
@@ -486,7 +506,7 @@ const Purchase = () => {
 											ref={(el) => (distListRef.current[index] = el)}
 										>
 											<>
-												{item.regionMasterId} - {item.ledgerName}
+												{item.ledgerCode} - {item.ledgerName}
 											</>
 										</li>
 									))}
@@ -581,9 +601,7 @@ const Purchase = () => {
 														<li
 															tabIndex="0"
 															key={catIndex}
-															onClick={() => 
-															{
-																
+															onClick={() => {
 																handleSelect("category", cat, focusedRow);
 																tableRefs.current[focusedRow * 5 + 1].focus();
 																setSelectIndexCat(catIndex);
@@ -631,18 +649,17 @@ const Purchase = () => {
 														<li
 															tabIndex="0"
 															key={prodIndex}
-															onClick={() =>{
-																handleSelect('code', prod, focusedRow)
+															onClick={() => {
+																handleSelect("code", prod, focusedRow);
 																tableRefs.current[focusedRow * 5 + 2].focus();
-															}
-															}
+															}}
 															ref={(el) => (listRefs.current[prodIndex] = el)}
 															className={`cursor-pointer ${
 																selectIndex === prodIndex ? "bg-[#ff9a00]" : ""
 															} pl-1  text-[13px]  border-b border-[#fff]`}
 														>
 															<>
-																{prod.productCode}	
+																{prod.productCode}
 																<span className="ml-1">
 																	- {prod.description}
 																</span>
@@ -696,24 +713,22 @@ const Purchase = () => {
 								value={createdBy}
 								type="text"
 								ref={(el) => (inputRefs.current[3] = el)}
-								onKeyDown={(e) =>
-									{
-										if(e.key === "Enter" && e.target.value !== "" ){
-											inputRefs.current[4].focus();
-										} else if(e.key === "Backspace"){
-											if(e.target.value !== ""){
-												return;
-											} else {
-												const lastRowIndex = tableData.length - 1;
-												const lastCellKey = lastRowIndex * 5 + 0;
-												if(tableRefs.current[lastCellKey]){
-													tableRefs.current[lastCellKey].focus();
-													tableRefs.current[lastCellKey].setSelectionRange(0,0)
-												}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" && e.target.value !== "") {
+										inputRefs.current[4].focus();
+									} else if (e.key === "Backspace") {
+										if (e.target.value !== "") {
+											return;
+										} else {
+											const lastRowIndex = tableData.length - 1;
+											const lastCellKey = lastRowIndex * 5 + 0;
+											if (tableRefs.current[lastCellKey]) {
+												tableRefs.current[lastCellKey].focus();
+												tableRefs.current[lastCellKey].setSelectionRange(0, 0);
 											}
 										}
 									}
-								}
+								}}
 								className="w-[65%] border border-fuchsia-700 h-[18px] focus:bg-[#fee8af] focus:border-blue-500 text-[13px] pl-0.5 bg-transparent outline-0 font-semibold"
 							/>
 						</div>
