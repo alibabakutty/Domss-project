@@ -1,15 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const AlterLedgerMaster = () => {
   let navigate = useNavigate();
   const { ledgerCode } = useParams();
 
   const [ledger, setLedger] = useState({
-    ledgerCode: "",
-    ledgerName: "",
+    ledgerCode: '',
+    ledgerName: '',
   });
 
   const inputRefs = useRef({
@@ -24,10 +24,10 @@ const AlterLedgerMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -35,22 +35,22 @@ const AlterLedgerMaster = () => {
     }
   };
 
-  const onInputChange = (e) => {
+  const onInputChange = e => {
     const { name, value } = e.target;
     const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
     setLedger({ ...ledger, [name]: capitalizedValue });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async e => {
     e.preventDefault();
     try {
       await axios.put(
         `http://localhost:9080/ledgerMasterApi/alterLedgerMaster/${ledgerCode}`,
-        ledger
+        ledger,
       );
-      navigate("/ledgerAlter/filter");
+      navigate('/ledgerAlter/filter');
     } catch (error) {
-      console.error("Error updating the godown", error);
+      console.error('Error updating the godown', error);
     }
   };
 
@@ -60,75 +60,73 @@ const AlterLedgerMaster = () => {
         inputRefs.current.ledgerCode.focus();
         pulseCursor(inputRefs.current.ledgerCode);
       }
-    }
+    };
 
-    setTimeout(focusAndPulseCursor,100);
+    setTimeout(focusAndPulseCursor, 100);
 
     const loadLedger = async () => {
       try {
         const result = await axios.get(
-          `http://localhost:9080/ledgerMasterApi/displayLedger/${ledgerCode}`
+          `http://localhost:9080/ledgerMasterApi/displayLedger/${ledgerCode}`,
         );
         setLedger(result.data);
       } catch (error) {
-        console.error("Error fetching the godown data", error);
+        console.error('Error fetching the godown data', error);
       }
     };
 
     loadLedger();
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         acceptButtonRef.current.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, [ledgerCode]);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       // Enter key
@@ -137,9 +135,7 @@ const AlterLedgerMaster = () => {
       if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         acceptButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
@@ -147,9 +143,9 @@ const AlterLedgerMaster = () => {
       // Escape key
       event.preventDefault();
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "ledgerCode") {
+    } else if (keyCode === 8 && target.id !== 'ledgerCode') {
       // Backspace key
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
       if (isEmptyOrZero) {
         event.preventDefault();
         const prevInputIndex =
@@ -172,7 +168,7 @@ const AlterLedgerMaster = () => {
       event.preventDefault();
       // Implement your logic for handling Delete key here
       // For example, clear the current input field value
-      setLedger({ ...ledger, [target.name]: "" });
+      setLedger({ ...ledger, [target.name]: '' });
     }
   };
 
@@ -186,7 +182,7 @@ const AlterLedgerMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/ledgerAlter/filter");
+    navigate('/ledgerAlter/filter');
   };
 
   return (
@@ -198,7 +194,7 @@ const AlterLedgerMaster = () => {
           <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
             <h2 className="ml-[200px]">Ledger Master</h2>
             <span className="cursor-pointer mt-[5px] mr-2">
-              <Link to={"/ledgerAlter/filter"}>
+              <Link to={'/ledgerAlter/filter'}>
                 <IoClose />
               </Link>
             </span>
@@ -206,15 +202,10 @@ const AlterLedgerMaster = () => {
 
           <div className="w-[550px] h-[10vh] border border-gray-500 ml-[750px]">
             <form onSubmit={onSubmit}>
-              {["ledgerCode", "ledgerName"].map((field) => (
+              {['ledgerCode', 'ledgerName'].map(field => (
                 <div key={field} className="input-ldgr flex items-center mt-1">
-                  <label
-                    htmlFor={field}
-                    className="text-sm ml-2 mr-2 w-[140px]"
-                  >
-                    {field
-                      .replace(/([A-Z])/g, "$1")
-                      .replace(/^./, (str) => str.toUpperCase())}
+                  <label htmlFor={field} className="text-sm ml-2 mr-2 w-[140px]">
+                    {field.replace(/([A-Z])/g, '$1').replace(/^./, str => str.toUpperCase())}
                   </label>
                   <span className="mr-2">:</span>
                   <input
@@ -224,7 +215,7 @@ const AlterLedgerMaster = () => {
                     value={ledger[field]}
                     onChange={onInputChange}
                     onKeyDown={handleKeyDown}
-                    ref={(input) => {
+                    ref={input => {
                       inputRefs.current[field] = input;
                     }}
                     className="w-[320px] h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -237,32 +228,34 @@ const AlterLedgerMaster = () => {
                 <input
                   type="button"
                   id="acceptButton"
-                  onKeyDown={(e) => {
-                    if (e.key === "Backspace") {
+                  onKeyDown={e => {
+                    if (e.key === 'Backspace') {
                       e.preventDefault();
-                      if (
-                        inputRefs.current.ledgerName &&
-                        inputRefs.current.ledgerName.focus
-                      ) {
+                      if (inputRefs.current.ledgerName && inputRefs.current.ledgerName.focus) {
                         inputRefs.current.ledgerName.focus();
                       }
                     }
                   }}
-                  value={": Accept"}
-                  ref={(button) => {
+                  value={': Accept'}
+                  ref={button => {
                     acceptButtonRef.current = button;
                   }}
-                  onClick={(e) => onSubmit(e)}
+                  onClick={e => onSubmit(e)}
                   className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
                 />
-                <span className="text-sm absolute top-[585px] left-[847px] underline decoration-black" style={{textDecorationThickness: '2px'}}>A</span>
+                <span
+                  className="text-sm absolute top-[585px] left-[847px] underline decoration-black"
+                  style={{ textDecorationThickness: '2px' }}
+                >
+                  A
+                </span>
               </div>
             </form>
           </div>
 
           <div className="mt-[450px] ml-[420px]">
             <Link
-              to={"/ledgerAlter/filter"}
+              to={'/ledgerAlter/filter'}
               className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800 "
             >
               <span className="border-b-2 border-black">Q</span>: Quit
@@ -275,17 +268,11 @@ const AlterLedgerMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
 
@@ -293,10 +280,7 @@ const AlterLedgerMaster = () => {
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">

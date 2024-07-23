@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { listOfProducts } from "../../../services/MasterService";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { listOfProducts } from '../../../services/MasterService';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProductAlter = () => {
-  const [productCode, setProductCode] = useState("");
+  const [productCode, setProductCode] = useState('');
   const [product, setProduct] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -18,13 +18,13 @@ const ProductAlter = () => {
     inputRef.current.focus();
 
     listOfProducts()
-      .then((response) => {
+      .then(response => {
         setProduct(response.data);
         setFilteredProducts(response.data);
         setRemainingItemsCount(response.data.length - ITEMS_PER_PAGE);
         setSelectedIndex(response.data.length > 0 ? 2 : 0);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }, []);
@@ -34,6 +34,7 @@ const ProductAlter = () => {
   }, [productCode]);
 
   useEffect(() => {
+
     const handleKeyDown = (e) => {
       const totalItems = filteredProducts.length + 2; //+2 for create, back
 
@@ -67,33 +68,34 @@ const ProductAlter = () => {
           })
         }
       } else if (e.key === "Enter") {
+
         if (selectedIndex === 0) {
-          navigate("/create/product");
+          navigate('/create/product');
           e.preventDefault();
         } else if (selectedIndex === 1) {
+
           navigate("/alter");
+
         } else if (filteredProducts[selectedIndex - 2]) {
-          navigate(
-            `/alterProductMaster/${
-              filteredProducts[selectedIndex - 2].productCode
-            }`
-          ); //Navigate to the selected product
+          navigate(`/alterProductMaster/${filteredProducts[selectedIndex - 2].productCode}`); //Navigate to the selected product
         }
-      } else if (e.key === 'Escape'){
-        navigate("/alter");
+      } else if (e.key === 'Escape') {
+        navigate('/alter');
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [filteredProducts, selectedIndex, navigate, startIndex]);
+
 
   useEffect (() => {
     if (selectedRef.current){
       selectedRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
     }
   }, [selectedIndex]);
 
@@ -106,7 +108,7 @@ const ProductAlter = () => {
     setSelectedIndex(2); //Reset selected index to the first element in the filtered list
   };
 
-  const handleDropdownChange = (e) => {
+  const handleDropdownChange = e => {
     const selectedProductCode = e.target.value;
     navigate(`/alterProductMaster/${selectedProductCode}`);
   };
@@ -127,7 +129,7 @@ const ProductAlter = () => {
                 id="productCode"
                 name="productCode"
                 value={productCode}
-                onChange={(e) => setProductCode(e.target.value)}
+                onChange={e => setProductCode(e.target.value)}
                 ref={inputRef}
                 className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
@@ -135,9 +137,7 @@ const ProductAlter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
-              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">
-                List of Product
-              </h2>
+              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">List of Product</h2>
               <table>
                 <thead>
                   <tr>
@@ -147,17 +147,17 @@ const ProductAlter = () => {
                 <div className="border border-b-gray-500 w-[347px]">
                   <Link
                     className={`block text-center text-[13px] ${
-                      selectedIndex === 0 ? "bg-[#FEB941]" : ""
+                      selectedIndex === 0 ? 'bg-[#FEB941]' : ''
                     }`}
-                    to={"/create/product"}
+                    to={'/create/product'}
                   >
                     <p className="ml-[285px] text-[14px]">Create</p>
                   </Link>
                   <Link
                     className={`block text-center text-[13px] ${
-                      selectedIndex === 1 ? "bg-[#FEB941]" : ""
+                      selectedIndex === 1 ? 'bg-[#FEB941]' : ''
                     }`}
-                    to={"/alter"}
+                    to={'/alter'}
                   >
                     <p className="ml-[287px] text-[14px] ">Back</p>
                   </Link>
@@ -166,15 +166,10 @@ const ProductAlter = () => {
                   {filteredProducts.map((prod, index) => (
                     <tr
                       key={prod.productCode}
-                      className={
-                        selectedIndex === index + 2 ? "bg-[#FEB941]" : ""
-                      }
+                      className={selectedIndex === index + 2 ? 'bg-[#FEB941]' : ''}
                     >
                       <td className="flex text-left text-[13px] pl-2 capitalize">
-                        <Link
-                          to={`/alterProductMaster/${prod.productCode}`}
-                          className="block"
-                        >
+                        <Link to={`/alterProductMaster/${prod.productCode}`} className="block">
                           {prod.productCode} - {prod.description}
                         </Link>
                       </td>
@@ -182,6 +177,7 @@ const ProductAlter = () => {
                   ))}
                 </tbody>
               </table>
+
             </div>
           </div>
         </div>

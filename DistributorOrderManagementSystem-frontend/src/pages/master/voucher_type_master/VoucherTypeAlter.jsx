@@ -19,6 +19,7 @@ const VoucherTypeAlter = () => {
 
     listOfVoucherTypeNames()
       .then(response => {
+
         setVoucherTypeNames(response.data);
         setFilteredVoucherNames(response.data.slice(0, 20));
         setShowDropdown(response.data.length > 20);
@@ -29,6 +30,7 @@ const VoucherTypeAlter = () => {
 
     listOfVoucherTypes()
       .then(response => {
+
         setVoucherTypes(response.data);
         setFilteredVoucherTypes(response.data.slice(0, 20));
         setShowDropdown(response.data.length > 20);
@@ -39,6 +41,7 @@ const VoucherTypeAlter = () => {
   }, []);
 
   useEffect(() => {
+
     filterVoucherNames();
   }, [voucherTypeName]);
 
@@ -64,6 +67,8 @@ const VoucherTypeAlter = () => {
           selectedIndex === filteredVoucherNames.length + filteredVoucherTypes.length + 2
         ) {
           dropdownRef.current.focus();
+
+    
         } else if (filteredVoucherNames[selectedIndex - 2]) {
           navigate(
             `/alterVoucherTypeMaster/${filteredVoucherNames[selectedIndex - 2].voucherTypeName}`,
@@ -75,7 +80,9 @@ const VoucherTypeAlter = () => {
             }`,
           );
         }
+
         e.preventDefault();
+
       } else if (e.key === 'Escape') {
         navigate('/alter');
       }
@@ -90,6 +97,7 @@ const VoucherTypeAlter = () => {
 
   const filterVoucherNames = () => {
     if (voucherTypeName === '') {
+
       setFilteredVoucherNames(voucherTypeNames.slice(0, 20));
       setFilteredVoucherTypes(voucherTypes.slice(0, 20));
       setShowDropdown(voucherTypeNames.length > 20 || voucherTypes.length > 20);
@@ -101,6 +109,7 @@ const VoucherTypeAlter = () => {
       const filteredTypes = voucherTypes
         .filter(vou => vou.voucherType.toLowerCase().includes(voucherTypeName.toLowerCase()))
         .slice(0, 20);
+
 
       setFilteredVoucherNames(filteredNames);
       setFilteredVoucherTypes(filteredTypes);
@@ -130,6 +139,8 @@ const VoucherTypeAlter = () => {
                 id="voucherTypeName"
                 name="voucherTypeName"
                 value={voucherTypeName}
+
+
                 onChange={e => {
                   setVoucherTypeName(e.target.value);
                   filterVoucherNames();

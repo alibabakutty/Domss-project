@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { listOfRegions } from '../../../services/MasterService';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -35,6 +35,7 @@ const RegionFilter = () => {
 
   useEffect(() => {
     const handleKeyDown = e => {
+
       const totalItems = filteredRegions.length + 2; // +2 for Create, Back
 
       if (e.key === 'ArrowDown') {
@@ -67,6 +68,7 @@ const RegionFilter = () => {
             return newIndex;
           });
         }
+
       } else if (e.key === 'Enter') {
         if (selectedIndex === 0) {
           navigate('/create/region');
@@ -74,6 +76,7 @@ const RegionFilter = () => {
         } else if (selectedIndex === 1) {
           navigate('/display');
           e.preventDefault();
+
         } else if (filteredRegions[selectedIndex - 2]) {
           navigate(`/displayRegion/${filteredRegions[selectedIndex - 2].regionMasterId}`); // Navigate to the selected region
         }
@@ -89,9 +92,11 @@ const RegionFilter = () => {
     };
   }, [filteredRegions, selectedIndex, navigate, startIndex]);
 
+
   useEffect(() => {
     if (selectedRef.current){
       selectedRef.current.scrollIntoView({ behavior: "smooth", block: "nearest"});
+
     }
   },[selectedIndex]);
 
@@ -105,10 +110,12 @@ const RegionFilter = () => {
     setSelectedIndex(2); // Reset selected index to the first element in the filtered list
   };
 
+
   const displayedRegions = filteredRegions.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
+
 
   return (
     <>
@@ -134,10 +141,12 @@ const RegionFilter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
+
               <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">List of Regions</h2>
                 <div className="border border-b-gray-500 w-[347px]">
                   <Link
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+
                       selectedIndex === 0 ? 'bg-[#FEB941]' : ''
                     }`}
                     to={'/create/region'}
@@ -145,7 +154,9 @@ const RegionFilter = () => {
                     <p className="ml-[285px] text-[13px]">Create</p>
                   </Link>
                   <Link
+
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+
                       selectedIndex === 1 ? 'bg-[#FEB941]' : ''
                     }`}
                     to={'/display'}
@@ -153,6 +164,7 @@ const RegionFilter = () => {
                     <p className="ml-[270px] text-[13px] px-[30px]">Back</p>
                   </Link>
                 </div>
+
                 <div className='h-[68.5vh] overflow-hidden'>
                   <table className='w-full'>
                     <thead>

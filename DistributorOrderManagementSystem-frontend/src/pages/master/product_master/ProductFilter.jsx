@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { listOfProducts } from "../../../services/MasterService";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import { listOfProducts } from '../../../services/MasterService';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ProductFilter = () => {
-  const [productCode, setProductCode] = useState("");
+  const [productCode, setProductCode] = useState('');
   const [product, setProduct] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -18,13 +18,13 @@ const ProductFilter = () => {
     inputRef.current.focus();
 
     listOfProducts()
-      .then((response) => {
+      .then(response => {
         setProduct(response.data);
         setFilteredProducts(response.data);
         setRemainingItemsCount(response.data.length - ITEMS_PER_PAGE);
         setSelectedIndex(response.data.length > 0 ? 2 : 0); 
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }, []);
@@ -34,6 +34,7 @@ const ProductFilter = () => {
   }, [productCode]);
 
   useEffect(() => {
+
     const handleKeyDown = (e) => {
       const totalItems = filteredProducts.length + 2; //+2 for create, back
 
@@ -67,32 +68,34 @@ const ProductFilter = () => {
           })
         }
       } else if (e.key === "Enter") {
+
         if (selectedIndex === 0) {
-          navigate("/create/product");
+          navigate('/create/product');
           e.preventDefault();
         } else if (selectedIndex === 1) {
-          navigate("/display");
+          navigate('/display');
           e.preventDefault();
+
         } else if (filteredProducts[selectedIndex - 2]) {
-          navigate(
-            `/displayProduct/${filteredProducts[selectedIndex - 2].productCode}`
-          ); //Navigate to the selected product
+          navigate(`/displayProduct/${filteredProducts[selectedIndex - 2].productCode}`); //Navigate to the selected product
         }
-      } else if (e.key === 'Escape'){
-        navigate("/display");
+      } else if (e.key === 'Escape') {
+        navigate('/display');
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [filteredProducts, selectedIndex, navigate, startIndex]);
+
 
   useEffect(() => {
     if (selectedRef.current){
       selectedRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
     }
   },[selectedIndex]);
 
@@ -107,10 +110,12 @@ const ProductFilter = () => {
     setSelectedIndex(2); //Reset selected index to the first element in the filtered list
   };
 
+
   const displayedProducts = filteredProducts.slice(
     startIndex,
     startIndex + ITEMS_PER_PAGE
   );
+
 
   return (
     <>
@@ -128,7 +133,7 @@ const ProductFilter = () => {
                 id="productCode"
                 name="productCode"
                 value={productCode}
-                onChange={(e) => setProductCode(e.target.value)}
+                onChange={e => setProductCode(e.target.value)}
                 ref={inputRef}
                 className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
@@ -136,6 +141,7 @@ const ProductFilter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
+
               <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">
                 List of Products
               </h2>
@@ -143,21 +149,25 @@ const ProductFilter = () => {
                   <Link
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
                       selectedIndex === 0 ? "bg-[#FEB941]" : ""
+
                     }`}
-                    to={"/create/product"}
+                    to={'/create/product'}
                   >
                     <p className="ml-[285px] text-[13px]">Create</p>
                   </Link>
 
                   <Link
+
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
                       selectedIndex === 1 ? "bg-[#FEB941]" : ""
+
                     }`}
-                    to={"/display"}
+                    to={'/display'}
                   >
                     <p className="ml-[287px] ">Back</p>
                   </Link>
                 </div>
+
                 <div className="h-[68.5vh] overflow-hidden">
                   <table className="w-full">
                     <thead>
@@ -189,6 +199,7 @@ const ProductFilter = () => {
                 </div>
                 <div className="text-left p-2 text-white text-[13px] bg-[#2a67b1]">
                   Remaining: {remainingItemsCount} products
+
                 </div>
             </div>
           </div>

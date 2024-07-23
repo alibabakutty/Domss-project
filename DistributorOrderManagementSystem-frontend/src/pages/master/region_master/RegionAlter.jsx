@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import { listOfRegions } from "../../../services/MasterService";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { listOfRegions } from '../../../services/MasterService';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 const RegionAlter = () => {
   const [regionMasterId, setRegionMasterId] = useState("");
+
   const [region, setRegion] = useState([]);
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -31,43 +33,49 @@ const RegionAlter = () => {
   }, [regionMasterId]);
 
   useEffect(() => {
+
     const handleKeyDown = (e) => {
       const totalItems = showDropdown
         ? filteredRegions.length + 3 // Create, Back, Dropdown
         : filteredRegions.length + 2; // Create, Back
 
-      if (e.key === "ArrowDown") {
-        setSelectedIndex((prevIndex) => (prevIndex + 1) % totalItems);
+      if (e.key === 'ArrowDown') {
+        setSelectedIndex(prevIndex => (prevIndex + 1) % totalItems);
         e.preventDefault();
+
       } else if (e.key === "ArrowUp") {
         setSelectedIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
+
         e.preventDefault();
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         if (selectedIndex === 0) {
-          navigate("/create/region");
+          navigate('/create/region');
           e.preventDefault();
         } else if (selectedIndex === 1) {
-          navigate("/alter");
+          navigate('/alter');
           e.preventDefault();
+
         } else if (showDropdown && selectedIndex === filteredRegions.length + 2) {
           dropdownRef.current.focus();
         } else if (filteredRegions[selectedIndex - 2]) {
           navigate(`/alterRegionMaster/${filteredRegions[selectedIndex - 2].regionMasterId}`);
+
         }
       } else if (e.key === 'Escape') {
         navigate('/alter');
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [filteredRegions, selectedIndex, navigate, showDropdown]);
 
   const filterRegions = () => {
     let filtered = [];
+
 
     if (regionMasterId === "") {
       filtered = region.slice(0, 20); // Reset to show the first 20 elements
@@ -75,6 +83,7 @@ const RegionAlter = () => {
       filtered = region.filter((reg) =>
         reg.regionMasterId.toLowerCase().includes(regionMasterId.toLowerCase())
       ).slice(0, 20); // Limit to 20 elements
+
     }
 
     setFilteredRegions(filtered);
@@ -82,7 +91,7 @@ const RegionAlter = () => {
     setSelectedIndex(2); // Reset selected index to the first element in the filtered list
   };
 
-  const handleDropdownChange = (e) => {
+  const handleDropdownChange = e => {
     const selectedRegionId = e.target.value;
     navigate(`/alterRegionMaster/${selectedRegionId}`);
   };
@@ -103,7 +112,7 @@ const RegionAlter = () => {
                 id="regionMasterId"
                 name="regionMasterId"
                 value={regionMasterId}
-                onChange={(e) => setRegionMasterId(e.target.value)}
+                onChange={e => setRegionMasterId(e.target.value)}
                 ref={inputRef}
                 className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
@@ -111,6 +120,7 @@ const RegionAlter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
+
               <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">
                 List of Regions
               </h2>
@@ -133,15 +143,18 @@ const RegionAlter = () => {
                 </Link>
               </div>
               <table className="w-full">
+
                 <thead>
                   <tr>
                     <th></th>
                   </tr>
                 </thead>
+
                 <tbody>
                   {filteredRegions.map((reg, index) => (
                     <tr
                       key={reg.regionMasterId}
+
                       className={selectedIndex === index + 2 ? "bg-[#FEB941]" : ""}
                     >
                       <Link
@@ -149,6 +162,7 @@ const RegionAlter = () => {
                         className="block text-left pl-2 text-[13px] focus:bg-[#FEB941] outline-none"
                       ><td className="text-[12.5px]">
                         {reg.regionMasterId} - {reg.regionName}
+
                       </td>
                       </Link>
                     </tr>
@@ -168,8 +182,10 @@ const RegionAlter = () => {
                     className="w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                     onChange={handleDropdownChange}
                   >
+
                     <option value="">Select Other Regions</option>
                     {region.slice(20).map((reg) => (
+
                       <option
                         key={reg.regionMasterId}
                         value={reg.regionMasterId}

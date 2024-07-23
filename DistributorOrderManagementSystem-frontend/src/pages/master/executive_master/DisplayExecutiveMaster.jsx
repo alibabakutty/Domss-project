@@ -311,8 +311,6 @@ const DisplayExecutiveMaster = () => {
           </div>
 
           <div className="mt-[330px] ml-[270px]">
-            {/* <input type="button" id="backButton" ref={(button) => {backButtonRef.current = button; inputRefs.current.backButton = button;}} onKeyDown={(e) => {if (e.key === 'Backspace'){e.preventDefault(); if (inputRefs.current.status && inputRefs.current.status.focus){inputRefs.current.status.focus()}}}} className="px-11 py-[5px] text-sm bg-slate-600 hover:bg-slate-800" value={': Quit'} onClick={handleNavigation} />
-            <span className="text-sm underline decoration-black absolute left-[987px] top-[598px]" style={{textDecorationThickness: '2px'}}>Q</span> */}
           </div>
         </div>
       </div>
