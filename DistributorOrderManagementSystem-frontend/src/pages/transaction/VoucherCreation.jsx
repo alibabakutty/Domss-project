@@ -66,7 +66,7 @@ const VoucherCreation = () => {
 	const loadCategory = async () => {
 		const response = await axios.get("http://localhost:9080/products/allProducts");
 		setProductData(response.data);
-		console.log(productData);
+		
 	};
 
 	const loadRegion = async ()=>{
@@ -124,7 +124,7 @@ const VoucherCreation = () => {
 			newTableData[rowIndex].code = option.productCode;
 			newTableData[rowIndex].description = option.description;
 			newTableData[rowIndex].uom = option.uom;
-			newTableData[rowIndex].rate = parseFloat(option.sellingPrice).toFixed(2);
+			newTableData[rowIndex].rate = parseFloat(option.standardCost).toFixed(2);
 			newTableData[rowIndex].discount = parseFloat(option.discount).toFixed(2);
 			setTableData(newTableData);
 			setShowProdList(false);
