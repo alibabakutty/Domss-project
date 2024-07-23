@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { listOfRegions } from "../../../services/MasterService";
 import { Link, useNavigate } from "react-router-dom";
 
-const RegionFilter = () => {
+const RegionAlter = () => {
   const [regionMasterId, setRegionMasterId] = useState("");
   const [region, setRegion] = useState([]);
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -16,11 +16,12 @@ const RegionFilter = () => {
     inputRef.current.focus();
 
     listOfRegions()
-      .then((response) => {
+      .then(response => {
         setRegion(response.data);
-        setFilteredRegions(response.data.slice(0, 20)); // Initially set filteredRegions to the first 15 regions
+        setFilteredRegions(response.data.slice(0, 20)); // Initially show the first 20 regions
+        setShowDropdown(response.data.length > 20);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }, []);
@@ -31,18 +32,15 @@ const RegionFilter = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      const totalItems =
-        region.length > 20
-          ? filteredRegions.length + 3
-          : filteredRegions.length + 2; // +2 for create, back, and +1 for dropdown if it exists
+      const totalItems = showDropdown
+        ? filteredRegions.length + 3 // Create, Back, Dropdown
+        : filteredRegions.length + 2; // Create, Back
 
       if (e.key === "ArrowDown") {
         setSelectedIndex((prevIndex) => (prevIndex + 1) % totalItems);
         e.preventDefault();
       } else if (e.key === "ArrowUp") {
-        setSelectedIndex(
-          (prevIndex) => (prevIndex - 1 + totalItems) % totalItems
-        );
+        setSelectedIndex((prevIndex) => (prevIndex - 1 + totalItems) % totalItems);
         e.preventDefault();
       } else if (e.key === "Enter") {
         if (selectedIndex === 0) {
@@ -51,19 +49,12 @@ const RegionFilter = () => {
         } else if (selectedIndex === 1) {
           navigate("/alter");
           e.preventDefault();
-        } else if (
-          region.length > 20 &&
-          selectedIndex === filteredRegions.length + 2
-        ) {
+        } else if (showDropdown && selectedIndex === filteredRegions.length + 2) {
           dropdownRef.current.focus();
         } else if (filteredRegions[selectedIndex - 2]) {
-          navigate(
-            `/alterRegionMaster/${
-              filteredRegions[selectedIndex - 2].regionMasterId
-            }`
-          ); //Navigate to the selected region
+          navigate(`/alterRegionMaster/${filteredRegions[selectedIndex - 2].regionMasterId}`);
         }
-      } else if(e.key === 'Escape'){
+      } else if (e.key === 'Escape') {
         navigate('/alter');
       }
     };
@@ -73,22 +64,22 @@ const RegionFilter = () => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [filteredRegions, selectedIndex, navigate, region.length]);
+  }, [filteredRegions, selectedIndex, navigate, showDropdown]);
 
   const filterRegions = () => {
     let filtered = [];
 
     if (regionMasterId === "") {
-      filtered = region.slice(0, 20); //Reset to show the first 15 elements
+      filtered = region.slice(0, 20); // Reset to show the first 20 elements
     } else {
       filtered = region.filter((reg) =>
         reg.regionMasterId.toLowerCase().includes(regionMasterId.toLowerCase())
-      );
-      filtered = filtered.slice(0, 20); //Limit to 15 elements
+      ).slice(0, 20); // Limit to 20 elements
     }
 
     setFilteredRegions(filtered);
-    setSelectedIndex(2); //Reset selected index to the first element in the filtered list
+    setShowDropdown(region.length > 20); // Show dropdown if more than 20 regions
+    setSelectedIndex(2); // Reset selected index to the first element in the filtered list
   };
 
   const handleDropdownChange = (e) => {
@@ -103,7 +94,7 @@ const RegionFilter = () => {
           <div className="w-[50%] bg-white"></div>
 
           <div className="w-[65%] bg-slate-100 flex justify-center items-center flex-col">
-            <div className="w-[50%] h-16 flex flex-col justify-center items-center border border-black bg-white border-b-0 ">
+            <div className="w-[50%] h-16 flex flex-col justify-center items-center border border-black bg-white border-b-0">
               <p className="text-[13px] font-semibold underline underline-offset-4 decoration-gray-400">
                 Region Alter
               </p>
@@ -114,85 +105,74 @@ const RegionFilter = () => {
                 value={regionMasterId}
                 onChange={(e) => setRegionMasterId(e.target.value)}
                 ref={inputRef}
-                className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
+                className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
               <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">
-                List of Region
+                List of Regions
               </h2>
-              <table>
+              <div className="border border-b-gray-500 w-[347px]">
+                <Link
+                  className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+                    selectedIndex === 0 ? "bg-[#FEB941]" : ""
+                  }`}
+                  to={"/create/region"}
+                >
+                  <p className="ml-[285px] text-[13px]">Create</p>
+                </Link>
+                <Link
+                  className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+                    selectedIndex === 1 ? "bg-[#FEB941]" : ""
+                  }`}
+                  to={"/alter"}
+                >
+                  <p className="ml-[270px] text-[13px] px-[30px]">Back</p>
+                </Link>
+              </div>
+              <table className="w-full">
                 <thead>
                   <tr>
                     <th></th>
                   </tr>
                 </thead>
-                <div className="border border-b-gray-500 w-[347px]">
-                  <Link
-                    className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
-                      selectedIndex === 0 ? "bg-[#FEB941]" : ""
-                    }`}
-                    to={"/create/region"}
-                  >
-                    <p className="ml-[285px] text-[13px]">Create</p>
-                  </Link>
-                  <Link
-                    className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
-                      selectedIndex === 1 ? "bg-[#FEB941]" : ""
-                    }`}
-                    to={"/alter"}
-                  >
-                    <p className="ml-[270px] text-[13px] px-[30px]">Back</p>
-                  </Link>
-                </div>
                 <tbody>
                   {filteredRegions.map((reg, index) => (
                     <tr
                       key={reg.regionMasterId}
-                      className={
-                        selectedIndex === index + 2 ? "bg-[#FEB941]" : ""
-                      }
+                      className={selectedIndex === index + 2 ? "bg-[#FEB941]" : ""}
                     >
-                      <td className="block text-left text-[12.5px] pl-2 focus:bg-[#FEB941] outline-none capitalize">
-                        <Link
-                          to={`/alterRegionMaster/${reg.regionMasterId}`}
-                          className="block"
-                        >
-                          {reg.regionMasterId} - {reg.regionName}
-                        </Link>
+                      <Link
+                        to={`/alterRegionMaster/${reg.regionMasterId}`}
+                        className="block text-left pl-2 text-[13px] focus:bg-[#FEB941] outline-none"
+                      ><td className="text-[12.5px]">
+                        {reg.regionMasterId} - {reg.regionName}
                       </td>
+                      </Link>
                     </tr>
                   ))}
                 </tbody>
               </table>
-
-              {region.length > 20 && (
+              {showDropdown && (
                 <div className="mt-2">
                   <label
                     htmlFor="regionDropdown"
                     className="block text-center text-[14px] mb-1"
-                  ></label>
+                  >
+                  </label>
                   <select
                     id="regionDropdown"
                     ref={dropdownRef}
-                    className={`w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none ${
-                      selectedIndex === filteredRegions.length + 2
-                    }`}
+                    className="w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                     onChange={handleDropdownChange}
                   >
-                    <option
-                      value=""
-                      className="block text-left pl-2 text-[13px]"
-                    >
-                      Select Other Regions
-                    </option>
+                    <option value="">Select Other Regions</option>
                     {region.slice(20).map((reg) => (
                       <option
                         key={reg.regionMasterId}
                         value={reg.regionMasterId}
-                        className="block text-left pl-2 text-[12.5px]"
                       >
                         {reg.regionMasterId} - {reg.regionName}
                       </option>
@@ -208,4 +188,4 @@ const RegionFilter = () => {
   );
 };
 
-export default RegionFilter;
+export default RegionAlter;

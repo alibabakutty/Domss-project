@@ -481,11 +481,12 @@ const DistributorMaster = () => {
                   style={{ position: "absolute", top: "70px", left: "1055px" }}
                 >
                   <div className="text-left bg-[#003285] text-[13.5px] text-white pl-2">
-                    <p>List Of Executive Master</p>
+                    <p>List of Executive Master</p>
                   </div>
 
+                  <div className={filteredExecutiveSuggestions.length > 25 ? 'overflow-y-scroll': ''}>
                   <ul
-                    className="suggestions w-full h-[20vh] text-left text-[13px] mt-2"
+                    className="suggestions w-full h-[80vh] text-left text-[13px] mt-2"
                     onMouseDown={(e) => e.preventDefault()}
                   >
                     {filteredExecutiveSuggestions.map((executive, index) => (
@@ -510,6 +511,7 @@ const DistributorMaster = () => {
                       </li>
                     ))}
                   </ul>
+                  </div>
                 </div>
               )}
             </div>
@@ -567,7 +569,7 @@ const DistributorMaster = () => {
                     <p>List of Region Master</p>
                   </div>
 
-                  <div className="suggestions-dropdown overflow-y-scroll">
+                  <div className={filteredRegionSuggestions.length > 25 ? 'overflow-y-scroll': ''}>
                     <ul
                       className="suggestions w-full h-[80vh] text-left text-[13px] mt-2"
                       onMouseDown={(e) => e.preventDefault()}
