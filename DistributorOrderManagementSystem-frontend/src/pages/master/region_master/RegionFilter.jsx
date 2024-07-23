@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { listOfRegions } from '../../../services/MasterService';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -7,10 +7,12 @@ const RegionFilter = () => {
   const [region, setRegion] = useState([]);
   const [filteredRegions, setFilteredRegions] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [startIndex, setStartIndex] = useState(0);
+  const [remainingItemsCount, setRemainingItemsCount] = useState(0);
   const inputRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const selectedRef = useRef(null);
   const navigate = useNavigate();
+  const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
     inputRef.current.focus();
@@ -18,7 +20,9 @@ const RegionFilter = () => {
     listOfRegions()
       .then(response => {
         setRegion(response.data);
-        setFilteredRegions(response.data.slice(0, 20)); // Initially show only the first 15 regions
+        setFilteredRegions(response.data); // Initially show only the first 15 regions
+        setRemainingItemsCount(response.data.length - ITEMS_PER_PAGE);
+        setSelectedIndex(response.data.length > 0 ? 2 : 0);
       })
       .catch(error => {
         console.error(error);
@@ -31,15 +35,40 @@ const RegionFilter = () => {
 
   useEffect(() => {
     const handleKeyDown = e => {
-      const totalItems =
-        region.length > 20 ? filteredRegions.length + 3 : filteredRegions.length + 2; // +2 for Create, Back, and +1 for dropdown if it exists
+
+      const totalItems = filteredRegions.length + 2; // +2 for Create, Back
 
       if (e.key === 'ArrowDown') {
-        setSelectedIndex(prevIndex => (prevIndex + 1) % totalItems);
-        e.preventDefault();
+        if (selectedIndex < totalItems - 1){    // Ensure we don't go beyond the last item
+          setSelectedIndex((prevIndex) => {
+            const newIndex = (prevIndex + 1) % totalItems;
+
+            if (newIndex >= 2 && newIndex - 2 >= startIndex + ITEMS_PER_PAGE){
+              setStartIndex((prevStartIndex) => {
+                const newStartIndex = Math.min(filteredRegions.length - ITEMS_PER_PAGE, prevStartIndex + 1);
+                setRemainingItemsCount(filteredRegions.length - (newStartIndex + ITEMS_PER_PAGE));
+                return newStartIndex;
+              });
+            }
+            return newIndex;
+          });
+        }
       } else if (e.key === 'ArrowUp') {
-        setSelectedIndex(prevIndex => (prevIndex - 1 + totalItems) % totalItems);
-        e.preventDefault();
+        if (selectedIndex > 0){   // Ensure we don't go before the "Create" link
+          setSelectedIndex((prevIndex) => {  
+            const newIndex = (prevIndex - 1 + totalItems) % totalItems;
+            if (newIndex >= 2 && newIndex - 2 < startIndex){
+              setStartIndex((prevStartIndex) => {
+                const newStartIndex = Math.max(0, prevStartIndex - 1);
+                setRemainingItemsCount(filteredRegions.length - (newStartIndex + ITEMS_PER_PAGE));
+                return newStartIndex;
+              })
+            }
+            e.preventDefault();
+            return newIndex;
+          });
+        }
+
       } else if (e.key === 'Enter') {
         if (selectedIndex === 0) {
           navigate('/create/region');
@@ -47,8 +76,7 @@ const RegionFilter = () => {
         } else if (selectedIndex === 1) {
           navigate('/display');
           e.preventDefault();
-        } else if (region.length > 20 && selectedIndex === filteredRegions.length + 2) {
-          dropdownRef.current.focus();
+
         } else if (filteredRegions[selectedIndex - 2]) {
           navigate(`/displayRegion/${filteredRegions[selectedIndex - 2].regionMasterId}`); // Navigate to the selected region
         }
@@ -62,26 +90,32 @@ const RegionFilter = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [filteredRegions, selectedIndex, navigate, region.length]);
+  }, [filteredRegions, selectedIndex, navigate, startIndex]);
+
+
+  useEffect(() => {
+    if (selectedRef.current){
+      selectedRef.current.scrollIntoView({ behavior: "smooth", block: "nearest"});
+
+    }
+  },[selectedIndex]);
 
   const filterRegions = () => {
-    let filtered = [];
-    if (regionMasterId === '') {
-      filtered = region.slice(0, 20); // Reset to show the first 15 regions
-    } else {
-      filtered = region.filter(reg =>
-        reg.regionMasterId.toLowerCase().includes(regionMasterId.toLowerCase()),
-      );
-      filtered = filtered.slice(0, 20); // Limit to 15 elements
-    }
+    let filtered = region.filter((reg) =>
+      reg.regionMasterId.toLowerCase().includes(regionMasterId.toLowerCase())
+    );
     setFilteredRegions(filtered);
+    setStartIndex(0);
+    setRemainingItemsCount(filtered.length - ITEMS_PER_PAGE);
     setSelectedIndex(2); // Reset selected index to the first element in the filtered list
   };
 
-  const handleDropdownChange = e => {
-    const selectedRegionId = e.target.value;
-    navigate(`/displayRegion/${selectedRegionId}`);
-  };
+
+  const displayedRegions = filteredRegions.slice(
+    startIndex,
+    startIndex + ITEMS_PER_PAGE
+  );
+
 
   return (
     <>
@@ -107,16 +141,12 @@ const RegionFilter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
-              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">List of Region</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th></th>
-                  </tr>
-                </thead>
+
+              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[13px]">List of Regions</h2>
                 <div className="border border-b-gray-500 w-[347px]">
                   <Link
-                    className={`block text-center text-[13px] ${
+                    className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+
                       selectedIndex === 0 ? 'bg-[#FEB941]' : ''
                     }`}
                     to={'/create/region'}
@@ -124,7 +154,9 @@ const RegionFilter = () => {
                     <p className="ml-[285px] text-[13px]">Create</p>
                   </Link>
                   <Link
-                    className={`block text-center text-[13px] ${
+
+                    className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
+
                       selectedIndex === 1 ? 'bg-[#FEB941]' : ''
                     }`}
                     to={'/display'}
@@ -132,51 +164,34 @@ const RegionFilter = () => {
                     <p className="ml-[270px] text-[13px] px-[30px]">Back</p>
                   </Link>
                 </div>
-                <tbody>
-                  {filteredRegions.map((reg, index) => (
-                    <tr
-                      key={reg.regionMasterId}
-                      className={selectedIndex === index + 2 ? 'bg-[#FEB941]' : ''}
-                    >
-                      <td className="block text-left text-[12.5px] capitalize pl-2">
-                        <Link to={`/displayRegion/${reg.regionMasterId}`} className="block">
-                          {reg.regionMasterId} - {reg.regionName}
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
 
-              {region.length > 20 && (
-                <div className="mt-2 bg-[#BBE9FF]">
-                  <label
-                    htmlFor="regionDropdown"
-                    className="block text-center text-[13px] mb-1"
-                  ></label>
-                  <select
-                    id="regionDropdown"
-                    ref={dropdownRef}
-                    className={`w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none ${
-                      selectedIndex === filteredRegions.length + 2
-                    }`}
-                    onChange={handleDropdownChange}
-                  >
-                    <option value="" className="block text-left text-[13px]">
-                      Select Other Regions
-                    </option>
-                    {region.slice(20).map(reg => (
-                      <option
-                        key={reg.regionMasterId}
-                        value={reg.regionMasterId}
-                        className="block text-left text-[13px]"
-                      >
-                        {reg.regionMasterId} - {reg.regionName}
-                      </option>
-                    ))}
-                  </select>
+                <div className='h-[68.5vh] overflow-hidden'>
+                  <table className='w-full'>
+                    <thead>
+                      <tr>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {displayedRegions.map((reg, index) => (
+                        <tr
+                          key={reg.regionMasterId}
+                          className={selectedIndex === index + 2 + startIndex ? 'bg-[#FEB941]' : ''}
+                          ref={selectedIndex === index + 2 + startIndex ? selectedRef : null}
+                        >
+                          <td className="w-full text-[12.5px]">
+                            <Link to={`/displayRegion/${reg.regionMasterId}`} className={`block w-full text-left pl-2 text-[13px] ${selectedIndex === index + 2 + startIndex ? 'bg-[#FEB941]' : ''}`}>
+                              {reg.regionMasterId} - {reg.regionName}
+                            </Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              )}
+                <div className='text-left p-2 bg-[#2a67b1] text-white text-[13px]'>
+                  Remaining: {remainingItemsCount} regions
+                </div>
             </div>
           </div>
         </div>
