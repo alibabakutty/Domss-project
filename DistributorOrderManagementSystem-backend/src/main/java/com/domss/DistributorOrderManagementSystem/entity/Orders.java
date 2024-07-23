@@ -47,15 +47,17 @@ public class Orders {
     @Column(name = "created_by")
     private String createdBy;
 
-    @Column(name = "created_date_time", updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdDateTime;
+
 
     @Column(name = "approved_by")
     private String approvedBy;
 
     @Column(name = "approved_date_time")
     private LocalDateTime approvedDateTime;
+
+    @Column(name = "created_date_time", updatable = false)
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
 
     @Column(name = "narration")
     private String narration;
