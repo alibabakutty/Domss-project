@@ -15,6 +15,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
@@ -23,6 +24,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
             "i.approvedQuantity, i.rate, i.discount, i.amount, o.createdBy, o.createdDateTime, o.approvedBy," +
             "o.approvedDateTime, o.narration) FROM Orders o JOIN o.items i")
     public List<ReportDto> getJoinInformation();
+
 
 
 }
