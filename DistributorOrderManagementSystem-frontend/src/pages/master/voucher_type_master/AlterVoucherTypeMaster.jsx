@@ -410,6 +410,18 @@ const AlterVoucherTypeMaster = () => {
       console.log("Response:", response.data); // Log response for debugging
       // Close the subform modal on success
       setShowSubFormModal(false);
+
+       // After saving, set focus to printingVoucherAfterSaving Use setTimeout to delay focus
+      setTimeout(() => {
+        if (
+          inputRefs.current.printingVoucherAfterSaving &&
+          inputRefs.current.printingVoucherAfterSaving.focus
+        ) {
+          inputRefs.current.printingVoucherAfterSaving.focus();
+          pulseCursor(inputRefs.current.printingVoucherAfterSaving);
+        }
+      }, 50); // Adjust the delay as needed
+
     } catch (error) {
       console.error("Error updating data:", error);
       // Optionally handle error scenario (e.g., show error message)

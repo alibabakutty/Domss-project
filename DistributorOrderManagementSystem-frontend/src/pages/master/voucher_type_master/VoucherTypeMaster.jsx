@@ -48,6 +48,7 @@ const VoucherTypeMaster = () => {
     highlightedMethodOfVoucherNumbering,
     setHighlightedMethodOfVoucherNumbering,
   ] = useState(0);
+  
 
   const inputRefs = useRef({
     voucherTypeName: null,
@@ -99,6 +100,7 @@ const VoucherTypeMaster = () => {
 
     if (showSubFormModal) {
       startingNumberRef.current.focus();
+      pulseCursor(inputRefs.current.startingNumber);
     }
 
     const fetchVoucherTypeNameSuggestions = async () => {
@@ -280,7 +282,7 @@ const VoucherTypeMaster = () => {
           if (keyCode === 89 || keyCode === 121) {
             // Y or y
             event.preventDefault();
-            setAlterAdditionalNumberingDetails("no");
+            setAlterAdditionalNumberingDetails("yes");
             setShowSubFormModal(true);
           } else if (keyCode === 78 || keyCode === 110) {
             // N or n
@@ -351,17 +353,10 @@ const VoucherTypeMaster = () => {
 
       setFilteredVoucherTypeSuggestions(filteredSuggestions);
 
-      const exactMatch = voucherTypeSuggestions.find(
-        (voucher) => voucher.voucherType.toLowerCase() === value.toLowerCase()
-      );
-
-      if (exactMatch) {
-        setVoucherType(exactMatch.voucherType);
-      }
-    } else {
+      
+    } 
       setFilteredVoucherTypeSuggestions([]);
       setVoucherType("");
-    }
   };
 
   const selectVoucherType = (voucher) => {

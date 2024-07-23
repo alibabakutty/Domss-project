@@ -196,22 +196,8 @@ const DistributorMaster = () => {
     setFilteredRegionSuggestions([]);
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!distributorCode.trim()) {
-      newErrors.distributorCode = "Distributor Code is required!";
-    }
-    setErrors(newErrors);
-
-    return Object.keys(newErrors).length === 0;
-  };
-
   function saveDsitributorMaster(e) {
     e.preventDefault();
-
-    if (!validateForm()) {
-      return;
-    }
 
     const distributor = {
       distributorCode,
@@ -604,7 +590,7 @@ const DistributorMaster = () => {
                               : ""
                           }`}
                         >
-                          {region.regionMasterId} - {region.regionName}
+                          {region.regionMasterId.toUpperCase()} - {region.regionName.toUpperCase()}
                         </li>
                       ))}
                     </ul>

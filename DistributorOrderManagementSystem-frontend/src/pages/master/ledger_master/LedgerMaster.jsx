@@ -51,7 +51,7 @@ const LedgerMaster = () => {
       if (event.ctrlKey && event.key === "a") {
         event.preventDefault();
         acceptButtonRef.current.click();
-        saveGodownMaster(event);
+        saveLedgerMaster(event);
       }
     };
 

@@ -246,7 +246,7 @@ const ProductMaster = () => {
   };
 
   const selectUnit = (unit) => {
-    setuom(unit.uom.toUpperCase()); // Update the UOM state with the selected unit
+    setUom(unit.uom.toUpperCase()); // Update the UOM state with the selected unit
     setFilteredUnitsSuggestions([]); // Clear filtered suggestions
   };
 
