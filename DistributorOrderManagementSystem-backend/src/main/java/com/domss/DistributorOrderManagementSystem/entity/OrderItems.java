@@ -42,7 +42,7 @@ public class OrderItems {
     @Column(name = "approved_quantity")
     private Double approvedQuantity;
 
-    @Column(name = "rate")
+    @Column(name = "selling_price")
     private Double rate;
 
     @Column(name = "discount")
