@@ -422,29 +422,31 @@ const ProductMaster = () => {
                 autoComplete="off"
               />
               {uomFocused && filteredUnitsSuggestions.length > 0 && (
-                <div className="absolute top-[72px] left-[1031px] text-left bg-[#CAF4FF] w-[20%] h-[550px] border border-gray-500 overflow-y-scroll">
+                <div className="bg-[#CAF4FF] w-[20%] h-[85vh] border border-gray-500" style={{position: 'absolute', top: '70px', left: '1028px'}}>
                   <div className=" bg-[#003285] text-[13.5px] pl-2 text-white">
                     <p>List Of Uom</p>
                   </div>
-                  <ul className=" bg-[#CAF4FF] mt-5 w-full border border-gray-300 text-[12.5px] ">
-                    {filteredUnitsSuggestions.map((unit, index) => (
-                      <li
-                        key={unit.id || index}
-                        ref={(input) => (suggestionRefs.current[index] = input)}
-                        tabIndex={0}
-                        onClick={() => selectUnit(unit)}
-                        onMouseDown={() => selectUnit(unit)}
-                        onFocus={handleInputFocus}
-                        className={`pl-2 cursor-pointer ${
-                          highlightedSuggestionIndex === index
-                            ? "bg-yellow-300"
-                            : ""
-                        }`}
-                      >
-                        {unit.productUom.toUpperCase()}
-                      </li>
-                    ))}
-                  </ul>
+                  <div className={filteredUnitsSuggestions.length > 25 ? 'overflow-y-scroll': ''}>
+                    <ul className="suggestions w-full h-[80vh] text-left text-[13px] mt-2" onMouseDown={(e) => e.preventDefault()}>
+                      {filteredUnitsSuggestions.map((unit, index) => (
+                        <li
+                          key={unit.id || index}
+                          ref={(input) => (suggestionRefs.current[index] = input)}
+                          tabIndex={0}
+                          onClick={() => selectUnit(unit)}
+                          onMouseDown={() => selectUnit(unit)}
+                          onFocus={handleInputFocus}
+                          className={`pl-2 cursor-pointer ${
+                            highlightedSuggestionIndex === index
+                              ? "bg-yellow-300"
+                              : ""
+                          }`}
+                        >
+                          {unit.productUom.toUpperCase()}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               )}
             </div>

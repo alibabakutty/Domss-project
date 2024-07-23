@@ -7,10 +7,12 @@ const ProductAlter = () => {
   const [product, setProduct] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [startIndex, setStartIndex] = useState(0);
+  const [remainingItemsCount, setRemainingItemsCount] = useState(0);
   const inputRef = useRef(null);
-  const dropdownRef = useRef(null);
+  const selectedRef = useRef(null);
   const navigate = useNavigate();
+  const ITEMS_PER_PAGE = 20;
 
   useEffect(() => {
     inputRef.current.focus();
@@ -18,7 +20,9 @@ const ProductAlter = () => {
     listOfProducts()
       .then(response => {
         setProduct(response.data);
-        setFilteredProducts(response.data.slice(0, 20)); // Initially set filteredProducts to the first 15 products
+        setFilteredProducts(response.data);
+        setRemainingItemsCount(response.data.length - ITEMS_PER_PAGE);
+        setSelectedIndex(response.data.length > 0 ? 2 : 0);
       })
       .catch(error => {
         console.error(error);
@@ -30,23 +34,48 @@ const ProductAlter = () => {
   }, [productCode]);
 
   useEffect(() => {
-    const handleKeyDown = e => {
-      const totalItems =
-        product.length > 20 ? filteredProducts.length + 3 : filteredProducts.length + 2; //+2 for create, back and +1 for dropdown if exists
 
-      if (e.key === 'ArrowDown') {
-        setSelectedIndex(prevIndex => (prevIndex + 1) % totalItems);
-      } else if (e.key === 'ArrowUp') {
-        setSelectedIndex(prevIndex => (prevIndex - 1 + totalItems) % totalItems);
-        e.preventDefault();
-      } else if (e.key === 'Enter') {
+    const handleKeyDown = (e) => {
+      const totalItems = filteredProducts.length + 2; //+2 for create, back
+
+      if (e.key === "ArrowDown") {
+        if (selectedIndex < totalItems - 1){   // Ensure we don't go beyond the last item
+          setSelectedIndex((prevIndex) => {
+            const newIndex = (prevIndex + 1) % totalItems;
+            if (newIndex >= 2 && newIndex - 2 >= startIndex + ITEMS_PER_PAGE){
+              setStartIndex((prevStartIndex) => {
+                const newStartIndex = Math.min(filteredProducts.length - ITEMS_PER_PAGE, prevStartIndex + 1);
+                setRemainingItemsCount(filteredProducts.length - (newStartIndex + ITEMS_PER_PAGE));
+                return newStartIndex;
+              })
+            }
+            return newIndex;
+          })
+        }
+      } else if (e.key === "ArrowUp") {
+        if (selectedIndex > 0){  // Ensure we don't go before the "Create" link
+          setSelectedIndex((prevIndex) => {
+            const newIndex = (prevIndex - 1 + totalItems) % totalItems;
+            if (newIndex >= 2 && newIndex - 2 < startIndex){
+              setStartIndex((prevStartIndex) => {
+                const newStartIndex = Math.max(0, prevStartIndex - 1);
+                setRemainingItemsCount(filteredProducts.length - (newStartIndex + ITEMS_PER_PAGE));
+                return newStartIndex;
+              })
+            }
+            e.preventDefault();
+            return newIndex;
+          })
+        }
+      } else if (e.key === "Enter") {
+
         if (selectedIndex === 0) {
           navigate('/create/product');
           e.preventDefault();
         } else if (selectedIndex === 1) {
-          navigate('/alter');
-        } else if (product.length > 20 && selectedIndex === filteredProducts.length + 2) {
-          dropdownRef.current.focus();
+
+          navigate("/alter");
+
         } else if (filteredProducts[selectedIndex - 2]) {
           navigate(`/alterProductMaster/${filteredProducts[selectedIndex - 2].productCode}`); //Navigate to the selected product
         }
@@ -60,21 +89,22 @@ const ProductAlter = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [filteredProducts, selectedIndex, navigate, product.length]);
+  }, [filteredProducts, selectedIndex, navigate, startIndex]);
+
+
+  useEffect (() => {
+    if (selectedRef.current){
+      selectedRef.current.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+
+    }
+  }, [selectedIndex]);
 
   const filterProduct = () => {
-    let filtered = [];
-
-    if (productCode === '') {
-      filtered = product.slice(0, 20); //Reset to show 15 products
-    } else {
-      filtered = product.filter(prod =>
-        prod.productCode.toLowerCase().includes(productCode.toLowerCase()),
-      );
-      filtered = filtered.slice(0, 20); //Limit to 15 products
-    }
-
+    let filtered = product.filter((prod) => 
+      prod.productCode.toLowerCase().includes(productCode.toLowerCase())
+    );
     setFilteredProducts(filtered);
+    setStartIndex(0);
     setSelectedIndex(2); //Reset selected index to the first element in the filtered list
   };
 
@@ -147,36 +177,7 @@ const ProductAlter = () => {
                   ))}
                 </tbody>
               </table>
-              {product.length > 20 && (
-                <div className="mt-2">
-                  <label
-                    htmlFor="productDropdown"
-                    className="block text-center text-[14px] mb-1"
-                  ></label>
-                  <select
-                    name="productDropdown"
-                    id="productDropdown"
-                    ref={dropdownRef}
-                    className={`w-full text-[13px] border border-gray-600 bg-[#BBE9FF] p-1 focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none ${
-                      selectedIndex === filteredProducts.length + 2
-                    }`}
-                    onChange={handleDropdownChange}
-                  >
-                    <option value="" className="block text-left pl-2 text-[13px]">
-                      Select other Products
-                    </option>
-                    {product.slice(20).map(prod => (
-                      <option
-                        key={prod.productCode}
-                        value={prod.productCode}
-                        className="block text-left pl-2 text-[13px]"
-                      >
-                        {prod.productCode} - {prod.description}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+
             </div>
           </div>
         </div>

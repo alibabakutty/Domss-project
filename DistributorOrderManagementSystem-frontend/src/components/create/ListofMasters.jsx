@@ -38,7 +38,7 @@ const ListofMasters = () => {
         voucherTypeRef.current.focus();
       }
     }
-  }, [location]);
+  }, [location, links]);
 
   const handleKeyDown = event => {
     const currentIndex = links.findIndex(link => link.current === document.activeElement);

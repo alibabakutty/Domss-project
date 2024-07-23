@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { listOfLedgers } from "../../../services/MasterService";
+
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { listOfLedgers } from '../../../services/MasterService';
+
+
 
 const LedgerAlter = () => {
-  const [ledgerCode, setLedgerCode] = useState("");
+  const [ledgerCode, setLedgerCode] = useState('');
   const [ledger, setLedger] = useState([]);
   const [filteredLedgers, setFilteredLedgers] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [showDropdown, setShowDropdown] = useState(false);
   const inputRef = useRef(null);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -15,13 +19,14 @@ const LedgerAlter = () => {
     inputRef.current.focus();
 
     listOfLedgers()
-      .then((response) => {
+      .then(response => {
         console.log(response.data);
         setLedger(response.data);
-        setFilteredLedgers(response.data.slice(0,20));
+        setFilteredLedgers(response.data.slice(0, 20));
         setSelectedIndex(response.data.length > 0 ? 2 : 0);
+        setShowDropdown(response.data.length > 20);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }, []);
@@ -31,66 +36,57 @@ const LedgerAlter = () => {
   }, [ledgerCode]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      const totalItems = ledger.length > 20 ? filteredLedgers.length + 3 : filteredLedgers.length + 2;   // +2 for create, back, and +1 for dropdown if it exists
-      if (e.key === "ArrowDown") {
-        setSelectedIndex(
-          (prevIndex) => (prevIndex + 1) % totalItems
-        );
+    const handleKeyDown = e => {
+      const totalItems =
+        showDropdown ? filteredLedgers.length + 3 : filteredLedgers.length + 2; // +3 for create, back, and dropdown if it exists
+      if (e.key === 'ArrowDown') {
+        setSelectedIndex(prevIndex => (prevIndex + 1) % totalItems);
         e.preventDefault();
-      } else if (e.key === "ArrowUp") {
-        setSelectedIndex(
-          (prevIndex) =>
-            (prevIndex - 1 + totalItems) %
-            totalItems
-        );
+      } else if (e.key === 'ArrowUp') {
+        setSelectedIndex(prevIndex => (prevIndex - 1 + totalItems) % totalItems);
         e.preventDefault();
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         if (selectedIndex === 0) {
-          navigate("/create/ledger");
+          navigate('/create/ledger');
           e.preventDefault();
         } else if (selectedIndex === 1) {
-          navigate("/alter");
+          navigate('/alter');
           e.preventDefault();
-        } else if (ledger.length > 20 && selectedIndex === filteredLedgers.length + 2){
+        } else if (showDropdown && selectedIndex === filteredLedgers.length + 2) {
           dropdownRef.current.focus();
         } else if (filteredLedgers[selectedIndex - 2]) {
-          navigate(
-            `/alterLedgerMaster/${
-              filteredLedgers[selectedIndex - 2].ledgerCode
-            }`
-          );
+          navigate(`/alterLedgerMaster/${filteredLedgers[selectedIndex - 2].ledgerCode}`);
         }
-      } else if (e.key === 'Escape'){
-        navigate("/alter");
+      } else if (e.key === 'Escape') {
+        navigate('/alter');
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [filteredLedgers, selectedIndex, navigate, ledger.length]);
+  }, [filteredLedgers, selectedIndex, navigate, showDropdown]);
 
   const filterLedgers = () => {
     let filtered = [];
-    if (ledgerCode === "") {
-      filtered = ledger.slice(0,20);  // Reset to show the first 20 elements
+    if (ledgerCode === '') {
+      filtered = ledger.slice(0, 20); // Reset to show the first 20 elements
     } else {
-      filtered = ledger.filter((led) =>
-        led.ledgerCode.toLowerCase().includes(ledgerCode.toLowerCase())
+      filtered = ledger.filter(led =>
+        led.ledgerCode.toLowerCase().includes(ledgerCode.toLowerCase()),
       );
-      filtered = filtered.slice(0,20);  // Limit to 20 elements
+      filtered = filtered.slice(0, 20); // Limit to 20 elements
     }
     setFilteredLedgers(filtered);
-    setSelectedIndex(2);  // Reset selected index to the first element in the filtered list
+    setSelectedIndex(2); // Reset selected index to the first element in the filtered list
   };
 
-  const handleDropdownChange = (e) => {
+  const handleDropdownChange = e => {
     const selectedLedgerCode = e.target.value;
     navigate(`/alterLedgerMaster/${selectedLedgerCode}`);
-  }
+  };
 
   return (
     <>
@@ -108,7 +104,7 @@ const LedgerAlter = () => {
                 id="ledgerCode"
                 name="ledgerCode"
                 value={ledgerCode}
-                onChange={(e) => setLedgerCode(e.target.value)}
+                onChange={e => setLedgerCode(e.target.value)}
                 ref={inputRef}
                 className="w-[250px] ml-2 mt-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200  focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
@@ -116,9 +112,7 @@ const LedgerAlter = () => {
             </div>
 
             <div className="w-[350px] h-[85vh] border border-gray-600 bg-[#def1fc]">
-              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[14px]">
-                List of Ledgers
-              </h2>
+              <h2 className="p-1 bg-[#2a67b1] text-white text-left text-[14px]">List of Ledgers</h2>
               <table>
                 <thead>
                   <tr>
@@ -128,17 +122,17 @@ const LedgerAlter = () => {
                 <div className="border border-b-gray-500 w-[347px]">
                   <Link
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
-                      selectedIndex === 0 ? "bg-[#FEB941]" : ""
+                      selectedIndex === 0 ? 'bg-[#FEB941]' : ''
                     }`}
-                    to={"/create/ledger"}
+                    to={'/create/ledger'}
                   >
                     <p className="ml-[285px]">Create</p>
                   </Link>
                   <Link
                     className={`block text-center text-[13px] focus:bg-[#FEB941] outline-none ${
-                      selectedIndex === 1 ? "bg-[#FEB941]" : ""
+                      selectedIndex === 1 ? 'bg-[#FEB941]' : ''
                     }`}
-                    to={"/alter"}
+                    to={'/alter'}
                   >
                     <p className="ml-[287px] ">Back</p>
                   </Link>
@@ -147,27 +141,46 @@ const LedgerAlter = () => {
                   {filteredLedgers.map((led, index) => (
                     <tr
                       key={led.ledgerCode}
-                      className={
-                        selectedIndex === index + 2 ? "bg-[#FEB941]" : ""
-                      }
+                      className={selectedIndex === index + 2 ? 'bg-[#FEB941]' : ''}
                     >
                       <Link
                         className="block text-left pl-2 text-[13px] focus:bg-[#FEB941] outline-none"
                         to={`/alterLedgerMaster/${led.ledgerCode}`}
                       >
-                        <td>{led.ledgerCode} - {led.ledgerName}</td>
+                        <td>
+                          {led.ledgerCode} - {led.ledgerName}
+                        </td>
                       </Link>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              {ledger.length > 20 && (
+              {showDropdown && (
                 <div className="mt-2">
-                  <label htmlFor="ledgerDropDOwn" className="block text-center text-[14px] mb-1"></label>
-                  <select name="ledgerDropDOwn" id="ledgerDropDOwn" ref={dropdownRef} className={`w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none ${selectedIndex === filteredLedgers.length + 2}`} onChange={handleDropdownChange}>
-                    <option value="" className="block text-left pl-2 text-[13px]">Select Other Ledgers</option>
-                    {ledger.slice(20).map((led) => (
-                      <option key={led.ledgerCode} value={led.ledgerCode} className="block text-left pl-2 text-[12.5px]">{led.ledgerCode} - {led.ledgerName}</option>
+                  <label
+                    htmlFor="ledgerDropDOwn"
+                    className="block text-center text-[14px] mb-1"
+                  ></label>
+                  <select
+                    name="ledgerDropDOwn"
+                    id="ledgerDropDOwn"
+                    ref={dropdownRef}
+                    className={`w-full border border-gray-600 bg-[#BBE9FF] p-1 text-[13px] focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none ${
+                      selectedIndex === filteredLedgers.length + 2
+                    }`}
+                    onChange={handleDropdownChange}
+                  >
+                    <option value="" className="block text-left pl-2 text-[13px]">
+                      Select Other Ledgers
+                    </option>
+                    {ledger.slice(20).map(led => (
+                      <option
+                        key={led.ledgerCode}
+                        value={led.ledgerCode}
+                        className="block text-left pl-2 text-[12.5px]"
+                      >
+                        {led.ledgerCode} - {led.ledgerName}
+                      </option>
                     ))}
                   </select>
                 </div>
