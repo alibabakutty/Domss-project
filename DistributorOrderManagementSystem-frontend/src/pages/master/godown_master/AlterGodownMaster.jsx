@@ -1,15 +1,15 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const AlterGodownMaster = () => {
   let navigate = useNavigate();
   const { godownCode } = useParams();
 
   const [godown, setGodown] = useState({
-    godownCode: "",
-    godownName: "",
+    godownCode: '',
+    godownName: '',
   });
 
   const inputRefs = useRef({
@@ -24,10 +24,10 @@ const AlterGodownMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -35,22 +35,22 @@ const AlterGodownMaster = () => {
     }
   };
 
-  const onInputChange = (e) => {
+  const onInputChange = e => {
     const { name, value } = e.target;
     const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
     setGodown({ ...godown, [name]: capitalizedValue });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async e => {
     e.preventDefault();
     try {
       await axios.put(
         `http://localhost:9080/godownMasterApi/alterGodownMaster/${godownCode}`,
-        godown
+        godown,
       );
-      navigate("/godownAlter/filter");
+      navigate('/godownAlter/filter');
     } catch (error) {
-      console.error("Error updating the godown", error);
+      console.error('Error updating the godown', error);
     }
   };
 
@@ -60,64 +60,62 @@ const AlterGodownMaster = () => {
         inputRefs.current.godownCode.focus();
         pulseCursor(inputRefs.current.godownCode);
       }
-    }
+    };
 
-    setTimeout(focusAndPulseCursor,100);
+    setTimeout(focusAndPulseCursor, 100);
 
     loadGodown();
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         acceptButtonRef.current.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, [godownCode]);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       // Enter key
@@ -126,9 +124,7 @@ const AlterGodownMaster = () => {
       if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         acceptButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
@@ -136,9 +132,9 @@ const AlterGodownMaster = () => {
       // Escape key
       event.preventDefault();
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "godownCode") {
+    } else if (keyCode === 8 && target.id !== 'godownCode') {
       // Backspace key
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
       if (isEmptyOrZero) {
         event.preventDefault();
         const prevInputIndex =
@@ -158,18 +154,18 @@ const AlterGodownMaster = () => {
       }
     } else if (keyCode === 46) {
       event.preventDefault();
-      setGodown({ ...godown, [target.name]: "" });
+      setGodown({ ...godown, [target.name]: '' });
     }
   };
 
   const loadGodown = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:9080/godownMasterApi/displayGodown/${godownCode}`
+        `http://localhost:9080/godownMasterApi/displayGodown/${godownCode}`,
       );
       setGodown(result.data);
     } catch (error) {
-      console.error("Error fetching the godown data", error);
+      console.error('Error fetching the godown data', error);
     }
   };
 
@@ -183,7 +179,7 @@ const AlterGodownMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/godownAlter/filter");
+    navigate('/godownAlter/filter');
   };
 
   return (
@@ -195,7 +191,7 @@ const AlterGodownMaster = () => {
           <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
             <h2 className="ml-[200px]">Godown Master</h2>
             <span className="cursor-pointer mt-[5px] mr-2">
-              <Link to={"/godownAlter/filter"}>
+              <Link to={'/godownAlter/filter'}>
                 <IoClose />
               </Link>
             </span>
@@ -203,15 +199,10 @@ const AlterGodownMaster = () => {
 
           <div className="w-[550px] h-[10vh] border border-gray-500 ml-[750px]">
             <form onSubmit={onSubmit}>
-              {["godownCode", "godownName"].map((field) => (
+              {['godownCode', 'godownName'].map(field => (
                 <div key={field} className="input-ldgr flex items-center mt-1">
-                  <label
-                    htmlFor={field}
-                    className="text-sm ml-2 mr-2 w-[140px]"
-                  >
-                    {field
-                      .replace(/([A-Z])/g, "$1")
-                      .replace(/^./, (str) => str.toUpperCase())}
+                  <label htmlFor={field} className="text-sm ml-2 mr-2 w-[140px]">
+                    {field.replace(/([A-Z])/g, '$1').replace(/^./, str => str.toUpperCase())}
                   </label>
                   <span className="mr-2">:</span>
                   <input
@@ -221,7 +212,7 @@ const AlterGodownMaster = () => {
                     value={godown[field]}
                     onChange={onInputChange}
                     onKeyDown={handleKeyDown}
-                    ref={(input) => {
+                    ref={input => {
                       inputRefs.current[field] = input;
                     }}
                     className="w-[300px] h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -234,34 +225,36 @@ const AlterGodownMaster = () => {
                 <input
                   type="button"
                   id="acceptButton"
-                  onKeyDown={(e) => {
-                    if (e.key === "Backspace") {
+                  onKeyDown={e => {
+                    if (e.key === 'Backspace') {
                       e.preventDefault();
-                      if (
-                        inputRefs.current.godownName &&
-                        inputRefs.current.godownName.focus
-                      ) {
+                      if (inputRefs.current.godownName && inputRefs.current.godownName.focus) {
                         inputRefs.current.godownName.focus();
                       }
                     }
                   }}
-                  value={": Accept"}
-                  ref={(button) => {
+                  value={': Accept'}
+                  ref={button => {
                     acceptButtonRef.current = button;
                   }}
-                  onClick={(e) => {
+                  onClick={e => {
                     onSubmit(e);
                   }}
                   className="text-sm px-8 py-[6px] bg-slate-600 hover:bg-slate-800 relative"
                 />
-                <span className="text-sm absolute top-[580px] left-[844px] underline decoration-black" style={{textDecorationThickness: '2px'}}>A</span>
+                <span
+                  className="text-sm absolute top-[580px] left-[844px] underline decoration-black"
+                  style={{ textDecorationThickness: '2px' }}
+                >
+                  A
+                </span>
               </div>
             </form>
           </div>
 
           <div className="mt-[443px] absolute left-[410px]">
             <Link
-              to={"/godownAlter/filter"}
+              to={'/godownAlter/filter'}
               className="px-11 py-[7px] text-sm bg-slate-600 hover:bg-slate-800 "
             >
               <span className="border-b-2 border-black">Q</span>: Quit
@@ -274,17 +267,11 @@ const AlterGodownMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
 
@@ -292,10 +279,7 @@ const AlterGodownMaster = () => {
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">

@@ -1,7 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 const DisplayProductMaster = () => {
   const { productCode } = useParams();
@@ -9,14 +9,14 @@ const DisplayProductMaster = () => {
   const navigate = useNavigate();
 
   const [product, setProduct] = useState({
-    productCode: "",
-    description: "",
-    stockCategory: "",
-    uom: "",
-    stockGroup: "",
-    standardCost: "",
-    sellingPrice: "",
-    discount: "",
+    productCode: '',
+    description: '',
+    stockCategory: '',
+    uom: '',
+    stockGroup: '',
+    standardCost: '',
+    sellingPrice: '',
+    discount: '',
   });
 
   const inputRefs = useRef({
@@ -37,10 +37,10 @@ const DisplayProductMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -54,64 +54,62 @@ const DisplayProductMaster = () => {
         inputRefs.current.productCode.focus();
         pulseCursor(inputRefs.current.productCode);
       }
-    }
+    };
 
-    setTimeout(focusAndPulseCursor,100);
+    setTimeout(focusAndPulseCursor, 100);
 
     loadProduct();
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         backButtonRef.current.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, []);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       event.preventDefault();
@@ -119,18 +117,16 @@ const DisplayProductMaster = () => {
       if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         backButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
     } else if (keyCode === 27) {
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "productCode") {
+    } else if (keyCode === 8 && target.id !== 'productCode') {
       event.preventDefault();
 
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
 
       if (isEmptyOrZero) {
         event.preventDefault();
@@ -154,11 +150,11 @@ const DisplayProductMaster = () => {
   const loadProduct = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:9080/products/displayProduct/${productCode}`
+        `http://localhost:9080/products/displayProduct/${productCode}`,
       );
       setProduct(result.data);
     } catch (error) {
-      console.error("Error fetching the product data", error);
+      console.error('Error fetching the product data', error);
     }
   };
 
@@ -172,12 +168,12 @@ const DisplayProductMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/display/productFilter");
+    navigate('/display/productFilter');
   };
 
-  const handleNavigation = () => {
-    navigate("/display/productFilter");
-  }
+  // const handleNavigation = () => {
+  //   navigate('/display/productFilter');
+  // };
 
   return (
     <div>
@@ -189,7 +185,7 @@ const DisplayProductMaster = () => {
             <h2 className="ml-[200px]">Product Master</h2>
             <span className="cursor-pointer mt-[5px] mr-2">
               <Link to={'/display/productFilter'}>
-                <IoClose /> 
+                <IoClose />
               </Link>
             </span>
           </div>
@@ -200,14 +196,14 @@ const DisplayProductMaster = () => {
                 <label htmlFor="productCode" className="text-sm ml-2 mr-[59px]">
                   Product Code
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="productCode"
                   name="productCode"
                   value={product.productCode}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => {
+                  ref={input => {
                     inputRefs.current.productCode = input;
                   }}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -217,22 +213,17 @@ const DisplayProductMaster = () => {
               </div>
 
               <div className="input-ldgr mt-1">
-                <label
-                  htmlFor="description"
-                  className="text-sm mr-[22px] ml-2"
-                >
+                <label htmlFor="description" className="text-sm mr-[22px] ml-2">
                   Product Description
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="description"
                   name="description"
                   value={product.description}
                   onKeyDown={handleKeyDown}
-                  ref={(input) =>
-                    (inputRefs.current.description = input)
-                  }
+                  ref={input => (inputRefs.current.description = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -243,14 +234,14 @@ const DisplayProductMaster = () => {
                 <label htmlFor="uom" className="text-sm mr-[60px] ml-2">
                   Product UOM
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="uom"
                   name="uom"
                   value={product.uom}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.uom = input)}
+                  ref={input => (inputRefs.current.uom = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -258,20 +249,17 @@ const DisplayProductMaster = () => {
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="stockCategory"
-                  className="text-sm mr-[36px] ml-2"
-                >
+                <label htmlFor="stockCategory" className="text-sm mr-[36px] ml-2">
                   Product Category
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="stockCategory"
                   name="stockCategory"
                   value={product.stockCategory}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.stockCategory = input)}
+                  ref={input => (inputRefs.current.stockCategory = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -279,20 +267,17 @@ const DisplayProductMaster = () => {
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="stockGroup"
-                  className="text-sm mr-[55px] ml-2"
-                >
+                <label htmlFor="stockGroup" className="text-sm mr-[55px] ml-2">
                   Product Group
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="stockGroup"
                   name="stockGroup"
                   value={product.stockGroup}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.stockGroup = input)}
+                  ref={input => (inputRefs.current.stockGroup = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -300,20 +285,17 @@ const DisplayProductMaster = () => {
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="standardCost"
-                  className="text-sm mr-[57px] ml-2"
-                >
+                <label htmlFor="standardCost" className="text-sm mr-[57px] ml-2">
                   Standard Cost
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="standardCost"
                   name="standardCost"
                   value={product.standardCost}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.standardCost = input)}
+                  ref={input => (inputRefs.current.standardCost = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -321,20 +303,17 @@ const DisplayProductMaster = () => {
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="sellingPrice"
-                  className="text-sm mr-[68px] ml-2"
-                >
+                <label htmlFor="sellingPrice" className="text-sm mr-[68px] ml-2">
                   Selling Price
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="sellingPrice"
                   name="sellingPrice"
                   value={product.sellingPrice}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.sellingPrice = input)}
+                  ref={input => (inputRefs.current.sellingPrice = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -345,14 +324,14 @@ const DisplayProductMaster = () => {
                 <label htmlFor="discount" className="text-sm mr-[92.5px] ml-2">
                   Discount
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="discount"
                   name="discount"
                   value={product.discount}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.discount = input)}
+                  ref={input => (inputRefs.current.discount = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -372,26 +351,17 @@ const DisplayProductMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">

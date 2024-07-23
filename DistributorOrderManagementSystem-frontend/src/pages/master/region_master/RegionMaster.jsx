@@ -1,13 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { createNewRegionMaster } from "../../../services/MasterService";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { createNewRegionMaster } from '../../../services/MasterService';
+import { Link, useNavigate } from 'react-router-dom';
 
 const RegionMaster = () => {
-  const [regionMasterId, setRegionMasterId] = useState("");
-  const [regionName, setRegionName] = useState("");
-  const [regionState, setRegionState] = useState("");
-  const [country, setCountry] = useState("");
+  const [regionMasterId, setRegionMasterId] = useState('');
+  const [regionName, setRegionName] = useState('');
+  const [regionState, setRegionState] = useState('');
+  const [country, setCountry] = useState('');
   const [showModal, setShowModal] = useState(false);
 
   const inputRefs = useRef({
@@ -23,10 +23,10 @@ const RegionMaster = () => {
   const cancelModalConfirmRef = useRef(null);
   const navigate = useNavigate();
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -40,80 +40,74 @@ const RegionMaster = () => {
       pulseCursor(inputRefs.current.regionMasterId);
     }
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         acceptButtonRef.current.click();
         saveRegionMaster(event);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, [navigate]);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
     if (keyCode === 13) {
       event.preventDefault();
-      if (target.id === 'regionMasterId' && !regionMasterId.trim()){
+      if (target.id === 'regionMasterId' && !regionMasterId.trim()) {
         // if regionmasterid is empty, do not proceed to the next input
         return;
       }
-      const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-        (key) => key === target.id
-      );
+      const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
       if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         acceptButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
     } else if (keyCode === 27) {
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "regionMasterId") {
-      const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-        (key) => key === target.id
-      );
+    } else if (keyCode === 8 && target.id !== 'regionMasterId') {
+      const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
       if (target.selectionStart === 0 && target.selectionEnd === 0) {
         event.preventDefault();
@@ -127,7 +121,7 @@ const RegionMaster = () => {
     }
   };
 
-  const saveRegionMaster = (e) => {
+  const saveRegionMaster = e => {
     e.preventDefault();
 
     const region = { regionMasterId, regionName, regionState, country };
@@ -135,12 +129,12 @@ const RegionMaster = () => {
     console.log(region);
 
     createNewRegionMaster(region)
-      .then((response) => {
+      .then(response => {
         console.log(response.data);
         navigate('/create');
       })
-      .catch((error) => {
-        console.error("Error creating region master:", error);
+      .catch(error => {
+        console.error('Error creating region master:', error);
       });
   };
 
@@ -154,12 +148,12 @@ const RegionMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/create");
+    navigate('/create');
   };
 
-  const handleClickOutsideInputs = (e) => {
-    const inputs = ["regionMasterId", "regionName", "regionState", "country"];
-    if (!inputs.includes(e.target.id) && inputRefs.current.regionMasterId){
+  const handleClickOutsideInputs = e => {
+    const inputs = ['regionMasterId', 'regionName', 'regionState', 'country'];
+    if (!inputs.includes(e.target.id) && inputRefs.current.regionMasterId) {
       inputRefs.current.regionMasterId.focus();
       pulseCursor(inputRefs.current.regionMasterId);
     }
@@ -171,7 +165,7 @@ const RegionMaster = () => {
         <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
           <h2 className="ml-[200px]">Region Master</h2>
           <span className="cursor-pointer mt-[5px] mr-2">
-            <Link to={"/create"}>
+            <Link to={'/create'}>
               <IoClose />
             </Link>
           </span>
@@ -183,36 +177,35 @@ const RegionMaster = () => {
               <label htmlFor="regionMasterId" className="text-sm mr-12 ml-2">
                 Region Master ID
               </label>
-              :{" "}
+              :{' '}
               <input
                 type="text"
                 id="regionMasterId"
                 name="regionMasterId"
                 value={regionMasterId}
-                onChange={(e) => setRegionMasterId(e.target.value)}
+                onChange={e => setRegionMasterId(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => {
+                ref={input => {
                   inputRefs.current.regionMasterId = input;
                 }}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
-              
             </div>
 
             <div className="input-ldgr">
               <label htmlFor="regionName" className="text-sm mr-[71px] ml-2">
                 Region Name
               </label>
-              :{" "}
+              :{' '}
               <input
                 type="text"
                 id="regionName"
                 name="regionName"
                 value={regionName}
-                onChange={(e) => setRegionName(e.target.value)}
+                onChange={e => setRegionName(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.regionName = input)}
+                ref={input => (inputRefs.current.regionName = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
@@ -222,15 +215,15 @@ const RegionMaster = () => {
               <label htmlFor="regionState" className="text-sm mr-[76px] ml-2">
                 Region State
               </label>
-              :{" "}
+              :{' '}
               <input
                 type="text"
                 id="regionState"
                 name="regionState"
                 value={regionState}
-                onChange={(e) => setRegionState(e.target.value)}
+                onChange={e => setRegionState(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.regionState = input)}
+                ref={input => (inputRefs.current.regionState = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
@@ -240,52 +233,52 @@ const RegionMaster = () => {
               <label htmlFor="country" className="text-sm mr-[106px] ml-2">
                 Country
               </label>
-              :{" "}
+              :{' '}
               <input
                 type="text"
                 id="country"
                 name="country"
                 value={country}
-                onChange={(e) => setCountry(e.target.value)}
+                onChange={e => setCountry(e.target.value)}
                 onKeyDown={handleKeyDown}
-                ref={(input) => (inputRefs.current.country = input)}
+                ref={input => (inputRefs.current.country = input)}
                 className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                 autoComplete="off"
               />
             </div>
-
-            
           </form>
         </div>
 
         <div className="mt-[387px] ml-[805px]">
-              <input
-                type="button"
-                id="acceptButton"
-                onKeyDown={(e) => {
-                  if (e.key === "Backspace") {
-                    e.preventDefault();
-                    if (
-                      inputRefs.current.country &&
-                      inputRefs.current.country.focus
-                    ) {
-                      inputRefs.current.country.focus();
-                    }
-                  }
-                }}
-                value={": Accept"}
-                ref={(button) => {
-                  acceptButtonRef.current = button;
-                }}
-                onClick={(e) => saveRegionMaster(e)}
-                className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
-              />
-              <span className="text-sm absolute top-[590px] left-[828px] underline decoration-black" style={{textDecorationThickness: '2px'}}>A</span>
-            </div>
+          <input
+            type="button"
+            id="acceptButton"
+            onKeyDown={e => {
+              if (e.key === 'Backspace') {
+                e.preventDefault();
+                if (inputRefs.current.country && inputRefs.current.country.focus) {
+                  inputRefs.current.country.focus();
+                }
+              }
+            }}
+            value={': Accept'}
+            ref={button => {
+              acceptButtonRef.current = button;
+            }}
+            onClick={e => saveRegionMaster(e)}
+            className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
+          />
+          <span
+            className="text-sm absolute top-[590px] left-[828px] underline decoration-black"
+            style={{ textDecorationThickness: '2px' }}
+          >
+            A
+          </span>
+        </div>
 
         <div className="absolute left-[350px] top-[590px]">
           <Link
-            to={"/create"}
+            to={'/create'}
             className="px-10 py-1 text-sm bg-slate-600 hover:bg-slate-800 ml-[100px]"
           >
             <span className="border-b-2 border-black">Q</span>: Quit
@@ -296,10 +289,7 @@ const RegionMaster = () => {
         {showModal && (
           <div className="fixed z-10 inset-0 overflow-y-auto">
             <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-              <div
-                className="fixed inset-0 transition-opacity"
-                aria-hidden="true"
-              >
+              <div className="fixed inset-0 transition-opacity" aria-hidden="true">
                 <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
               </div>
 
@@ -314,10 +304,7 @@ const RegionMaster = () => {
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                   <div className="sm:flex sm:items-start">
                     <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                      <h3
-                        className="text-lg leading-6 font-medium text-gray-900"
-                        id="modal-title"
-                      >
+                      <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                         Quit Confirmation
                       </h3>
                       <div className="mt-2">

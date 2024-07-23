@@ -1,15 +1,15 @@
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+import { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const DisplayLedgerMaster = () => {
   const { ledgerCode } = useParams();
   const navigate = useNavigate();
 
   const [ledger, setLedger] = useState({
-    ledgerCode: "",
-    ledgerName: "",
+    ledgerCode: '',
+    ledgerName: '',
   });
 
   const inputRefs = useRef({
@@ -24,10 +24,10 @@ const DisplayLedgerMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -36,7 +36,7 @@ const DisplayLedgerMaster = () => {
   };
 
   const handleNavigation = () => {
-    navigate("/display/ledgerFilter");
+    navigate('/display/ledgerFilter');
   };
 
   useEffect(() => {
@@ -51,58 +51,56 @@ const DisplayLedgerMaster = () => {
 
     setTimeout(focusAndPulseCursor, 100);
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         backButtonRef.current.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, [ledgerCode]);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       // Enter key
@@ -111,9 +109,7 @@ const DisplayLedgerMaster = () => {
       if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         backButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
@@ -121,9 +117,9 @@ const DisplayLedgerMaster = () => {
       // Escape key
       event.preventDefault();
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "ledgerCode") {
+    } else if (keyCode === 8 && target.id !== 'ledgerCode') {
       // Backspace key
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
       if (isEmptyOrZero) {
         event.preventDefault();
         const prevInputIndex =
@@ -147,11 +143,11 @@ const DisplayLedgerMaster = () => {
   const loadLedger = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:9080/ledgerMasterApi/displayLedger/${ledgerCode}`
+        `http://localhost:9080/ledgerMasterApi/displayLedger/${ledgerCode}`,
       );
       setLedger(result.data);
     } catch (error) {
-      console.error("Error fetching the godown data", error);
+      console.error('Error fetching the godown data', error);
     }
   };
 
@@ -165,7 +161,7 @@ const DisplayLedgerMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/display/ledgerFilter");
+    navigate('/display/ledgerFilter');
   };
 
   return (
@@ -177,7 +173,7 @@ const DisplayLedgerMaster = () => {
           <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[750px] mt-10 border border-gray-500 border-b-0">
             <h2 className="ml-[200px]">Ledger Master</h2>
             <span className="cursor-pointer mt-[5px] mr-2">
-              <Link to={"/display/ledgerFilter"}>
+              <Link to={'/display/ledgerFilter'}>
                 <IoClose />
               </Link>
             </span>
@@ -185,15 +181,10 @@ const DisplayLedgerMaster = () => {
 
           <div className="w-[550px] h-[10vh] border border-gray-500 ml-[750px]">
             <form>
-              {["ledgerCode", "ledgerName"].map((field) => (
+              {['ledgerCode', 'ledgerName'].map(field => (
                 <div key={field} className="input-ldgr flex items-center mt-1">
-                  <label
-                    htmlFor={field}
-                    className="text-sm ml-2 mr-2 w-[140px]"
-                  >
-                    {field
-                      .replace(/([A-Z])/g, "$1")
-                      .replace(/^./, (str) => str.toUpperCase())}
+                  <label htmlFor={field} className="text-sm ml-2 mr-2 w-[140px]">
+                    {field.replace(/([A-Z])/g, '$1').replace(/^./, str => str.toUpperCase())}
                   </label>
                   <span className="mr-2">:</span>
                   <input
@@ -202,7 +193,7 @@ const DisplayLedgerMaster = () => {
                     name={field}
                     value={ledger[field]}
                     onKeyDown={handleKeyDown}
-                    ref={(input) => {
+                    ref={input => {
                       inputRefs.current[field] = input;
                     }}
                     className="w-[300px] h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -214,30 +205,7 @@ const DisplayLedgerMaster = () => {
             </form>
           </div>
 
-          <div className="mt-[450px] ml-[900px]">
-            {/* <input
-              type="button"
-              id="backButton"
-              className="text-sm px-8 py-1 mt-3 border bg-slate-600 hover:bg-slate-800 relative"
-              onKeyDown={(e) => {
-                if (e.key === "Backspace") {
-                  e.preventDefault();
-                  if (
-                    inputRefs.current.ledgerName &&
-                    inputRefs.current.ledgerName.focus
-                  ) {
-                    inputRefs.current.ledgerName.focus();
-                  }
-                }
-              }}
-              value={": Quit"}
-              ref={(button) => {
-                backButtonRef.current = button;
-              }}
-              onClick={handleNavigation}
-            />
-            <span className="text-sm absolute left-[925px] top-[602px] underline decoration-black" style={{textDecorationThickness: '2px'}}>Q</span> */}
-          </div>
+          <div className="mt-[450px] ml-[900px]"></div>
         </div>
       </div>
 
@@ -245,17 +213,11 @@ const DisplayLedgerMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
 
@@ -263,10 +225,7 @@ const DisplayLedgerMaster = () => {
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">
