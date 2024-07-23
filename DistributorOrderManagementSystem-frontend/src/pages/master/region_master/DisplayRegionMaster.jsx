@@ -1,21 +1,21 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 
 const DisplayRegionMaster = () => {
   const { regionMasterId } = useParams();
   const navigate = useNavigate();
 
   const [region, setRegion] = useState({
-    ledgerCode: "",
-    ledgerName: "",
-    regionMasterId: "",
-    regionName: "",
-    regionState: "",
-    country: "",
-    godownCode: "",
-    godownName: "",
+    ledgerCode: '',
+    ledgerName: '',
+    regionMasterId: '',
+    regionName: '',
+    regionState: '',
+    country: '',
+    godownCode: '',
+    godownName: '',
   });
 
   const inputRefs = useRef({
@@ -36,10 +36,10 @@ const DisplayRegionMaster = () => {
 
   const [showModal, setShowModal] = useState(false);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -53,87 +53,81 @@ const DisplayRegionMaster = () => {
         inputRefs.current.regionMasterId.focus();
         pulseCursor(inputRefs.current.regionMasterId);
       }
-    }
+    };
     loadRegion();
 
-    setTimeout(focusAndPulseCursor,100);
+    setTimeout(focusAndPulseCursor, 100);
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         backButtonRef.current.click();
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, []);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       // Handle Enter key
       event.preventDefault();
-      const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-        (key) => key === target.id
-      );
+      const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
       if (target.id === 'country') {
         backButtonRef.current.focus();
         pulseCursor(backButtonRef.current); // Pulsing the cursor on the back button
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef); // Pulsing the cursor on the next input
       }
     } else if (keyCode === 27) {
       // Handle Escape key
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "regionMasterId") {
+    } else if (keyCode === 8 && target.id !== 'regionMasterId') {
       // Handle Backspace key
       event.preventDefault();
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
 
       if (isEmptyOrZero) {
         event.preventDefault();
@@ -156,11 +150,11 @@ const DisplayRegionMaster = () => {
   const loadRegion = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:9080/regionMasterApi/displayRegion/${regionMasterId}`
+        `http://localhost:9080/regionMasterApi/displayRegion/${regionMasterId}`,
       );
       setRegion(result.data);
     } catch (error) {
-      console.error("Error fetching the region data", error);
+      console.error('Error fetching the region data', error);
     }
   };
 
@@ -174,12 +168,12 @@ const DisplayRegionMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/display/regionFilter");
+    navigate('/display/regionFilter');
   };
 
-  const handleNavigation = () => {
-    navigate("/display/regionFilter");
-  }
+  // const handleNavigation = () => {
+  //   navigate('/display/regionFilter');
+  // };
 
   return (
     <div>
@@ -197,21 +191,18 @@ const DisplayRegionMaster = () => {
           <div className="w-[550px] h-[18vh] border border-gray-500 ml-[80px] ">
             <form>
               <div className="input-ldgr ">
-                <label
-                  htmlFor="regionMasterId"
-                  className="text-sm ml-2 mr-[49px]"
-                >
+                <label htmlFor="regionMasterId" className="text-sm ml-2 mr-[49px]">
                   Region Master ID
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="regionMasterId"
                   name="regionMasterId"
                   value={region.regionMasterId}
                   onKeyDown={handleKeyDown}
-                  onFocus={(e) => pulseCursor(e.target)}
-                  ref={(input) => (inputRefs.current.regionMasterId = input)}
+                  onFocus={e => pulseCursor(e.target)}
+                  ref={input => (inputRefs.current.regionMasterId = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -221,15 +212,15 @@ const DisplayRegionMaster = () => {
                 <label htmlFor="regionName" className="text-sm mr-[71px] ml-2">
                   Region Name
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="regionName"
                   name="regionName"
                   value={region.regionName}
                   onKeyDown={handleKeyDown}
-                  onFocus={(e) => pulseCursor(e.target)}
-                  ref={(input) => (inputRefs.current.regionName = input)}
+                  onFocus={e => pulseCursor(e.target)}
+                  ref={input => (inputRefs.current.regionName = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -239,15 +230,15 @@ const DisplayRegionMaster = () => {
                 <label htmlFor="regionState" className="text-sm mr-[76px] ml-2">
                   Region State
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="regionState"
                   name="regionState"
                   value={region.regionState}
                   onKeyDown={handleKeyDown}
-                  onFocus={(e) => pulseCursor(e.target)}
-                  ref={(input) => (inputRefs.current.regionState = input)}
+                  onFocus={e => pulseCursor(e.target)}
+                  ref={input => (inputRefs.current.regionState = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -257,15 +248,15 @@ const DisplayRegionMaster = () => {
                 <label htmlFor="country" className="text-sm mr-[106px] ml-2">
                   Country
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="country"
                   name="country"
                   value={region.country}
                   onKeyDown={handleKeyDown}
-                  onFocus={(e) => pulseCursor(e.target)}
-                  ref={(input) => (inputRefs.current.country = input)}
+                  onFocus={e => pulseCursor(e.target)}
+                  ref={input => (inputRefs.current.country = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   readOnly
                   autoComplete="off"
@@ -286,26 +277,17 @@ const DisplayRegionMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">

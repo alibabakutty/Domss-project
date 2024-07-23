@@ -1,7 +1,7 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { IoClose } from "react-icons/io5";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { IoClose } from 'react-icons/io5';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const AlterDistributorMaster = () => {
   let navigate = useNavigate();
@@ -9,16 +9,16 @@ const AlterDistributorMaster = () => {
   const { distributorCode } = useParams(); //Use distributorCode from URL parameters
 
   const [distributor, setDistributor] = useState({
-    distributorCode: "",
-    distributorCompanyName: "",
-    distributorOwnerName: "",
-    mobileNo: "",
-    executiveCode: "",
-    executiveMaster: "",
-    regionCode: "",
-    regionMaster: "",
-    contactPersonName: "",
-    contactMobileNo: "",
+    distributorCode: '',
+    distributorCompanyName: '',
+    distributorOwnerName: '',
+    mobileNo: '',
+    executiveCode: '',
+    executiveMaster: '',
+    regionCode: '',
+    regionMaster: '',
+    contactPersonName: '',
+    contactMobileNo: '',
   });
 
   const inputRefs = useRef({
@@ -42,20 +42,17 @@ const AlterDistributorMaster = () => {
   const [showModal, setShowModal] = useState(false);
   const [executiveSuggestions, setExecutiveSuggestions] = useState([]);
   const [regionSuggestions, setRegionSuggestions] = useState([]);
-  const [filteredExecutiveSuggestions, setFilteredExecutiveSuggestions] =
-    useState([]);
-  const [filteredRegionSuggestions, setFilteredRegionSuggestions] = useState(
-    []
-  );
+  const [filteredExecutiveSuggestions, setFilteredExecutiveSuggestions] = useState([]);
+  const [filteredRegionSuggestions, setFilteredRegionSuggestions] = useState([]);
   const [executiveFocused, setExecutiveFocused] = useState(false);
   const [regionFocused, setRegionFocused] = useState(false);
   const [highlightedExecutiveIndex, setHighlightedExecutiveIndex] = useState(0);
   const [highlightedRegionIndex, setHighlightedRegionIndex] = useState(0);
 
-  const pulseCursor = (input) => {
+  const pulseCursor = input => {
     const value = input.value;
     if (value) {
-      input.value = "";
+      input.value = '';
       setTimeout(() => {
         input.value = value.charAt(0).toUpperCase() + value.slice(1);
         input.setSelectionRange(0, 0);
@@ -63,21 +60,21 @@ const AlterDistributorMaster = () => {
     }
   };
 
-  const onInputChange = (e) => {
+  const onInputChange = e => {
     const { name, value } = e.target;
     const capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
     setDistributor({ ...distributor, [name]: capitalizedValue });
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async e => {
     e.preventDefault();
 
     await axios.put(
       `http://localhost:9080/distributorMasterApi/alterDistributorMaster/${distributorCode}`,
-      distributor
+      distributor,
     );
 
-    navigate("/distributorAlter/filter");
+    navigate('/distributorAlter/filter');
   };
 
   useEffect(() => {
@@ -86,19 +83,19 @@ const AlterDistributorMaster = () => {
         inputRefs.current.distributorCode.focus();
         pulseCursor(inputRefs.current.distributorCode);
       }
-    }
+    };
 
-    setTimeout(focusAndPulseCursor,100);
+    setTimeout(focusAndPulseCursor, 100);
     loadDistributor();
 
     const fetchExecutiveSuggestions = async () => {
       try {
         const responseExecutive = await axios.get(
-          "http://localhost:9080/executiveMasterApi/allExecutives"
+          'http://localhost:9080/executiveMasterApi/allExecutives',
         );
         setExecutiveSuggestions(responseExecutive.data);
       } catch (error) {
-        console.error("Error fetching executive data:", error);
+        console.error('Error fetching executive data:', error);
       }
     };
 
@@ -106,89 +103,83 @@ const AlterDistributorMaster = () => {
 
     const fetchRegionSuggestions = async () => {
       try {
-        const responseRegion = await axios.get(
-          "http://localhost:9080/regionMasterApi/allRegions"
-        );
+        const responseRegion = await axios.get('http://localhost:9080/regionMasterApi/allRegions');
         setRegionSuggestions(responseRegion.data);
       } catch (error) {
-        console.error("Error fetching region data:", error);
+        console.error('Error fetching region data:', error);
       }
     };
 
     fetchRegionSuggestions();
 
-    const handleKeyDown = (event) => {
+    const handleKeyDown = event => {
       const { ctrlKey, key } = event;
-      if ((ctrlKey && key === "q") || key === "Escape") {
+      if ((ctrlKey && key === 'q') || key === 'Escape') {
         event.preventDefault();
         setShowModal(true);
       }
     };
 
-    const handleCtrlA = (event) => {
-      if (event.ctrlKey && event.key === "a") {
+    const handleCtrlA = event => {
+      if (event.ctrlKey && event.key === 'a') {
         event.preventDefault();
         acceptButtonRef.current.click();
         saveRegionMaster(event);
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    document.addEventListener("keydown", handleCtrlA);
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleCtrlA);
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keydown", handleCtrlA);
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('keydown', handleCtrlA);
     };
   }, [navigate]);
 
   useEffect(() => {
     if (showModal) {
       yesQuitButtonRef.current.focus();
-      const handleModalKeyDown = (event) => {
-        if (event.key.toLowerCase() === "y") {
+      const handleModalKeyDown = event => {
+        if (event.key.toLowerCase() === 'y') {
           handleModalConfirm();
-        } else if (event.key === "n") {
+        } else if (event.key === 'n') {
           handleModalClose();
-        } else if (event.key === "ArrowLeft") {
+        } else if (event.key === 'ArrowLeft') {
           cancelModalConfirmRef.current.focus();
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           yesQuitButtonRef.current.focus();
         }
       };
 
-      document.addEventListener("keydown", handleModalKeyDown);
+      document.addEventListener('keydown', handleModalKeyDown);
 
       return () => {
-        document.removeEventListener("keydown", handleModalKeyDown);
+        document.removeEventListener('keydown', handleModalKeyDown);
       };
     }
   }, [showModal]);
 
-  const handleExecutiveInputChange = (e) => {
+  const handleExecutiveInputChange = e => {
     const executiveValue = e.target.value;
-    setDistributor((prevState) => ({
+    setDistributor(prevState => ({
       ...prevState,
       executiveCode: executiveValue,
-      executiveMaster: "",
+      executiveMaster: '',
     }));
 
-    if (executiveValue.trim() !== "") {
-      const filtered = executiveSuggestions.filter((executive) =>
-        executive.executiveCode
-          .toLowerCase()
-          .includes(executiveValue.toLowerCase())
+    if (executiveValue.trim() !== '') {
+      const filtered = executiveSuggestions.filter(executive =>
+        executive.executiveCode.toLowerCase().includes(executiveValue.toLowerCase()),
       );
       setFilteredExecutiveSuggestions(filtered);
-
-      
     } else {
       setFilteredExecutiveSuggestions([]);
     }
   };
 
-  const selectExecutive = (executive) => {
-    setDistributor((prevState) => ({
+  const selectExecutive = executive => {
+    setDistributor(prevState => ({
       ...prevState,
       executiveCode: executive.executiveCode,
       executiveMaster: executive.executiveMaster,
@@ -196,27 +187,26 @@ const AlterDistributorMaster = () => {
     setFilteredExecutiveSuggestions([]);
   };
 
-  const handleRegionInputChange = (e) => {
+  const handleRegionInputChange = e => {
     const regionValue = e.target.value;
-    setDistributor((prevState) => ({
+    setDistributor(prevState => ({
       ...prevState,
       regionCode: regionValue,
-      regionMaster: "",
+      regionMaster: '',
     }));
 
-    if (regionValue.trim() !== "") {
-      const filtered = regionSuggestions.filter((region) =>
-        region.regionMasterId.toLowerCase().includes(regionValue.toLowerCase())
+    if (regionValue.trim() !== '') {
+      const filtered = regionSuggestions.filter(region =>
+        region.regionMasterId.toLowerCase().includes(regionValue.toLowerCase()),
       );
       setFilteredRegionSuggestions(filtered);
-      
     } else {
       setFilteredRegionSuggestions([]);
     }
   };
 
-  const selectRegion = (region) => {
-    setDistributor((prevState) => ({
+  const selectRegion = region => {
+    setDistributor(prevState => ({
       ...prevState,
       regionCode: region.regionMasterId,
       regionMaster: region.regionName,
@@ -224,24 +214,20 @@ const AlterDistributorMaster = () => {
     setFilteredRegionSuggestions([]);
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = event => {
     const { keyCode, target } = event;
-    const currentInputIndex = Object.keys(inputRefs.current).findIndex(
-      (key) => key === target.id
-    );
+    const currentInputIndex = Object.keys(inputRefs.current).findIndex(key => key === target.id);
 
     if (keyCode === 13) {
       // Enter key
       event.preventDefault();
       // Check if the current input is contactmobilenumber
-      if (target.id === 'contactMobileNo'){
+      if (target.id === 'contactMobileNo') {
         acceptButtonRef.current.focus();
-      }else if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
+      } else if (currentInputIndex === Object.keys(inputRefs.current).length - 2) {
         acceptButtonRef.current.focus();
       } else {
-        const nextInputRef = Object.values(inputRefs.current)[
-          currentInputIndex + 1
-        ];
+        const nextInputRef = Object.values(inputRefs.current)[currentInputIndex + 1];
         nextInputRef.focus();
         pulseCursor(nextInputRef);
       }
@@ -249,9 +235,9 @@ const AlterDistributorMaster = () => {
       // Escape key
       event.preventDefault();
       setShowModal(true);
-    } else if (keyCode === 8 && target.id !== "distributorCode") {
+    } else if (keyCode === 8 && target.id !== 'distributorCode') {
       // Backspace key
-      const isEmptyOrZero = target.value.trim() === "" || target.value === "0";
+      const isEmptyOrZero = target.value.trim() === '' || target.value === '0';
       if (isEmptyOrZero) {
         event.preventDefault();
         const prevInputIndex =
@@ -271,18 +257,18 @@ const AlterDistributorMaster = () => {
       }
     } else if (keyCode === 46) {
       event.preventDefault();
-      setDistributor({ ...distributor, [target.name]: "" });
+      setDistributor({ ...distributor, [target.name]: '' });
     }
   };
 
   const loadDistributor = async () => {
     try {
       const result = await axios.get(
-        `http://localhost:9080/distributorMasterApi/displayDistributor/${distributorCode}`
+        `http://localhost:9080/distributorMasterApi/displayDistributor/${distributorCode}`,
       );
       setDistributor(result.data);
     } catch (error) {
-      console.error("Error fetching the executive data", error);
+      console.error('Error fetching the executive data', error);
     }
   };
 
@@ -296,12 +282,12 @@ const AlterDistributorMaster = () => {
   };
 
   const handleModalConfirm = () => {
-    navigate("/distributorAlter/filter");
+    navigate('/distributorAlter/filter');
   };
 
-  const handleExecutiveFocus = (e) => {
+  const handleExecutiveFocus = e => {
     const { id } = e.target;
-    if (id === "executiveCode") {
+    if (id === 'executiveCode') {
       setExecutiveFocused(true);
       setFilteredExecutiveSuggestions(executiveSuggestions);
     } else {
@@ -310,9 +296,9 @@ const AlterDistributorMaster = () => {
     }
   };
 
-  const handleRegionFocus = (e) => {
+  const handleRegionFocus = e => {
     const { id } = e.target;
-    if (id === "regionCode") {
+    if (id === 'regionCode') {
       setRegionFocused(true);
       setFilteredRegionSuggestions(regionSuggestions);
     } else {
@@ -321,42 +307,39 @@ const AlterDistributorMaster = () => {
     }
   };
 
-  const handleExecutiveKeyDown = (e) => {
-    const {key} = e;
+  const handleExecutiveKeyDown = e => {
+    const { key } = e;
 
-    if(key === 'ArrowDown'){
+    if (key === 'ArrowDown') {
       e.preventDefault();
-      setHighlightedExecutiveIndex((prevIndex) => 
-        prevIndex + 1 <filteredExecutiveSuggestions.length ? prevIndex + 1 : prevIndex
+      setHighlightedExecutiveIndex(prevIndex =>
+        prevIndex + 1 < filteredExecutiveSuggestions.length ? prevIndex + 1 : prevIndex,
       );
-    } else if (key === 'ArrowUp'){
+    } else if (key === 'ArrowUp') {
       e.preventDefault();
-      setHighlightedExecutiveIndex((prevIndex) => 
-        prevIndex > 0 ? prevIndex - 1 : prevIndex
-      );
-    } else if (key === 'Enter'){
+      setHighlightedExecutiveIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    } else if (key === 'Enter') {
       e.preventDefault();
-      if(filteredExecutiveSuggestions.length > 0){
+      if (filteredExecutiveSuggestions.length > 0) {
         selectExecutive(filteredExecutiveSuggestions[highlightedExecutiveIndex]);
       }
     }
   };
 
-  const handleRegionKeyDown = (e) => {
-
-    if(e.key === 'ArrowDown'){
+  const handleRegionKeyDown = e => {
+    if (e.key === 'ArrowDown') {
       e.preventDefault();
       const newIndex = highlightedRegionIndex + 1;
-      if(newIndex < filteredRegionSuggestions.length){
+      if (newIndex < filteredRegionSuggestions.length) {
         setHighlightedRegionIndex(newIndex);
       }
-    } else if (e.key === 'ArrowUp'){
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       const newIndex = highlightedRegionIndex - 1;
-      if(newIndex >= 0){
+      if (newIndex >= 0) {
         setHighlightedRegionIndex(newIndex);
       }
-    } else if (e.key === 'Enter' && highlightedRegionIndex !== -1){
+    } else if (e.key === 'Enter' && highlightedRegionIndex !== -1) {
       e.preventDefault();
       selectRegion(filteredRegionSuggestions[highlightedRegionIndex]);
     }
@@ -367,11 +350,11 @@ const AlterDistributorMaster = () => {
       <div className="flex" onClick={() => inputRefs.current.distributorCode.focus()}>
         <div className="w-1/2 h-[100vh] border border-bg-gray-500"></div>
 
-        <div className="w-1/2 border border-bg-gray-500" >
+        <div className="w-1/2 border border-bg-gray-500">
           <div className="w-[550px] h-[30px] flex justify-between text-[20px] bg-[#F1E5D1] ml-[80px] mt-10 border border-gray-500 border-b-0">
             <h2 className="ml-[200px]">Distributor Master</h2>
             <span className="cursor-pointer mt-[5px] mr-2">
-              <Link to={"/distributorAlter/filter"}>
+              <Link to={'/distributorAlter/filter'}>
                 <IoClose />
               </Link>
             </span>
@@ -379,18 +362,15 @@ const AlterDistributorMaster = () => {
 
           <div className="w-[550px] h-[45vh] border border-gray-500 ml-[80px] ">
             <form
-              onSubmit={(e) => {
+              onSubmit={e => {
                 onSubmit(e);
               }}
             >
               <div className="input-ldgr mt-3">
-                <label
-                  htmlFor="distributorCode"
-                  className="text-sm ml-2 mr-[87px]"
-                >
+                <label htmlFor="distributorCode" className="text-sm ml-2 mr-[87px]">
                   Distributor Code
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="distributorCode"
@@ -398,7 +378,7 @@ const AlterDistributorMaster = () => {
                   value={distributor.distributorCode}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => {
+                  ref={input => {
                     inputRefs.current.distributorCode = input;
                   }}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -407,13 +387,10 @@ const AlterDistributorMaster = () => {
               </div>
 
               <div className="input-ldgr mt-1">
-                <label
-                  htmlFor="distributorCompanyName"
-                  className="text-sm mr-[20px] ml-2"
-                >
+                <label htmlFor="distributorCompanyName" className="text-sm mr-[20px] ml-2">
                   Distributor Company Name
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="distributorCompanyName"
@@ -421,22 +398,17 @@ const AlterDistributorMaster = () => {
                   value={distributor.distributorCompanyName}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) =>
-                    (inputRefs.current.distributorCompanyName = input)
-                  }
+                  ref={input => (inputRefs.current.distributorCompanyName = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="distributorOwnerName"
-                  className="text-sm mr-[38px] ml-2"
-                >
+                <label htmlFor="distributorOwnerName" className="text-sm mr-[38px] ml-2">
                   Distributor Owner Name
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="distributorOwnerName"
@@ -444,9 +416,7 @@ const AlterDistributorMaster = () => {
                   value={distributor.distributorOwnerName}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) =>
-                    (inputRefs.current.distributorOwnerName = input)
-                  }
+                  ref={input => (inputRefs.current.distributorOwnerName = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
@@ -456,7 +426,7 @@ const AlterDistributorMaster = () => {
                 <label htmlFor="mobileNo" className="text-sm mr-[125px] ml-2">
                   Mobile No
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="mobileNo"
@@ -464,31 +434,31 @@ const AlterDistributorMaster = () => {
                   value={distributor.mobileNo}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.mobileNo = input)}
+                  ref={input => (inputRefs.current.mobileNo = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="executiveCode"
-                  className="text-sm mr-[92px] ml-2"
-                >
+                <label htmlFor="executiveCode" className="text-sm mr-[92px] ml-2">
                   Executive Code
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="executiveCode"
                   name="executiveCode"
                   value={distributor.executiveCode}
-                  onChange={(e) => {
+                  onChange={e => {
                     onInputChange(e);
                     handleExecutiveInputChange(e);
                   }}
-                  onKeyDown={(e) => {handleKeyDown(e); handleExecutiveKeyDown(e);}}
-                  ref={(input) => (inputRefs.current.executiveCode = input)}
+                  onKeyDown={e => {
+                    handleKeyDown(e);
+                    handleExecutiveKeyDown(e);
+                  }}
+                  ref={input => (inputRefs.current.executiveCode = input)}
                   onFocus={handleExecutiveFocus}
                   onBlur={() => setExecutiveFocused(false)}
                   className="w-[300px] ml-2 h-5 capitalize pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -498,28 +468,31 @@ const AlterDistributorMaster = () => {
                   <div
                     className="bg-[#CAF4FF] w-[20%] h-[85vh] border border-gray-500"
                     style={{
-                      position: "absolute",
-                      top: "70px",
-                      left: "1041px",
+                      position: 'absolute',
+                      top: '70px',
+                      left: '1041px',
                     }}
                   >
                     <div className="text-left bg-[#003285] text-[13.5px] text-white pl-2">
                       <p>List Of Executive Master</p>
                     </div>
 
-                    <ul className="suggestions w-full h-[20vh] text-left text-[13px] mt-2" onMouseDown={(e) => e.preventDefault()}>
+                    <ul
+                      className="suggestions w-full h-[20vh] text-left text-[13px] mt-2"
+                      onMouseDown={e => e.preventDefault()}
+                    >
                       {filteredExecutiveSuggestions.map((executive, index) => (
                         <li
                           key={index}
                           tabIndex={0}
                           onClick={() => selectExecutive(executive)}
-                          onKeyDown={(e) =>
-                            e.key === "Enter" && selectExecutive(executive)
-                          }
-                          ref={(input) => suggestionExecutiveRef.current[index] = input}
-                          className={`pl-2 cursor-pointer ${highlightedExecutiveIndex === index ? 'bg-yellow-200': ''}`}
+                          onKeyDown={e => e.key === 'Enter' && selectExecutive(executive)}
+                          ref={input => (suggestionExecutiveRef.current[index] = input)}
+                          className={`pl-2 cursor-pointer ${
+                            highlightedExecutiveIndex === index ? 'bg-yellow-200' : ''
+                          }`}
                         >
-                          {executive.executiveCode.toUpperCase()} -{" "}
+                          {executive.executiveCode.toUpperCase()} -{' '}
                           {executive.executiveMaster.toUpperCase()}
                         </li>
                       ))}
@@ -529,13 +502,10 @@ const AlterDistributorMaster = () => {
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="executiveMaster"
-                  className="text-sm mr-[82px] ml-2"
-                >
+                <label htmlFor="executiveMaster" className="text-sm mr-[82px] ml-2">
                   Executive Master
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="executiveMaster"
@@ -543,7 +513,7 @@ const AlterDistributorMaster = () => {
                   value={distributor.executiveMaster}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.executiveMaster = input)}
+                  ref={input => (inputRefs.current.executiveMaster = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
@@ -553,18 +523,21 @@ const AlterDistributorMaster = () => {
                 <label htmlFor="regionCode" className="text-sm mr-[108px] ml-2">
                   Region Code
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="regionCode"
                   name="regionCode"
                   value={distributor.regionCode}
-                  onChange={(e) => {
+                  onChange={e => {
                     onInputChange(e);
                     handleRegionInputChange(e);
                   }}
-                  onKeyDown={(e) => {handleKeyDown(e); handleRegionKeyDown(e);}}
-                  ref={(input) => (inputRefs.current.regionCode = input)}
+                  onKeyDown={e => {
+                    handleKeyDown(e);
+                    handleRegionKeyDown(e);
+                  }}
+                  ref={input => (inputRefs.current.regionCode = input)}
                   onFocus={handleRegionFocus}
                   onBlur={() => setRegionFocused(false)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
@@ -574,9 +547,9 @@ const AlterDistributorMaster = () => {
                   <div
                     className="bg-[#CAF4FF] w-[20%] h-[85vh] border border-gray-500"
                     style={{
-                      position: "absolute",
-                      top: "70px",
-                      left: "1041px",
+                      position: 'absolute',
+                      top: '70px',
+                      left: '1041px',
                     }}
                   >
                     <div className="text-left pl-2 bg-[#003285] text-[13.5px] text-white">
@@ -584,40 +557,39 @@ const AlterDistributorMaster = () => {
                     </div>
 
                     <div className="suggestions-dropdown overflow-y-scroll">
-                      <ul className="suggestions w-full h-[80vh] text-left mt-2 text-[13px]" onMouseDown={(e) => e.preventDefault()}>
-                        {filteredRegionSuggestions
-                          .map((region, index) => (
-                            <li
-                              key={region.regionCode}
-                              tabIndex={0}
-                              onClick={() => selectRegion(region)}
-                              ref={(input) => {suggestionRegionRef.current[index] = input;}}
-                              onKeyDown={(e) =>
-                                e.key === "Enter" && selectRegion(region)
-                              }
-                              onMouseEnter={() => setHighlightedRegionIndex(index)}
-                              className={`pl-2 cursor-pointer ${highlightedRegionIndex === index ? 'bg-yellow-200': ''}`}
-                            >
-                              {region.regionMasterId.toUpperCase()} -{" "}
-                              {region.regionName.toUpperCase()}
-                            </li>
-                          ))}
+                      <ul
+                        className="suggestions w-full h-[80vh] text-left mt-2 text-[13px]"
+                        onMouseDown={e => e.preventDefault()}
+                      >
+                        {filteredRegionSuggestions.map((region, index) => (
+                          <li
+                            key={region.regionCode}
+                            tabIndex={0}
+                            onClick={() => selectRegion(region)}
+                            ref={input => {
+                              suggestionRegionRef.current[index] = input;
+                            }}
+                            onKeyDown={e => e.key === 'Enter' && selectRegion(region)}
+                            onMouseEnter={() => setHighlightedRegionIndex(index)}
+                            className={`pl-2 cursor-pointer ${
+                              highlightedRegionIndex === index ? 'bg-yellow-200' : ''
+                            }`}
+                          >
+                            {region.regionMasterId.toUpperCase()} -{' '}
+                            {region.regionName.toUpperCase()}
+                          </li>
+                        ))}
                       </ul>
-
-                      
                     </div>
                   </div>
                 )}
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="regionMaster"
-                  className="text-sm mr-[99px] ml-2"
-                >
+                <label htmlFor="regionMaster" className="text-sm mr-[99px] ml-2">
                   Region Master
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="regionMaster"
@@ -625,20 +597,17 @@ const AlterDistributorMaster = () => {
                   value={distributor.regionMaster}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.regionMaster = input)}
+                  ref={input => (inputRefs.current.regionMaster = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="contactPersonName"
-                  className="text-sm mr-[53px] ml-2"
-                >
+                <label htmlFor="contactPersonName" className="text-sm mr-[53px] ml-2">
                   Contact Person Name
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="contactPersonName"
@@ -646,20 +615,17 @@ const AlterDistributorMaster = () => {
                   value={distributor.contactPersonName}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.contactPersonName = input)}
+                  ref={input => (inputRefs.current.contactPersonName = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
               </div>
 
               <div className="input-ldgr">
-                <label
-                  htmlFor="contactMobileNo"
-                  className="text-sm mr-[75px] ml-2"
-                >
+                <label htmlFor="contactMobileNo" className="text-sm mr-[75px] ml-2">
                   Contact Mobile No
                 </label>
-                :{" "}
+                :{' '}
                 <input
                   type="text"
                   id="contactMobileNo"
@@ -667,7 +633,7 @@ const AlterDistributorMaster = () => {
                   value={distributor.contactMobileNo}
                   onChange={onInputChange}
                   onKeyDown={handleKeyDown}
-                  ref={(input) => (inputRefs.current.contactMobileNo = input)}
+                  ref={input => (inputRefs.current.contactMobileNo = input)}
                   className="w-[300px] ml-2 h-5 capitalize font-medium pl-1 text-sm focus:bg-yellow-200 focus:border focus:border-blue-500 focus:outline-none"
                   autoComplete="off"
                 />
@@ -677,8 +643,8 @@ const AlterDistributorMaster = () => {
                 <input
                   type="button"
                   id="acceptButton"
-                  onKeyDown={(e) => {
-                    if (e.key === "Backspace") {
+                  onKeyDown={e => {
+                    if (e.key === 'Backspace') {
                       e.preventDefault();
                       if (
                         inputRefs.current.contactMobileNo &&
@@ -688,23 +654,28 @@ const AlterDistributorMaster = () => {
                       }
                     }
                   }}
-                  value={": Accept"}
-                  ref={(button) => {
+                  value={': Accept'}
+                  ref={button => {
                     acceptButtonRef.current = button;
                   }}
-                  onClick={(e) => {
+                  onClick={e => {
                     onSubmit(e);
                   }}
                   className="text-sm px-8 py-[5px] bg-slate-600 hover:bg-slate-800 relative"
                 />
-                <span className="text-sm absolute top-[583px] left-[857px] underline decoration-black" style={{textDecorationThickness: '2px'}}>A</span>
+                <span
+                  className="text-sm absolute top-[583px] left-[857px] underline decoration-black"
+                  style={{ textDecorationThickness: '2px' }}
+                >
+                  A
+                </span>
               </div>
             </form>
           </div>
 
           <div className="mt-[225px] absolute left-[400px]">
             <Link
-              to={"/distributorAlter/filter"}
+              to={'/distributorAlter/filter'}
               className="px-11 py-[6px] text-sm bg-slate-600 hover:bg-slate-800 "
             >
               <span className="border-b-2 border-black">Q</span> : Quit
@@ -717,17 +688,11 @@ const AlterDistributorMaster = () => {
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
+            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
+            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
               &#8203;
             </span>
 
@@ -735,10 +700,7 @@ const AlterDistributorMaster = () => {
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                    <h3
-                      className="text-lg leading-6 font-medium text-gray-900"
-                      id="modal-title"
-                    >
+                    <h3 className="text-lg leading-6 font-medium text-gray-900" id="modal-title">
                       Quit Confirmation
                     </h3>
                     <div className="mt-2">

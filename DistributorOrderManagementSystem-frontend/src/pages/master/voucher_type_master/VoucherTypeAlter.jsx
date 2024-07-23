@@ -1,9 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import {
-  listOfVoucherTypeNames,
-  listOfVoucherTypes,
-} from "../../../services/MasterService";
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { listOfVoucherTypeNames, listOfVoucherTypes } from '../../../services/MasterService';
 
 const VoucherTypeAlter = () => {
   const [voucherTypeName, setVoucherTypeName] = useState();
@@ -19,93 +16,80 @@ const VoucherTypeAlter = () => {
     inputRef.current.focus();
 
     listOfVoucherTypeNames()
-      .then((response) => {
+      .then(response => {
         console.log(response.data);
         setVoucherTypeNames(response.data);
         setFilteredVoucherNames(response.data);
         setSelectedIndex(response.data.length > 0 ? 2 : 0);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
 
     listOfVoucherTypes()
-      .then((response) => {
+      .then(response => {
         console.log(response.data);
         setVoucherTypes(response.data);
         setFilteredVoucherTypes(response.data);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   }, []);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowDown") {
+    const handleKeyDown = e => {
+      if (e.key === 'ArrowDown') {
         setSelectedIndex(
-          (prevIndex) =>
-            (prevIndex + 1) %
-            (filteredVoucherNames.length + filteredVoucherTypes.length + 2)
+          prevIndex =>
+            (prevIndex + 1) % (filteredVoucherNames.length + filteredVoucherTypes.length + 2),
         );
-      } else if (e.key === "ArrowUp") {
+      } else if (e.key === 'ArrowUp') {
         setSelectedIndex(
-          (prevIndex) =>
-            (prevIndex -
-              1 +
-              filteredVoucherNames.length +
-              filteredVoucherTypes.length +
-              2) %
-            (filteredVoucherNames.length + filteredVoucherTypes.length + 2)
+          prevIndex =>
+            (prevIndex - 1 + filteredVoucherNames.length + filteredVoucherTypes.length + 2) %
+            (filteredVoucherNames.length + filteredVoucherTypes.length + 2),
         );
-      } else if (e.key === "Enter") {
+      } else if (e.key === 'Enter') {
         if (selectedIndex === 0) {
-          navigate("/create/voucherType");
+          navigate('/create/voucherType');
           e.preventDefault();
         } else if (selectedIndex === 1) {
-          navigate("/alter");
+          navigate('/alter');
         } else if (filteredVoucherNames[selectedIndex - 2]) {
           navigate(
-            `/alterVoucherTypeMaster/${
-              filteredVoucherNames[selectedIndex - 2].voucherTypeName
-            }`
+            `/alterVoucherTypeMaster/${filteredVoucherNames[selectedIndex - 2].voucherTypeName}`,
           );
-        } else if (
-          filteredVoucherTypes[selectedIndex - filteredVoucherNames.length - 2]
-        ) {
+        } else if (filteredVoucherTypes[selectedIndex - filteredVoucherNames.length - 2]) {
           navigate(
             `/displayVoucherType/${
-              filteredVoucherTypes[
-                selectedIndex - filteredVoucherNames.length - 2
-              ].voucherType
-            }`
+              filteredVoucherTypes[selectedIndex - filteredVoucherNames.length - 2].voucherType
+            }`,
           );
         }
-      } else if (e.key === 'Escape'){
+      } else if (e.key === 'Escape') {
         navigate('/alter');
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
   }, [filteredVoucherNames, filteredVoucherTypes, selectedIndex, navigate]);
 
   const filterVoucherNames = () => {
-    if (voucherTypeName === "") {
+    if (voucherTypeName === '') {
       setFilteredVoucherNames(voucherTypeNames);
       setFilteredVoucherTypes(voucherTypes);
     } else {
-      const filteredNames = voucherTypeNames.filter((vou) =>
-        vou.voucherTypeName
-          .toLowerCase()
-          .includes(voucherTypeName.toLowerCase())
+      const filteredNames = voucherTypeNames.filter(vou =>
+        vou.voucherTypeName.toLowerCase().includes(voucherTypeName.toLowerCase()),
       );
 
-      const filteredTypes = voucherTypes.filter((vou) =>
-        vou.voucherType.toLowerCase().includes(voucherTypeName.toLowerCase())
+      const filteredTypes = voucherTypes.filter(vou =>
+        vou.voucherType.toLowerCase().includes(voucherTypeName.toLowerCase()),
       );
 
       setFilteredVoucherNames(filteredNames);
@@ -131,7 +115,7 @@ const VoucherTypeAlter = () => {
                 name="voucherTypeName"
                 value={voucherTypeName}
                 ref={inputRef}
-                onChange={(e) => {
+                onChange={e => {
                   setVoucherTypeName(e.target.value);
                   filterVoucherNames();
                 }}
@@ -150,9 +134,9 @@ const VoucherTypeAlter = () => {
                   tabIndex={0}
                   onFocus={() => setSelectedIndex(0)}
                   className={`block text-center text-[14px] focus:bg-[#FEB941] outline-none ${
-                    selectedIndex === 0 ? "bg-[#FEB941]" : ""
+                    selectedIndex === 0 ? 'bg-[#FEB941]' : ''
                   }`}
-                  to={"/create/voucherType"}
+                  to={'/create/voucherType'}
                 >
                   <p className="ml-[285px] text-[13px]">Create</p>
                 </Link>
@@ -160,9 +144,9 @@ const VoucherTypeAlter = () => {
                   tabIndex={0}
                   onFocus={() => setSelectedIndex(1)}
                   className={`block text-center text-[14px] focus:bg-[#FEB941] outline-none ${
-                    selectedIndex === 1 ? "bg-[#FEB941]" : ""
+                    selectedIndex === 1 ? 'bg-[#FEB941]' : ''
                   }`}
-                  to={"/alter"}
+                  to={'/alter'}
                 >
                   <p className="ml-[287px] text-[13px]">Back</p>
                 </Link>
@@ -179,9 +163,7 @@ const VoucherTypeAlter = () => {
                   {filteredVoucherNames.map((vou, index) => (
                     <tr
                       key={vou.voucherTypeName}
-                      className={
-                        selectedIndex === index + 2 ? "bg-[#FEB941]" : ""
-                      }
+                      className={selectedIndex === index + 2 ? 'bg-[#FEB941]' : ''}
                     >
                       <td className="w-[350px]">
                         <Link
@@ -202,10 +184,9 @@ const VoucherTypeAlter = () => {
                     <tr
                       key={vou.voucherType}
                       className={
-                        selectedIndex ===
-                        index + filteredVoucherNames.length + 2
-                          ? "bg-[#FEB941]"
-                          : ""
+                        selectedIndex === index + filteredVoucherNames.length + 2
+                          ? 'bg-[#FEB941]'
+                          : ''
                       }
                     >
                       <td className="w-[350px]">
@@ -213,15 +194,9 @@ const VoucherTypeAlter = () => {
                           className="text-[12.5px]"
                           to={`/displayVoucherType/${vou.voucherType}`}
                           tabIndex={0}
-                          onFocus={() =>
-                            setSelectedIndex(
-                              index + filteredVoucherNames.length + 2
-                            )
-                          }
+                          onFocus={() => setSelectedIndex(index + filteredVoucherNames.length + 2)}
                         >
-                          <div className="flex text-left pl-2 capitalize">
-                            {vou.voucherType}
-                          </div>
+                          <div className="flex text-left pl-2 capitalize">{vou.voucherType}</div>
                         </Link>
                       </td>
                     </tr>
